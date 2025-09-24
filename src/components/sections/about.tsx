@@ -3,10 +3,10 @@ import { Download } from 'lucide-react';
 
 const AboutSection = () => {
     return (
-        <section id="about" className="py-20 md:py-28">
-            <div className="container max-w-4xl">
+        <section id="about" className="py-24 md:py-32 bg-secondary">
+            <div className="container max-w-3xl">
                 <div className="max-w-2xl mx-auto text-center mb-12">
-                    <h2 className="font-headline text-3xl md:text-4xl font-bold">
+                    <h2 className="font-headline text-4xl md:text-5xl font-bold">
                         About Me
                     </h2>
                 </div>
@@ -27,7 +27,7 @@ const AboutSection = () => {
                     </p>
                 </div>
                 <div className="text-center mt-12">
-                    <Button asChild size="lg" variant="outline">
+                    <Button asChild size="lg">
                         <a href="https://drive.google.com/uc?export=download&id=1MbT8wtl8vq_2B0XrGYpDgHmEQ8BHPj8V" target="_blank" rel="noopener noreferrer">
                             <Download className="mr-2 h-4 w-4" />
                             Download My Resume

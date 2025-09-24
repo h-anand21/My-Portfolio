@@ -2,7 +2,7 @@ import { projects } from '@/lib/projects';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Github } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import GenerateSummary from '@/components/generate-summary';
@@ -55,24 +55,27 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                 </div>
                 <div className="flex gap-2">
                     <Button variant="outline" asChild>
-                        <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">Live Demo</a>
+                        <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          Live Demo
+                        </a>
                     </Button>
                     <Button variant="outline" size="icon" asChild>
                         <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
-                            <Github className="h-4 w-4" />
+                            <Github className="h-5 w-5" />
                         </a>
                     </Button>
                 </div>
             </div>
           </header>
 
-          <div className="prose dark:prose-invert max-w-none">
-            <div className="relative aspect-video mb-12">
+          <div className="prose dark:prose-invert max-w-none prose-lg">
+            <div className="relative aspect-video mb-12 rounded-lg overflow-hidden shadow-2xl">
                 <Image 
                     src={project.thumbnailUrl} 
                     alt={`${project.title} screenshot`} 
                     fill 
-                    className="object-cover rounded-lg shadow-lg"
+                    className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
             </div>

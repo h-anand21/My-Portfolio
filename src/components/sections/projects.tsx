@@ -14,13 +14,13 @@ const ProjectsSection = () => {
     };
 
     return (
-        <section id="projects" className="py-20 md:py-28 bg-secondary">
+        <section id="projects" className="py-24 md:py-32">
             <div className="container">
-                <div className="max-w-2xl mx-auto text-center mb-12">
-                    <h2 className="font-headline text-3xl md:text-4xl font-bold">
+                <div className="max-w-2xl mx-auto text-center mb-16">
+                    <h2 className="font-headline text-4xl md:text-5xl font-bold">
                         My Work
                     </h2>
-                    <p className="mt-4 text-muted-foreground">Here are some of the projects I'm proud to have worked on. Each one was a unique challenge and a great learning experience.</p>
+                    <p className="mt-4 text-lg text-muted-foreground">Here are some of the projects I'm proud to have worked on. Each one was a unique challenge and a great learning experience.</p>
                 </div>
                 <motion.div
                     className="grid grid-cols-1 md:grid-cols-2 gap-8"

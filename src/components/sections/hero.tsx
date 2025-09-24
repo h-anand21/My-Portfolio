@@ -31,10 +31,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="py-20 md:py-32 relative">
-      <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]">
-        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-primary/20 opacity-20 blur-[100px]"></div>
-      </div>
+    <section className="py-24 md:py-32">
       <motion.div
         className="container grid grid-cols-1 items-center gap-12 text-center md:grid-cols-2 md:text-left"
         variants={containerVariants}
@@ -42,14 +39,14 @@ const HeroSection = () => {
         animate="visible"
       >
         <motion.div variants={itemVariants} className="order-2 flex flex-col items-center md:items-start md:order-1">
-          <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl mb-4">
+          <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl mb-6">
             Your Name
           </h1>
-          <p className="max-w-xl text-lg text-primary md:text-xl mb-8">
+          <p className="max-w-xl text-lg text-muted-foreground md:text-xl mb-10">
             A passionate developer creating modern, responsive, and accessible web experiences.
           </p>
           <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4 md:justify-start">
-            <Button asChild size="lg" className="bg-accent hover:bg-accent/90">
+            <Button asChild size="lg">
               <Link href="#contact">Contact Me</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
@@ -59,20 +56,20 @@ const HeroSection = () => {
               </a>
             </Button>
           </motion.div>
-           <motion.div variants={itemVariants} className="flex items-center gap-2 mt-8">
+           <motion.div variants={itemVariants} className="flex items-center gap-2 mt-10">
             <Button variant="ghost" size="icon" asChild>
               <Link href="#" aria-label="GitHub">
-                <Github className="h-5 w-5" />
+                <Github className="h-5 w-5 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
             <Button variant="ghost" size="icon" asChild>
               <Link href="#" aria-label="Twitter">
-                <Twitter className="h-5 w-5" />
+                <Twitter className="h-5 w-5 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
             <Button variant="ghost" size="icon" asChild>
               <Link href="#" aria-label="LinkedIn">
-                <Linkedin className="h-5 w-5" />
+                <Linkedin className="h-5 w-5 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
           </motion.div>
@@ -83,8 +80,8 @@ const HeroSection = () => {
               src={heroImage.imageUrl}
               alt={heroImage.description}
               data-ai-hint={heroImage.imageHint}
-              width={320}
-              height={320}
+              width={350}
+              height={350}
               className="rounded-full object-cover aspect-square shadow-2xl"
               priority
             />

@@ -48,19 +48,21 @@ export default function ContactForm() {
 
   return (
     <form ref={formRef} action={formAction} className="space-y-6 text-left">
-      <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
-        <Input id="name" name="name" placeholder="Your Name" aria-describedby="name-error" required />
-        {state.errors?.name && (
-          <p id="name-error" className="text-sm font-medium text-destructive">{state.errors.name[0]}</p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" placeholder="your@email.com" aria-describedby="email-error" required />
-        {state.errors?.email && (
-          <p id="email-error" className="text-sm font-medium text-destructive">{state.errors.email[0]}</p>
-        )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" name="name" placeholder="Your Name" aria-describedby="name-error" required />
+          {state.errors?.name && (
+            <p id="name-error" className="text-sm font-medium text-destructive">{state.errors.name[0]}</p>
+          )}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" name="email" type="email" placeholder="your@email.com" aria-describedby="email-error" required />
+          {state.errors?.email && (
+            <p id="email-error" className="text-sm font-medium text-destructive">{state.errors.email[0]}</p>
+          )}
+        </div>
       </div>
       <div className="space-y-2">
         <Label htmlFor="message">Message</Label>
