@@ -1,6 +1,10 @@
 "use server";
 
 import { z } from "zod";
+import { initializeFirebase } from "@/firebase";
+import { addDoc, collection } from "firebase/firestore";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 const contactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -37,15 +41,36 @@ export async function submitContactForm(
   }
   
   const { name, email, message } = validatedFields.data;
+  const { firestore } = initializeFirebase();
+  
+  const contactData = {
+    name,
+    email,
+    message,
+    createdAt: new Date(),
+  };
 
-  // In a real application, you would:
-  // 1. Store the contact in Firestore:
-  //    await db.collection('contacts').add({ name, email, message, createdAt: new Date() });
-  // 2. Send a transactional email (e.g., using a third-party service).
-  console.log("New contact submission:", { name, email, message });
+  try {
+    const contactsCollection = collection(firestore, "contacts");
+    await addDoc(contactsCollection, contactData)
+      .catch(serverError => {
+        const permissionError = new FirestorePermissionError({
+          path: contactsCollection.path,
+          operation: 'create',
+          requestResourceData: contactData
+        });
+        errorEmitter.emit('permission-error', permissionError);
+        // This throw will be caught by the outer try/catch and result in the user-facing error message.
+        throw permissionError;
+      });
 
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  } catch (e) {
+    console.error("Failed to submit contact form:", e);
+    return {
+      message: "Something went wrong on the server. Please try again later.",
+      success: false,
+    };
+  }
   
   return {
     message: "Thank you for your message! I'll get back to you soon.",
