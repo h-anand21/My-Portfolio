@@ -1,0 +1,69 @@
+/**
+ * @fileOverview Firestore Security Rules for the portfolio application.
+ *
+ * Core Philosophy:
+ * This ruleset provides public read access to project data, restricts contact submissions to a secured function,
+ * and limits analytics metric updates to authenticated admin users or secured functions. Authorization Independence
+ * is a key principle to simplify the rules and enhance security.
+ *
+ * Data Structure:
+ * - /projects/{projectId}: Stores project metadata. Publicly readable. Writes are managed via secured functions.
+ * - /contacts/{contactId}: Stores contact form submissions. Writes are managed via secured functions.
+ * - /analytics_meta/{analyticsMetaId}: Stores custom analytics metrics. Writes are restricted to authenticated admin users or secured functions.
+ *
+ * Key Security Decisions:
+ * - Public read access is granted for the /projects collection to enable efficient retrieval for the project grid.
+ * - Contact form submissions are managed via a secured function to prevent unauthorized access and spam.
+ * - Analytics metric updates are restricted to authenticated admin users or secured functions to maintain data integrity.
+ * - Timestamps for contact submissions are enforced via server timestamps in the secured function.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Grants public read access to projects and restricts write access to secured functions.
+     * @path /projects/{projectId}
+     * @allow get, list: Allows any user to read project data.
+     * @allow create, update, delete: Denies direct client writes.
+     * @deny create: if true; // Example of preventing direct creation
+     * @principle Allows public read access to projects for efficient retrieval.
+     */
+    match /projects/{projectId} {
+      allow get, list: if true;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Restricts direct client writes to contact form submissions.  Writes are handled by secured function.
+     * @path /contacts/{contactId}
+     * @allow get, list: Denies direct access to contact submissions.
+     * @allow create, update, delete: Denies all client-side modifications.
+     * @deny get: if true; // Example of preventing direct reads
+     * @principle Restricts direct client writes to contact form submissions to prevent unauthorized access.
+     */
+    match /contacts/{contactId} {
+      allow get, list: if false;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Restricts writes to analytics metadata to authenticated admin users or secured functions.
+     * @path /analytics_meta/{analyticsMetaId}
+     * @allow get, list: Allows public read access to analytics metadata
+     * @allow create, update, delete: Denies direct access.  Should be handled by a secured function or admin user.
+     * @deny create: if true; // Example of preventing direct creations.
+     * @principle Restricts writes to analytics metadata to maintain data integrity.
+     */
+    match /analytics_meta/{analyticsMetaId} {
+      allow get, list: if true;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}

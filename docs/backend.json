@@ -1,0 +1,178 @@
+{
+  "entities": {
+    "Project": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Project",
+      "type": "object",
+      "description": "Represents a project in the portfolio.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Project entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the project."
+        },
+        "description": {
+          "type": "string",
+          "description": "Short description of the project."
+        },
+        "tech": {
+          "type": "array",
+          "description": "Array of technologies used in the project.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "thumbnailUrl": {
+          "type": "string",
+          "description": "URL of the project thumbnail image."
+        },
+        "demoUrl": {
+          "type": "string",
+          "description": "URL of the live demo of the project."
+        },
+        "githubUrl": {
+          "type": "string",
+          "description": "URL of the project's GitHub repository."
+        },
+        "caseStudy": {
+          "type": "string",
+          "description": "Detailed case study of the project."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "tech",
+        "thumbnailUrl",
+        "demoUrl",
+        "githubUrl",
+        "caseStudy"
+      ]
+    },
+    "Contact": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Contact",
+      "type": "object",
+      "description": "Represents a contact form submission.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Contact entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the person submitting the contact form."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the person submitting the contact form.",
+          "format": "email"
+        },
+        "message": {
+          "type": "string",
+          "description": "Message submitted through the contact form."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the contact form was submitted.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "message",
+        "createdAt"
+      ]
+    },
+    "AnalyticsMeta": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AnalyticsMeta",
+      "type": "object",
+      "description": "Represents custom analytics metrics (optional).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the AnalyticsMeta entity."
+        },
+        "metricName": {
+          "type": "string",
+          "description": "Name of the metric being tracked."
+        },
+        "metricValue": {
+          "type": "number",
+          "description": "Value of the metric."
+        }
+      },
+      "required": [
+        "id",
+        "metricName",
+        "metricValue"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/projects/{projectId}",
+        "definition": {
+          "entityName": "Project",
+          "schema": {
+            "$ref": "#/backend/entities/Project"
+          },
+          "description": "Stores project metadata with public read access.",
+          "params": [
+            {
+              "name": "projectId",
+              "description": "The unique identifier for the project."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/contacts/{contactId}",
+        "definition": {
+          "entityName": "Contact",
+          "schema": {
+            "$ref": "#/backend/entities/Contact"
+          },
+          "description": "Stores contact form submissions.  Writes are handled via a secured function to prevent unauthorized access.",
+          "params": [
+            {
+              "name": "contactId",
+              "description": "The unique identifier for the contact message."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/analytics_meta/{analyticsMetaId}",
+        "definition": {
+          "entityName": "AnalyticsMeta",
+          "schema": {
+            "$ref": "#/backend/entities/AnalyticsMeta"
+          },
+          "description": "Stores custom analytics metrics.  Writes should be restricted to authenticated admin users or secured functions.",
+          "params": [
+            {
+              "name": "analyticsMetaId",
+              "description": "The unique identifier for the analytics metric."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to support the portfolio application's features, emphasizing security, scalability, and ease of maintenance. It incorporates key principles like Authorization Independence and Structural Segregation.\n\n*   `/projects`: Stores project metadata. This collection has public read access, enabling efficient retrieval for the project grid. No write access is granted directly; updates occur via a secured function.\n*   `/contacts`: Stores contact form submissions. Writes are handled via a secured function to prevent spam/unauthorized access. This function can implement reCAPTCHA or other validation methods.\n*   `/analytics_meta`: Stores custom analytics metrics. This is an optional collection that allows for tracking application usage and performance. Writes should be restricted to authenticated admin users or secured functions.\n\n**Authorization Independence:** Authorization for project access is inherently public, simplifying rules. Contacts are managed via a secured function, avoiding direct client writes and complex rule logic. No `get()` calls are needed in rules, enabling atomic operations.\n\n**QAPs (Rules are not Filters):** The structure supports the required QAPs.\n\n*   `List Projects`: The segregation of public project data into a dedicated `/projects` collection allows for efficient and secure `list` operations without filtering.\n\n**Invariants:** Timestamps are enforced via server timestamps in the secured function for contact creation, ensuring integrity. Project ownership is not explicitly modeled, as projects are considered public data, managed by authorized personnel."
+  }
+}
