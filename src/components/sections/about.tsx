@@ -28,7 +28,7 @@ const AboutSection = () => {
                 </div>
                 <div className="text-center mt-12">
                     <Button asChild size="lg" variant="outline">
-                        <a href="/resume.pdf" download>
+                        <a href="https://drive.google.com/uc?export=download&id=1MbT8wtl8vq_2B0XrGYpDgHmEQ8BHPj8V" target="_blank" rel="noopener noreferrer">
                             <Download className="mr-2 h-4 w-4" />
                             Download My Resume
                         </a>
