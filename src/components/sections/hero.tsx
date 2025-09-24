@@ -31,7 +31,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="py-28 md:py-40">
+    <section className="pt-28 md:pt-40">
       <motion.div
         className="container grid grid-cols-1 items-center gap-16 text-center md:grid-cols-2 md:text-left"
         variants={containerVariants}
@@ -80,8 +80,8 @@ const HeroSection = () => {
               src={heroImage.imageUrl}
               alt={heroImage.description}
               data-ai-hint={heroImage.imageHint}
-              width={400}
-              height={400}
+              width={300}
+              height={300}
               className="rounded-full object-cover aspect-square shadow-2xl"
               priority
             />
