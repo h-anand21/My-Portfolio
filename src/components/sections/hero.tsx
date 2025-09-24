@@ -56,20 +56,20 @@ const HeroSection = () => {
               </a>
             </Button>
           </motion.div>
-           <motion.div variants={itemVariants} className="flex items-center gap-4 mt-12">
-            <Button variant="ghost" size="lg" asChild>
+           <motion.div variants={itemVariants} className="flex items-center gap-2 mt-10">
+            <Button variant="ghost" size="icon" asChild>
               <Link href="#" aria-label="GitHub">
-                <Github className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+                <Github className="h-5 w-5 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
-            <Button variant="ghost" size="lg" asChild>
+            <Button variant="ghost" size="icon" asChild>
               <Link href="#" aria-label="Twitter">
-                <Twitter className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+                <Twitter className="h-5 w-5 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
-            <Button variant="ghost" size="lg" asChild>
+            <Button variant="ghost" size="icon" asChild>
               <Link href="#" aria-label="LinkedIn">
-                <Linkedin className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+                <Linkedin className="h-5 w-5 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
           </motion.div>
@@ -80,8 +80,8 @@ const HeroSection = () => {
               src={heroImage.imageUrl}
               alt={heroImage.description}
               data-ai-hint={heroImage.imageHint}
-              width={500}
-              height={500}
+              width={600}
+              height={600}
               className="rounded-full object-cover aspect-square shadow-2xl"
               priority
             />
