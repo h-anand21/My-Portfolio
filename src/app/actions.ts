@@ -1,10 +1,9 @@
 "use server";
 
 import { z } from "zod";
-import { initializeFirebase } from "@/firebase";
-import { addDoc, collection } from "firebase/firestore";
-import { errorEmitter } from "@/firebase/error-emitter";
-import { FirestorePermissionError } from "@/firebase/errors";
+import { initializeApp, getApps, App } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+import { credential } from "firebase-admin";
 
 const contactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -21,6 +20,22 @@ export type ContactFormState = {
   };
   success: boolean;
 };
+
+// Helper function to initialize Firebase Admin SDK on the server
+function initializeFirebaseAdmin(): App {
+    if (getApps().length > 0) {
+        return getApps()[0];
+    }
+    // Check if the service account key is available in environment variables
+    if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+        return initializeApp({
+            credential: credential.json(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY))
+        });
+    }
+    // Fallback for local development or other environments without the service account key in the env.
+    // Ensure you have the service account file locally and GOOGLE_APPLICATION_CREDENTIALS is set.
+    return initializeApp();
+}
 
 export async function submitContactForm(
   prevState: ContactFormState,
@@ -41,33 +56,27 @@ export async function submitContactForm(
   }
   
   const { name, email, message } = validatedFields.data;
-  const { firestore } = initializeFirebase();
   
-  const contactData = {
-    name,
-    email,
-    message,
-    createdAt: new Date(),
-  };
-
   try {
-    const contactsCollection = collection(firestore, "contacts");
-    await addDoc(contactsCollection, contactData)
-      .catch(serverError => {
-        const permissionError = new FirestorePermissionError({
-          path: contactsCollection.path,
-          operation: 'create',
-          requestResourceData: contactData
-        });
-        errorEmitter.emit('permission-error', permissionError);
-        // This throw will be caught by the outer try/catch and result in the user-facing error message.
-        throw permissionError;
-      });
+    const adminApp = initializeFirebaseAdmin();
+    const firestore = getFirestore(adminApp);
+    
+    const contactData = {
+      name,
+      email,
+      message,
+      createdAt: new Date(),
+    };
+
+    const contactsCollection = firestore.collection("contacts");
+    await contactsCollection.add(contactData);
 
   } catch (e) {
     console.error("Failed to submit contact form:", e);
+    // In a real app, you might want to avoid exposing raw error messages.
+    const errorMessage = e instanceof Error ? e.message : "An unknown error occurred.";
     return {
-      message: "Something went wrong on the server. Please try again later.",
+      message: `Something went wrong on the server: ${errorMessage}. Please try again later.`,
       success: false,
     };
   }
