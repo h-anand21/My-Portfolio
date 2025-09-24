@@ -39,10 +39,10 @@ const HeroSection = () => {
         animate="visible"
       >
         <motion.div variants={itemVariants} className="order-2 flex flex-col items-center md:items-start md:order-1">
-          <h1 className="font-headline text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl mb-8">
+          <h1 className="font-headline text-6xl font-bold tracking-tighter sm:text-7xl md:text-8xl lg:text-9xl mb-8">
             Your Name
           </h1>
-          <p className="max-w-2xl text-xl text-muted-foreground md:text-2xl mb-12">
+          <p className="max-w-2xl text-2xl text-muted-foreground md:text-3xl mb-12">
             A passionate developer creating modern, responsive, and accessible web experiences.
           </p>
           <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4 md:justify-start">
@@ -56,20 +56,20 @@ const HeroSection = () => {
               </a>
             </Button>
           </motion.div>
-           <motion.div variants={itemVariants} className="flex items-center gap-2 mt-10">
-            <Button variant="ghost" size="icon" asChild>
+           <motion.div variants={itemVariants} className="flex items-center gap-4 mt-12">
+            <Button variant="ghost" size="lg" asChild>
               <Link href="#" aria-label="GitHub">
-                <Github className="h-5 w-5 text-muted-foreground hover:text-foreground" />
+                <Github className="h-6 w-6 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
-            <Button variant="ghost" size="icon" asChild>
+            <Button variant="ghost" size="lg" asChild>
               <Link href="#" aria-label="Twitter">
-                <Twitter className="h-5 w-5 text-muted-foreground hover:text-foreground" />
+                <Twitter className="h-6 w-6 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
-            <Button variant="ghost" size="icon" asChild>
+            <Button variant="ghost" size="lg" asChild>
               <Link href="#" aria-label="LinkedIn">
-                <Linkedin className="h-5 w-5 text-muted-foreground hover:text-foreground" />
+                <Linkedin className="h-6 w-6 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
           </motion.div>
@@ -80,8 +80,8 @@ const HeroSection = () => {
               src={heroImage.imageUrl}
               alt={heroImage.description}
               data-ai-hint={heroImage.imageHint}
-              width={450}
-              height={450}
+              width={500}
+              height={500}
               className="rounded-full object-cover aspect-square shadow-2xl"
               priority
             />
