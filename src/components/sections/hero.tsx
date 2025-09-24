@@ -80,8 +80,8 @@ const HeroSection = () => {
               src={heroImage.imageUrl}
               alt={heroImage.description}
               data-ai-hint={heroImage.imageHint}
-              width={600}
-              height={600}
+              width={400}
+              height={400}
               className="rounded-full object-cover aspect-square shadow-2xl"
               priority
             />
