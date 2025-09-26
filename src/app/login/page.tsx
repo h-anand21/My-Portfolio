@@ -16,7 +16,7 @@ import { useState, useEffect } from 'react';
 import { useUser } from '@/firebase';
 
 export default function LoginPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const auth = useAuth();
   const router = useRouter();
@@ -24,16 +24,18 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!isUserLoading && user) {
+      // If user is logged in, redirect to admin
       router.push('/admin');
     }
   }, [user, isUserLoading, router]);
 
   const handleGoogleSignIn = async () => {
-    setIsLoading(true);
+    setIsSigningIn(true);
     setError(null);
     try {
       await initiateGoogleSignIn(auth);
       // The onAuthStateChanged listener in the provider will handle the redirect on success.
+      // We keep `isSigningIn` true to show the loader until redirection happens.
     } catch (err: any) {
         if (err instanceof FirebaseError) {
             switch (err.code) {
@@ -50,11 +52,12 @@ export default function LoginPage() {
         } else {
              setError('An unexpected error occurred. Please try again.');
         }
-        setIsLoading(false);
+        setIsSigningIn(false);
     }
   };
 
-  if (isUserLoading || user) {
+  // Show a loading screen while checking auth state, during sign-in, or if the user is already logged in (pre-redirect)
+  if (isUserLoading || isSigningIn || user) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -75,8 +78,8 @@ export default function LoginPage() {
             {error && (
               <p className="text-sm font-medium text-destructive text-center">{error}</p>
             )}
-            <Button onClick={handleGoogleSignIn} disabled={isLoading} className="w-full">
-            {isLoading ? (
+            <Button onClick={handleGoogleSignIn} disabled={isSigningIn} className="w-full">
+            {isSigningIn ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
                 <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
