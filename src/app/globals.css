@@ -71,17 +71,19 @@
 
 @layer components {
   .animated-button {
-    @apply flex justify-around items-center py-2 pl-3 pr-0 bg-yellow-400 cursor-pointer shadow-[3px_4px_0px_black] border-2 border-black rounded-[12px] relative overflow-hidden z-50 transition-all duration-300;
+    @apply flex justify-around items-center py-2 pl-3 pr-0 cursor-pointer shadow-[3px_4px_0px_hsl(var(--foreground))] border-2 border-foreground rounded-[12px] relative overflow-hidden z-50 transition-all duration-300;
+    background-color: hsl(var(--primary));
   }
   .animated-button:hover {
-    @apply translate-x-[1px] translate-y-[1px] shadow-[2px_3px_0px_black];
+    @apply translate-x-[1px] translate-y-[1px] shadow-[2px_3px_0px_hsl(var(--foreground))];
   }
   .animated-button:active {
     filter: saturate(0.75);
   }
   .animated-button::after {
     content: "";
-    @apply absolute inset-0 bg-pink-400 -z-10 transition-transform duration-300;
+    @apply absolute inset-0 -z-10 transition-transform duration-300;
+    background-color: hsl(var(--accent));
     transform: translateX(-100%);
   }
   .animated-button:hover::after {
@@ -90,6 +92,7 @@
   .animated-button .bgContainer {
     @apply relative flex justify-start items-center overflow-hidden text-lg font-semibold;
     max-width: fit-content;
+    color: hsl(var(--primary-foreground));
   }
   .animated-button .bgContainer span {
     @apply relative transition-all duration-300;
@@ -97,14 +100,17 @@
   }
   .animated-button:hover .bgContainer > span {
     transform: translateX(0);
+    color: hsl(var(--accent-foreground));
   }
   .animated-button .arrowContainer {
-    @apply p-2 ml-3 border-2 border-black rounded-full bg-pink-400 relative overflow-hidden transition-all duration-300 z-50;
+    @apply p-2 ml-3 border-2 border-foreground rounded-full relative overflow-hidden transition-all duration-300 z-50;
+    background-color: hsl(var(--accent));
   }
   .animated-button .arrowContainer::after {
     content: "";
-    @apply absolute inset-0 bg-yellow-400 -z-10 transition-transform duration-300 ease-in-out;
+    @apply absolute inset-0 -z-10 transition-transform duration-300 ease-in-out;
     border-radius: inherit;
+    background-color: hsl(var(--primary));
     transform: translateX(-100%);
   }
   .animated-button:hover .arrowContainer::after {
@@ -120,5 +126,8 @@
     @apply align-middle;
     width: 20px;
     height: 20px;
+  }
+  .animated-button .arrowContainer svg path {
+    fill: hsl(var(--accent-foreground));
   }
 }
