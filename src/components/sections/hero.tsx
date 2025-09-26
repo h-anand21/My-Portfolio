@@ -94,6 +94,12 @@ const HeroSection = () => {
               )
             })}
           </motion.h1>
+           <motion.h2
+            variants={itemVariants}
+            className="font-headline text-2xl md:text-3xl text-primary mb-6"
+          >
+            Full-Stack Developer
+          </motion.h2>
           <motion.div
             variants={itemVariants}
             className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-8"
@@ -177,7 +183,5 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
-    
 
     
