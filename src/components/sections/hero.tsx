@@ -54,10 +54,10 @@ const HeroSection = () => {
         animate="visible"
       >
         <motion.div variants={itemVariants} className="order-2 flex flex-col items-center md:items-start md:order-1">
-          <h1 className="font-headline text-6xl font-bold tracking-tighter sm:text-7xl md:text-8xl lg:text-9xl mb-8">
+          <h1 className="font-headline text-7xl font-bold tracking-tighter sm:text-8xl md:text-9xl mb-8">
             Your Name
           </h1>
-          <p className="max-w-2xl text-2xl text-muted-foreground md:text-3xl mb-12">
+          <p className="max-w-2xl text-3xl text-muted-foreground md:text-4xl mb-12">
             A passionate developer creating modern, responsive, and accessible web experiences.
           </p>
           <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4 md:justify-start">
