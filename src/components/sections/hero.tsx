@@ -102,8 +102,8 @@ const HeroSection = () => {
                 src={heroImage.imageUrl}
                 alt={heroImage.description}
                 data-ai-hint={heroImage.imageHint}
-                width={200}
-                height={200}
+                width={300}
+                height={300}
                 className="rounded-full object-cover aspect-square shadow-2xl z-10"
                 priority
                 />
@@ -115,5 +115,6 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
 
 
