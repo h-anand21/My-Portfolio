@@ -20,6 +20,11 @@ export const AnimatedTestimonials = ({
   autoplay?: boolean;
 }) => {
   const [active, setActive] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleNext = () => {
     setActive((prev) => (prev + 1) % testimonials.length);
@@ -41,6 +46,7 @@ export const AnimatedTestimonials = ({
   }, [autoplay]);
 
   const randomRotateY = () => {
+    if (!isClient) return 0;
     return Math.floor(Math.random() * 21) - 10;
   };
   return (
