@@ -6,6 +6,8 @@ import { ThemeToggle } from './theme-toggle';
 import { useUser } from '@/firebase';
 import { Button } from './ui/button';
 import { getAuth, signOut } from 'firebase/auth';
+import { FloatingDock } from './ui/floating-dock';
+import { Home, FolderKanban, User, MessageSquare, KeySquare } from 'lucide-react';
 
 const Header = () => {
   const { user } = useUser();
@@ -16,10 +18,19 @@ const Header = () => {
   };
 
   const navItems = [
-    { label: 'Projects', href: '#projects' },
-    { label: 'About', href: '#about' },
-    { label: 'Contact', href: '#contact' },
+    { title: 'Home', href: '#', icon: <Home className="h-full w-full" /> },
+    { title: 'Projects', href: '#projects', icon: <FolderKanban className="h-full w-full" /> },
+    { title: 'About', href: '#about', icon: <User className="h-full w-full" /> },
+    { title: 'Contact', href: '#contact', icon: <MessageSquare className="h-full w-full" /> },
   ];
+
+  if (user) {
+    navItems.push({
+        title: 'Admin',
+        href: '/admin',
+        icon: <KeySquare className="h-full w-full" />,
+    });
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -30,20 +41,9 @@ const Header = () => {
           </Link>
         </div>
 
-        <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="transition-colors hover:text-primary text-foreground/80"
-              >
-                {item.label}
-              </Link>
-            ))}
-            {user && (
-               <Link href="/admin" className="transition-colors hover:text-primary text-foreground/80">Admin</Link>
-            )}
-        </nav>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <FloatingDock items={navItems} />
+        </div>
         
         <div className="flex items-center justify-end space-x-2">
           {user ? (
