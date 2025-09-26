@@ -11,6 +11,7 @@ import { doc } from 'firebase/firestore';
 import { useFirestore, useUser, useMemoFirebase } from '@/firebase';
 import AnimatedButton from '../ui/animated-button';
 import { TextHoverEffect } from '../ui/text-hover-effect';
+import { HoverBorderGradient } from '../ui/hover-border-gradient';
 
 const HeroSection = () => {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
@@ -150,16 +151,20 @@ const HeroSection = () => {
             </div>
           </div>
 
-          <motion.div variants={itemVariants} className="flex flex-wrap justify-center md:justify-start gap-4">
+          <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center md:justify-start gap-4">
             <Link href="#contact" passHref>
               <AnimatedButton />
             </Link>
-            <Button asChild variant="outline" size="lg">
-              <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
-                <Download className="mr-2 h-4 w-4" />
-                Resume
-              </a>
-            </Button>
+            <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
+              <HoverBorderGradient
+                  containerClassName="rounded-full"
+                  as="button"
+                  className="bg-card text-foreground flex items-center space-x-2"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  <span>Resume</span>
+              </HoverBorderGradient>
+            </a>
           </motion.div>
         </motion.div>
         <motion.div variants={itemVariants} className="relative justify-self-center order-first md:order-last">
