@@ -1,0 +1,273 @@
+
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { useToast } from '@/hooks/use-toast';
+import { useFirestore, useMemoFirebase } from '@/firebase';
+import { setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import { doc } from 'firebase/firestore';
+import { useRouter, useParams } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useDoc } from '@/firebase/firestore/use-doc';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const projectSchema = z.object({
+  title: z.string().min(2, 'Title must be at least 2 characters.'),
+  shortSummary: z
+    .string()
+    .min(10, 'Summary must be at least 10 characters.')
+    .max(160, 'Summary must be less than 160 characters.'),
+  description: z.string().min(20, 'Description must be at least 20 characters.'),
+  tech: z.string().min(1, 'Please add at least one technology.'),
+  tags: z.string().optional(),
+  githubUrl: z.string().url().optional().or(z.literal('')),
+  demoUrl: z.string().url().optional().or(z.literal('')),
+  published: z.boolean().default(false),
+});
+
+type ProjectFormValues = z.infer<typeof projectSchema>;
+
+export default function EditProjectPage() {
+  const firestore = useFirestore();
+  const router = useRouter();
+  const params = useParams();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const projectId = params.id as string;
+
+  const projectRef = useMemoFirebase(() => {
+    if (!firestore || !projectId) return null;
+    return doc(firestore, 'projects', projectId);
+  }, [firestore, projectId]);
+
+  const { data: projectData, isLoading: isLoadingProject } = useDoc(projectRef);
+
+  const form = useForm<ProjectFormValues>({
+    resolver: zodResolver(projectSchema),
+    defaultValues: {
+      title: '',
+      shortSummary: '',
+      description: '',
+      tech: '',
+      tags: '',
+      githubUrl: '',
+      demoUrl: '',
+      published: false,
+    },
+  });
+
+  useEffect(() => {
+    if (projectData) {
+      form.reset({
+        title: projectData.title,
+        shortSummary: projectData.shortSummary,
+        description: projectData.description,
+        tech: (projectData.tech || []).join(', '),
+        tags: (projectData.tags || []).join(', '),
+        githubUrl: projectData.githubUrl,
+        demoUrl: projectData.demoUrl,
+        published: projectData.published,
+      });
+    }
+  }, [projectData, form]);
+
+  const onSubmit = async (data: ProjectFormValues) => {
+    if (!projectRef) return;
+    
+    setIsSubmitting(true);
+
+    const updatedData = {
+      ...data,
+      tech: data.tech.split(',').map(t => t.trim()),
+      tags: data.tags?.split(',').map(t => t.trim()) || [],
+      updatedAt: new Date(),
+    };
+
+    try {
+        await setDocumentNonBlocking(projectRef, updatedData, { merge: true });
+        
+        toast({
+            title: 'Project updated!',
+            description: 'Your changes have been saved.',
+        });
+        router.push('/admin');
+    } catch (error) {
+        console.error('Error updating project:', error);
+        toast({
+            title: 'Error',
+            description: 'Something went wrong. Please try again.',
+            variant: 'destructive',
+        });
+        setIsSubmitting(false);
+    }
+  };
+
+  if (isLoadingProject) {
+    return (
+        <div className="container py-12">
+            <header className="mb-8">
+                <Skeleton className="h-10 w-1/2" />
+                <Skeleton className="h-4 w-3/4 mt-2" />
+            </header>
+            <div className="space-y-8">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+        </div>
+    );
+  }
+
+  return (
+    <div className="container py-12">
+      <header className="mb-8">
+        <h1 className="text-4xl font-bold">Edit Project</h1>
+        <p className="text-muted-foreground">Modify the details of your project below.</p>
+      </header>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Project Title</FormLabel>
+                <FormControl>
+                  <Input placeholder="My Awesome Project" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="shortSummary"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Short Summary</FormLabel>
+                <FormControl>
+                  <Input placeholder="A brief, catchy summary for the project card." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full Description (Markdown supported)</FormLabel>
+                <FormControl>
+                  <Textarea rows={8} placeholder="Describe your project in detail..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="tech"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Technologies Used</FormLabel>
+                <FormControl>
+                  <Input placeholder="Next.js, Firebase, Tailwind CSS" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tags</FormLabel>
+                <FormControl>
+                  <Input placeholder="AI, SaaS, B2B" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+             <FormField
+                control={form.control}
+                name="githubUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>GitHub URL</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://github.com/..." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="demoUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Live Demo URL</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://..." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+           </div>
+          <FormField
+            control={form.control}
+            name="published"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel>Publish Project</FormLabel>
+                  <p className="text-sm text-muted-foreground">
+                    Make this project visible on your public portfolio.
+                  </p>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <div className="flex items-center gap-4">
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isSubmitting ? 'Saving...' : 'Save Changes'}
+            </Button>
+             <Button type="button" variant="outline" onClick={() => router.back()}>
+                Cancel
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+}
