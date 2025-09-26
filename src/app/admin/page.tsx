@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -62,16 +63,23 @@ export default function AdminDashboard() {
   const { data: firestoreProjects, isLoading } = useCollection(projectsQuery);
 
   const allProjects = useMemo(() => {
-    const combined = [...localProjects.map(p => ({...p, id: p.slug, shortSummary: p.shortDescription, published: true, isLocal: true}))];
-    
-    if (firestoreProjects) {
-      firestoreProjects.forEach(fp => {
-        if (!combined.some(p => p.slug === fp.slug)) {
-          combined.push(fp);
-        }
-      });
-    }
-    
+    // Start with Firestore projects
+    const combined = firestoreProjects ? [...firestoreProjects] : [];
+    const firestoreSlugs = new Set(combined.map(p => p.slug));
+
+    // Add local projects only if a project with the same slug doesn't already exist from Firestore
+    localProjects.forEach(localProject => {
+      if (!firestoreSlugs.has(localProject.slug)) {
+        combined.push({
+          ...localProject,
+          id: localProject.slug, // Use slug for key consistency as local project id is different
+          shortSummary: localProject.shortDescription,
+          published: true, // Assume local projects are always 'published' for display
+          isLocal: true,
+        });
+      }
+    });
+
     return combined.sort((a, b) => (a.title > b.title ? 1 : -1));
   }, [firestoreProjects]);
 
