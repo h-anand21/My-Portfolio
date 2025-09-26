@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useMemo } from 'react';
 import { useMemoFirebase } from '@/firebase/provider';
+import { projects as localProjects } from '@/lib/projects';
 
 export default function AdminDashboard() {
   const firestore = useFirestore();
@@ -16,7 +17,22 @@ export default function AdminDashboard() {
     if (!firestore) return null;
     return collection(firestore, 'projects');
   }, [firestore]);
-  const { data: projects, isLoading } = useCollection(projectsQuery);
+  const { data: firestoreProjects, isLoading } = useCollection(projectsQuery);
+
+  const allProjects = useMemo(() => {
+    const combined = [...localProjects.map(p => ({...p, id: p.slug, shortSummary: p.shortDescription, published: true, isLocal: true}))];
+    
+    if (firestoreProjects) {
+      firestoreProjects.forEach(fp => {
+        if (!combined.some(p => p.slug === fp.slug)) {
+          combined.push(fp);
+        }
+      });
+    }
+    
+    return combined;
+  }, [firestoreProjects]);
+
 
   return (
     <div className="container py-12">
@@ -29,11 +45,11 @@ export default function AdminDashboard() {
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold">Your Projects</h2>
         {isLoading && <p>Loading projects...</p>}
-        {projects && projects.length === 0 && (
+        {allProjects && allProjects.length === 0 && !isLoading && (
           <p>You haven't added any projects yet.</p>
         )}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {projects?.map((project) => (
+          {allProjects?.map((project) => (
             <Card key={project.id}>
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
