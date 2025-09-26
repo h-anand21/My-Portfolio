@@ -55,7 +55,7 @@ const HeroSection = () => {
       >
         <motion.div variants={itemVariants} className="order-2 flex flex-col items-center md:items-start md:order-1">
           <h1 className="font-headline text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl mb-8">
-            Your Name
+            Himanshu Anand
           </h1>
           <p className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-12">
             A passionate developer creating modern, responsive, and accessible web experiences.
@@ -97,7 +97,7 @@ const HeroSection = () => {
               data-ai-hint={heroImage.imageHint}
               width={400}
               height={400}
-              className="rounded-full object-cover aspect-square shadow-2xl"
+              className="rounded-lg object-cover aspect-square shadow-2xl"
               priority
             />
           )}
