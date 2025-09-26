@@ -30,7 +30,7 @@ const AboutSection = () => {
                 <div className="bg-card text-card-foreground rounded-3xl p-8 md:p-12 shadow-2xl border border-border">
                     <div className="text-center mb-12">
                         <div className="inline-block bg-primary/20 text-primary font-bold py-2 px-6 rounded-lg">
-                           <h2 className="font-headline text-5xl md:text-6xl">ABOUT</h2>
+                           <h2 className="font-headline text-5xl md:text-6xl">About</h2>
                         </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-12 items-center">
