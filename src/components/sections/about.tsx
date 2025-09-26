@@ -27,13 +27,20 @@ const AboutSection = () => {
     return (
         <section id="about" className="pt-16 md:pt-20 pb-24 md:pb-32">
             <div className="container">
-                <div className="bg-card text-card-foreground rounded-3xl p-8 md:p-12 shadow-2xl border border-border">
-                    <div className="text-center mb-12">
+                <div className="bg-card text-card-foreground rounded-3xl shadow-2xl border border-border overflow-hidden">
+                   <div className="title p-8 md:p-12 relative">
+                     <div className="aurora">
+                        <div className="aurora__item"></div>
+                        <div className="aurora__item"></div>
+                        <div className="aurora__item"></div>
+                        <div className="aurora__item"></div>
+                    </div>
+                    <div className="text-center mb-12 relative z-10">
                         <div className="inline-block bg-primary/20 text-primary font-bold py-2 px-6 rounded-lg">
                            <h2 className="font-headline text-5xl md:text-6xl">About</h2>
                         </div>
                     </div>
-                    <div className="grid md:grid-cols-2 gap-12 items-center">
+                    <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
                         <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
                              {aboutImage && (
                                 <Image
@@ -66,6 +73,7 @@ const AboutSection = () => {
                             </div>
                         </div>
                     </div>
+                   </div>
                 </div>
             </div>
         </section>
