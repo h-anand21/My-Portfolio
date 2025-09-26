@@ -57,15 +57,27 @@ export default function AdminDashboard() {
   }, [firestoreProjects]);
 
   const handleDeleteProject = () => {
-    if (!firestore || !projectToDelete || projectToDelete.isLocal) return;
+    if (!firestore || !projectToDelete) return;
 
-    const projectRef = doc(firestore, 'projects', projectToDelete.id);
-    deleteDocumentNonBlocking(projectRef);
+    // Only attempt to delete from Firestore if it's not a local project
+    if (!projectToDelete.isLocal) {
+        const projectRef = doc(firestore, 'projects', projectToDelete.id);
+        deleteDocumentNonBlocking(projectRef);
+    }
 
     toast({
-      title: 'Project Deleted',
-      description: `"${projectToDelete.title}" has been successfully deleted.`,
+      title: 'Project Action',
+      description: `"${projectToDelete.title}" has been removed from the view.`,
     });
+
+    // Note: This will only visually remove local projects for the current session.
+    // A page refresh would bring them back as they are hardcoded.
+    // To permanently remove them, you would need to edit the source code.
+    const projectIndex = allProjects.findIndex(p => p.id === projectToDelete.id);
+    if (projectIndex > -1) {
+        allProjects.splice(projectIndex, 1);
+    }
+
     setProjectToDelete(null);
   };
 
@@ -110,7 +122,6 @@ export default function AdminDashboard() {
                     <Button
                       variant="destructive"
                       size="sm"
-                      disabled={project.isLocal}
                       onClick={() => setProjectToDelete(project)}
                     >
                       Delete
@@ -127,7 +138,7 @@ export default function AdminDashboard() {
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                     This action cannot be undone. This will permanently delete the
-                    project "{projectToDelete?.title}" from your database.
+                    project "{projectToDelete?.title}" from your database if it's a Firestore project, or remove it from the view if it's a sample.
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
