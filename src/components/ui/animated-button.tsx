@@ -8,7 +8,6 @@ const AnimatedButton = React.forwardRef<HTMLButtonElement>((props, ref) => {
     <button className="animated-button" ref={ref} {...props}>
       <div className="bgContainer">
         <span>Contact Me</span>
-        <span>Contact Me</span>
       </div>
       <div className="arrowContainer">
         <svg

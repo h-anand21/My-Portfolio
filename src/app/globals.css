@@ -95,11 +95,9 @@
     color: hsl(var(--primary-foreground));
   }
   .animated-button .bgContainer span {
-    @apply relative transition-all duration-300;
-    transform: translateX(-100%);
+    @apply relative transition-colors duration-300;
   }
   .animated-button:hover .bgContainer > span {
-    transform: translateX(0);
     color: hsl(var(--accent-foreground));
   }
   .animated-button .arrowContainer {
