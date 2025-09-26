@@ -120,37 +120,44 @@
         "createdAt"
       ]
     },
-    "Admin": {
+    "UserProfile": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Admin",
+      "title": "User Profile",
       "type": "object",
-      "description": "Represents an administrator user for the portfolio application.",
+      "description": "Represents a user profile in the application.",
       "properties": {
-        "id": {
+        "uid": {
           "type": "string",
-          "description": "Unique identifier for the admin user."
+          "description": "The user's unique ID from Firebase Authentication."
         },
         "email": {
           "type": "string",
-          "description": "The email address of the admin user.",
-          "format": "email"
+          "format": "email",
+          "description": "The user's email address."
         },
-        "role": {
+        "displayName": {
           "type": "string",
-          "description": "The role of the admin user (e.g., 'administrator')."
+          "description": "The user's display name."
+        },
+        "photoURL": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the user's profile picture."
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "description": "Flag to indicate if the user has administrative privileges."
         }
       },
       "required": [
-        "id",
-        "email",
-        "role"
+        "uid",
+        "email"
       ]
     }
   },
   "auth": {
     "providers": [
-      "password",
-      "anonymous"
+      "google"
     ]
   },
   "firestore": {
@@ -188,17 +195,17 @@
         }
       },
       {
-        "path": "/roles_admin/{userId}",
+        "path": "/users/{userId}",
         "definition": {
-          "entityName": "Admin",
+          "entityName": "UserProfile",
           "schema": {
-            "$ref": "#/backend/entities/Admin"
+            "$ref": "#/backend/entities/UserProfile"
           },
-          "description": "Stores admin user roles. Existence of a document grants admin privileges.  This existence check supports authorization independence.",
+          "description": "Stores public-facing user profile information. The `isAdmin` flag is stored here to be checked by security rules.",
           "params": [
             {
               "name": "userId",
-              "description": "Unique identifier for the admin user."
+              "description": "Unique identifier for the user, matching their Firebase Auth UID."
             }
           ]
         }
