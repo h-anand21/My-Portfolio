@@ -28,7 +28,7 @@ const ProjectsSection = () => {
     };
 
     return (
-        <section id="projects" className="pt-24 pb-24 md:pt-40 md:pb-32">
+        <section id="projects" className="pt-12 pb-24 md:pt-20 md:pb-32">
             <div className="container">
                 <div className="max-w-2xl mx-auto text-center mb-16">
                     <h2 className="font-headline text-4xl md:text-5xl font-bold">
@@ -68,4 +68,5 @@ const ProjectsSection = () => {
 };
 
 export default ProjectsSection;
+
 
