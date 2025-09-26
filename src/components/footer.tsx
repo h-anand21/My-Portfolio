@@ -11,7 +11,7 @@ const Footer = () => {
         </p>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" asChild>
-            <Link href="#" aria-label="GitHub">
+            <Link href="https://github.com/h-anand21" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
               <Github className="h-5 w-5 text-muted-foreground hover:text-foreground" />
             </Link>
           </Button>

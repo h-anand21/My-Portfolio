@@ -73,7 +73,7 @@ const HeroSection = () => {
           </motion.div>
            <motion.div variants={itemVariants} className="flex items-center gap-2 mt-10">
             <Button variant="ghost" size="sm" asChild>
-              <Link href="#" aria-label="GitHub">
+              <Link href="https://github.com/h-anand21" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                 <Github className="h-4 w-4 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
