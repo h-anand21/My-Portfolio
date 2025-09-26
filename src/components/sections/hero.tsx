@@ -68,17 +68,17 @@ const HeroSection = () => {
           <div className="flex items-center gap-2 mb-8">
             <Button variant="ghost" size="icon" asChild>
               <Link href="https://github.com/h-anand21" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                <Github className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+                <Github className="h-8 w-8 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
             <Button variant="ghost" size="icon" asChild>
               <Link href="https://x.com/hanand_21" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                <Twitter className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+                <Twitter className="h-8 w-8 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
             <Button variant="ghost" size="icon" asChild>
               <Link href="https://www.linkedin.com/in/himanshu-anand21/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <Linkedin className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+                <Linkedin className="h-8 w-8 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
           </div>
@@ -102,8 +102,8 @@ const HeroSection = () => {
                 src={heroImage.imageUrl}
                 alt={heroImage.description}
                 data-ai-hint={heroImage.imageHint}
-                width={300}
-                height={300}
+                width={400}
+                height={400}
                 className="rounded-full object-cover aspect-square shadow-2xl z-10"
                 priority
                 />
@@ -115,6 +115,7 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
 
 
 
