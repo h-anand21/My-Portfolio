@@ -14,12 +14,15 @@ const HeroSection = () => {
   const { user } = useUser();
   const firestore = useFirestore();
 
-  const userProfileRef = useMemoFirebase(() => {
-    if (!firestore || !user) return null;
-    return doc(firestore, 'users', user.uid);
-  }, [firestore, user]);
+  // In a real app, this should fetch a public profile, not the logged-in user's.
+  // For this portfolio, we'll fetch a specific admin doc.
+  const adminUserRef = useMemoFirebase(() => {
+    if (!firestore) return null;
+    const adminUid = "P2GcGewB82MHZtxIfR4PFr8eI323"; // This should be managed in a better way
+    return doc(firestore, 'users', adminUid);
+  }, [firestore]);
 
-  const { data: userProfile } = useDoc<{resumeUrl: string}>(userProfileRef);
+  const { data: userProfile } = useDoc<{resumeUrl: string}>(adminUserRef);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -46,21 +49,55 @@ const HeroSection = () => {
 
 
   return (
-    <section className="pt-16 md:pt-24">
+    <section className="pt-16 md:pt-24 pb-16 md:pb-24">
       <motion.div
-        className="container grid grid-cols-1 items-center gap-16 text-center md:grid-cols-2 md:text-left"
+        className="container flex flex-col items-center text-center"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <motion.div variants={itemVariants} className="order-2 flex flex-col items-center md:items-start md:order-1">
-          <h1 className="font-headline text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl mb-8">
+        <motion.div variants={itemVariants} className="relative mb-8">
+            <div className="absolute -inset-2 rounded-full border-4 border-dashed border-primary/50 animate-spin-slow"></div>
+            {heroImage && (
+                <Image
+                src={heroImage.imageUrl}
+                alt={heroImage.description}
+                data-ai-hint={heroImage.imageHint}
+                width={200}
+                height={200}
+                className="rounded-full object-cover aspect-square shadow-2xl z-10"
+                priority
+                />
+            )}
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="flex flex-col items-center">
+          <h1 className="font-headline text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl mb-4">
             Himanshu Anand
           </h1>
-          <p className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-12">
+          <p className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-8">
             A passionate developer creating modern, responsive, and accessible web experiences.
           </p>
-          <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4 md:justify-start">
+
+          <div className="flex items-center gap-2 mb-8">
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="https://github.com/h-anand21" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <Github className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+              </Link>
+            </Button>
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="https://x.com/hanand_21" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                <Twitter className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+              </Link>
+            </Button>
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="https://www.linkedin.com/in/himanshu-anand21/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <Linkedin className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+              </Link>
+            </Button>
+          </div>
+
+          <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4">
             <Button asChild size="lg">
               <Link href="#contact">Contact Me</Link>
             </Button>
@@ -71,36 +108,6 @@ const HeroSection = () => {
               </a>
             </Button>
           </motion.div>
-           <motion.div variants={itemVariants} className="flex items-center gap-2 mt-10">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="https://github.com/h-anand21" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                <Github className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-              </Link>
-            </Button>
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="https://x.com/hanand_21" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                <Twitter className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-              </Link>
-            </Button>
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="https://www.linkedin.com/in/himanshu-anand21/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <Linkedin className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-              </Link>
-            </Button>
-          </motion.div>
-        </motion.div>
-        <motion.div variants={itemVariants} className="order-1 flex justify-center md:order-2">
-          {heroImage && (
-            <Image
-              src={heroImage.imageUrl}
-              alt={heroImage.description}
-              data-ai-hint={heroImage.imageHint}
-              width={400}
-              height={400}
-              className="rounded-full object-cover aspect-square shadow-2xl"
-              priority
-            />
-          )}
         </motion.div>
       </motion.div>
     </section>
