@@ -71,10 +71,10 @@
 
 @layer components {
   .animated-button {
-    @apply flex justify-around items-center py-4 pl-4 pr-0 bg-yellow-400 cursor-pointer shadow-[4px_6px_0px_black] border-4 border-black rounded-[15px] relative overflow-hidden z-50 transition-all duration-300;
+    @apply flex justify-around items-center py-2 pl-3 pr-0 bg-yellow-400 cursor-pointer shadow-[3px_4px_0px_black] border-2 border-black rounded-[12px] relative overflow-hidden z-50 transition-all duration-300;
   }
   .animated-button:hover {
-    @apply translate-x-[2px] translate-y-[2px] shadow-[2px_3px_0px_black];
+    @apply translate-x-[1px] translate-y-[1px] shadow-[2px_3px_0px_black];
   }
   .animated-button:active {
     filter: saturate(0.75);
@@ -88,7 +88,7 @@
     transform: translateX(0);
   }
   .animated-button .bgContainer {
-    @apply relative flex justify-start items-center overflow-hidden text-2xl font-semibold;
+    @apply relative flex justify-start items-center overflow-hidden text-lg font-semibold;
     max-width: fit-content;
   }
   .animated-button .bgContainer span {
@@ -99,7 +99,7 @@
     transform: translateX(0);
   }
   .animated-button .arrowContainer {
-    @apply p-4 ml-4 border-4 border-black rounded-full bg-pink-400 relative overflow-hidden transition-all duration-300 z-50;
+    @apply p-2 ml-3 border-2 border-black rounded-full bg-pink-400 relative overflow-hidden transition-all duration-300 z-50;
   }
   .animated-button .arrowContainer::after {
     content: "";
@@ -111,14 +111,14 @@
     transform: translateX(0);
   }
   .animated-button:hover .arrowContainer {
-    transform: translateX(5px);
+    transform: translateX(3px);
   }
   .animated-button:active .arrowContainer {
-    transform: translateX(8px);
+    transform: translateX(5px);
   }
   .animated-button .arrowContainer svg {
     @apply align-middle;
+    width: 20px;
+    height: 20px;
   }
 }
-
-    
