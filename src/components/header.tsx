@@ -1,7 +1,19 @@
+'use client';
+
 import Link from 'next/link';
 import { ThemeToggle } from './theme-toggle';
+import { useUser } from '@/firebase';
+import { Button } from './ui/button';
+import { getAuth, signOut } from 'firebase/auth';
 
 const Header = () => {
+  const { user } = useUser();
+
+  const handleSignOut = () => {
+    const auth = getAuth();
+    signOut(auth);
+  };
+
   const navItems = [
     { label: 'Projects', href: '#projects' },
     { label: 'About', href: '#about' },
@@ -25,9 +37,19 @@ const Header = () => {
                 {item.label}
               </Link>
             ))}
+            {user && (
+               <Link href="/admin" className="transition-colors hover:text-primary text-foreground/80">Admin</Link>
+            )}
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
+          {user ? (
+            <Button onClick={handleSignOut} variant="ghost">Sign Out</Button>
+          ) : (
+            <Button asChild variant="ghost">
+              <Link href="/login">Login</Link>
+            </Button>
+          )}
           <ThemeToggle />
         </div>
       </div>
