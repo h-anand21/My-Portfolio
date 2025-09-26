@@ -94,10 +94,12 @@ const HeroSection = () => {
               )
             })}
           </motion.h1>
-          <LayoutTextFlip
-            text="A passionate developer creating"
-            words={["modern", "responsive", "accessible", "performant"]}
-          />
+          <motion.p
+            variants={itemVariants}
+            className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-8"
+          >
+            Passionate about crafting responsive, accessible interfaces that delight users and solve real problems. Let’s build something meaningful.
+          </motion.p>
 
           <div className="mb-8">
             <svg width={0} height={0} style={{position: 'absolute'}}>
