@@ -47,6 +47,26 @@ const HeroSection = () => {
     },
   };
 
+  const name = "Himanshu Anand";
+  const sentence = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.5,
+        staggerChildren: 0.08,
+      },
+    },
+  };
+
+  const letter = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
   const resumeUrl = userProfile?.resumeUrl || 'https://drive.google.com/uc?export=download&id=1MbT8wtl8vq_2B0XrGYpDgHmEQ8BHPj8V';
 
 
@@ -59,9 +79,20 @@ const HeroSection = () => {
         animate="visible"
       >
         <motion.div variants={itemVariants} className="flex flex-col items-center md:items-start text-center md:text-left">
-          <h1 className="font-headline text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl mb-4">
-            Himanshu Anand
-          </h1>
+          <motion.h1 
+            className="font-headline text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl mb-4"
+            variants={sentence}
+            initial="hidden"
+            animate="visible"
+          >
+             {name.split("").map((char, index) => {
+              return (
+                <motion.span key={char + "-" + index} variants={letter}>
+                  {char}
+                </motion.span>
+              )
+            })}
+          </motion.h1>
           <p className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-8">
             A passionate developer creating modern, responsive, and accessible web experiences.
           </p>
