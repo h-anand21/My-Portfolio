@@ -14,6 +14,7 @@ import {
   initiateEmailSignIn,
   initiateEmailSignUp,
 } from '@/firebase/non-blocking-login';
+import { FirebaseError } from 'firebase/app';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, FormEvent, useEffect } from 'react';
@@ -40,14 +41,31 @@ export default function LoginPage() {
     setError(null);
     try {
       if (action === 'signIn') {
-        initiateEmailSignIn(auth, email, password);
+        await initiateEmailSignIn(auth, email, password);
       } else {
-        initiateEmailSignUp(auth, email, password);
+        await initiateEmailSignUp(auth, email, password);
       }
-      // Non-blocking, so we wait for the onAuthStateChanged to redirect
+      // The onAuthStateChanged listener in the provider will handle the redirect on success.
     } catch (err: any) {
-      setError(err.message);
-      setIsLoading(false);
+        if (err instanceof FirebaseError) {
+            switch (err.code) {
+                case 'auth/invalid-credential':
+                    setError('Incorrect email or password. Please try again.');
+                    break;
+                case 'auth/email-already-in-use':
+                    setError('An account with this email already exists.');
+                    break;
+                case 'auth/weak-password':
+                    setError('The password is too weak. Please use at least 6 characters.');
+                    break;
+                default:
+                    setError('An authentication error occurred. Please try again.');
+                    break;
+            }
+        } else {
+             setError('An unexpected error occurred. Please try again.');
+        }
+        setIsLoading(false);
     }
   };
 
