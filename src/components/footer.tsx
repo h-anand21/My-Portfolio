@@ -21,7 +21,7 @@ const Footer = () => {
             </Link>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <Link href="#" aria-label="LinkedIn">
+            <Link href="https://www.linkedin.com/in/himanshu-anand21/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <Linkedin className="h-5 w-5 text-muted-foreground hover:text-foreground" />
             </Link>
           </Button>

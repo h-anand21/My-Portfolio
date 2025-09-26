@@ -83,7 +83,7 @@ const HeroSection = () => {
               </Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="#" aria-label="LinkedIn">
+              <Link href="https://www.linkedin.com/in/himanshu-anand21/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <Linkedin className="h-4 w-4 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>
