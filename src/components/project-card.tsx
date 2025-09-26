@@ -32,7 +32,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         <motion.div variants={cardVariants}>
             <Card className="h-full flex flex-col overflow-hidden transition-transform duration-300 transform-gpu hover:-translate-y-2 hover:shadow-primary/20 hover:shadow-2xl bg-card">
                 <CardHeader>
-                     <Link href={`/projects/${project.slug}`} className="block">
+                     <Link href={`/projects/${project.slug}`} className="block group">
                         <div className="aspect-video relative mb-4 overflow-hidden rounded-lg">
                             <Image
                                 src={project.thumbnailUrl}
