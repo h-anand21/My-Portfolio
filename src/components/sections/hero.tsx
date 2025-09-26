@@ -97,7 +97,7 @@ const HeroSection = () => {
               data-ai-hint={heroImage.imageHint}
               width={400}
               height={400}
-              className="rounded-lg object-cover aspect-square shadow-2xl"
+              className="rounded-full object-cover aspect-square shadow-2xl"
               priority
             />
           )}
