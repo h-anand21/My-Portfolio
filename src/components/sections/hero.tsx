@@ -78,7 +78,7 @@ const HeroSection = () => {
               </Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="#" aria-label="Twitter">
+              <Link href="https://x.com/hanand_21" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
                 <Twitter className="h-4 w-4 text-muted-foreground hover:text-foreground" />
               </Link>
             </Button>

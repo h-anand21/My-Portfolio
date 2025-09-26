@@ -16,7 +16,7 @@ const Footer = () => {
             </Link>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <Link href="#" aria-label="Twitter">
+            <Link href="https://x.com/hanand_21" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
               <Twitter className="h-5 w-5 text-muted-foreground hover:text-foreground" />
             </Link>
           </Button>
