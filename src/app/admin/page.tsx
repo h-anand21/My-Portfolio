@@ -34,6 +34,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useDoc } from '@/firebase/firestore/use-doc';
+import { Card as AnimatedCard, CardSkeletonContainer, CardTitle as AnimatedCardTitle, CardDescription as AnimatedCardDescription, AnimatedCardSkeleton } from '@/components/ui/animated-card';
 
 export default function AdminDashboard() {
   const firestore = useFirestore();
@@ -126,7 +127,7 @@ export default function AdminDashboard() {
           <h1 className="text-4xl font-bold">Admin Dashboard</h1>
         </header>
 
-        <div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="mb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
            <Card>
             <CardHeader>
                 <CardTitle>Resume Management</CardTitle>
@@ -163,6 +164,15 @@ export default function AdminDashboard() {
                     </Button>
                 </CardFooter>
             </Card>
+            <AnimatedCard>
+                <CardSkeletonContainer>
+                    <AnimatedCardSkeleton />
+                </CardSkeletonContainer>
+                <AnimatedCardTitle>AI Integrations</AnimatedCardTitle>
+                <AnimatedCardDescription>
+                    This card showcases the AI tools and services integrated into this application.
+                </AnimatedCardDescription>
+            </AnimatedCard>
         </div>
 
 
