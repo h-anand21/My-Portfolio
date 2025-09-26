@@ -24,6 +24,9 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             },
         },
     };
+    
+    // Ensure tech is an array before mapping
+    const techArray = Array.isArray(project.tech) ? project.tech : [];
 
     return (
         <motion.div variants={cardVariants}>
@@ -36,30 +39,35 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                                 alt={project.title}
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
                         </div>
                     </Link>
                     <CardTitle className="font-headline text-2xl">{project.title}</CardTitle>
-                    <CardDescription>{project.shortDescription}</CardDescription>
+                    <CardDescription>{project.shortSummary || project.shortDescription}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow pt-4">
                      <div className="flex flex-wrap items-center justify-between">
                         <div className="flex flex-wrap gap-2 mb-4">
-                            {project.tech.map((tag) => (
+                            {techArray.map((tag) => (
                                 <Badge key={tag} variant="secondary">{tag}</Badge>
                             ))}
                         </div>
                         <div className="flex gap-2">
-                            <Button variant="ghost" size="icon" asChild>
-                                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
-                                    <Github className="h-5 w-5 text-muted-foreground hover:text-primary" />
-                                </a>
-                            </Button>
-                            <Button variant="ghost" size="icon" asChild>
-                                <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" aria-label="Live Demo">
-                                    <ExternalLink className="h-5 w-5 text-muted-foreground hover:text-primary" />
-                                </a>
-                            </Button>
+                             {project.githubUrl && (
+                                <Button variant="ghost" size="icon" asChild>
+                                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
+                                        <Github className="h-5 w-5 text-muted-foreground hover:text-primary" />
+                                    </a>
+                                </Button>
+                            )}
+                            {project.demoUrl && (
+                                <Button variant="ghost" size="icon" asChild>
+                                    <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" aria-label="Live Demo">
+                                        <ExternalLink className="h-5 w-5 text-muted-foreground hover:text-primary" />
+                                    </a>
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </CardContent>
