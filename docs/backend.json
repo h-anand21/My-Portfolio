@@ -279,6 +279,7 @@
           "description": "Stores testimonial data for the homepage.",
           "rules": {
             "read": true,
+            "list": true,
             "create": "request.auth.token.email == 'himanshuanand563@gmail.com'",
             "update": "request.auth.token.email == 'himanshuanand563@gmail.com'",
             "delete": "request.auth.token.email == 'himanshuanand563@gmail.com'"
