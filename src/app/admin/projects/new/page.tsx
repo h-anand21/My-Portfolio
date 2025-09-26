@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -32,6 +33,7 @@ const projectSchema = z.object({
     .max(160, 'Summary must be less than 160 characters.'),
   description: z.string().min(20, 'Description must be at least 20 characters.'),
   tech: z.string().min(1, 'Please add at least one technology.'),
+  thumbnailUrl: z.string().url({ message: 'Please enter a valid URL.' }),
   tags: z.string().optional(),
   githubUrl: z.string().url().optional().or(z.literal('')),
   demoUrl: z.string().url().optional().or(z.literal('')),
@@ -54,6 +56,7 @@ export default function NewProjectPage() {
       shortSummary: '',
       description: '',
       tech: '',
+      thumbnailUrl: '',
       tags: '',
       githubUrl: '',
       demoUrl: '',
@@ -76,7 +79,6 @@ export default function NewProjectPage() {
       authorId: user.uid,
       createdAt: new Date(),
       updatedAt: new Date(),
-      thumbnailUrl: 'https://picsum.photos/seed/1/600/400', // Placeholder
       screenshots: [], // Placeholder
     };
 
@@ -142,6 +144,19 @@ export default function NewProjectPage() {
                 <FormLabel>Full Description (Markdown supported)</FormLabel>
                 <FormControl>
                   <Textarea rows={8} placeholder="Describe your project in detail..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="thumbnailUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Thumbnail URL</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://example.com/image.png" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
