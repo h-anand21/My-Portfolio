@@ -131,6 +131,21 @@
       aurora-4 24s ease-in-out infinite alternate;
   }
 
+  .breathe-text {
+    font-family: 'TheFont', sans-serif;
+    animation: letter-breathe 3s ease-in-out infinite;
+  }
+
+  @keyframes letter-breathe {
+    from,
+    to {
+      font-variation-settings: 'wght' 100;
+    }
+    50% {
+      font-variation-settings: 'wght' 900;
+    }
+  }
+
   @keyframes aurora-1 {
     0% {
       top: 0;

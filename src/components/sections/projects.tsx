@@ -31,7 +31,7 @@ const ProjectsSection = () => {
         <section id="projects" className="pt-12 pb-24 md:pt-20 md:pb-32">
             <div className="container">
                 <div className="max-w-2xl mx-auto text-center mb-16">
-                    <h2 className="font-headline text-4xl md:text-5xl font-bold">
+                    <h2 className="font-headline text-4xl md:text-5xl font-bold breathe-text">
                         My Work
                     </h2>
                     <p className="mt-4 text-lg text-muted-foreground">Here are some of the projects I'm proud to have worked on. Each one was a unique challenge and a great learning experience.</p>
