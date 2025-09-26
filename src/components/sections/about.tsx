@@ -36,7 +36,7 @@ const AboutSection = () => {
                         <div className="aurora__item"></div>
                     </div>
                     <div className="text-center mb-12 relative z-10">
-                        <h2 className="font-headline text-5xl md:text-6xl text-primary">About</h2>
+                        <h2 className="font-headline text-5xl md:text-6xl font-bold text-card-foreground">About</h2>
                     </div>
                     <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
                         <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
