@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -67,7 +68,7 @@ const FloatingDockMobile = ({
                 <a
                   href={item.href}
                   key={item.title}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-900"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-card"
                 >
                   <div className="h-4 w-4">{item.icon}</div>
                 </a>
@@ -177,8 +178,8 @@ function IconContainer({
             <motion.div
               initial={{ opacity: 0, y: 10, x: "-50%" }}
               animate={{ opacity: 1, y: 0, x: "-50%" }}
-              exit={{ opacity: 0, y: 2, x: "-50%" }}
-              className="absolute -top-8 left-1/2 w-fit rounded-md border border-border bg-background px-2 py-0.5 text-xs whitespace-pre text-foreground"
+              exit={{ opacity: 0, y: 10, x: "-50%" }}
+              className="absolute -top-10 left-1/2 w-fit rounded-md border border-border bg-background px-2 py-0.5 text-xs whitespace-pre text-foreground"
             >
               {title}
             </motion.div>
