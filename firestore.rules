@@ -1,81 +1,93 @@
+/**
+ * @fileoverview Firestore Security Rules for the portfolio application.
+ *
+ * Core Philosophy:
+ * This ruleset enforces a multi-layered security model:
+ *  - Public read access to published project data.
+ *  - Owner-only access to user profiles.
+ *  - Email-based authorization for project creation, updates, and deletion.
+ *
+ * Data Structure:
+ *  - /projects/{projectId}: Stores project information, with the 'published' field controlling public visibility.
+ *  - /contacts/{contactId}: Stores contact form submissions. No read/write access is granted via rules.
+ *  - /users/{userId}: Stores user profile data, with access restricted to the user themselves.
+ *
+ * Key Security Decisions:
+ *  - Contact form submissions are allowed for all.
+ *  - User listing is not permitted.
+ *  - Email-based authorization for projects provides a simple method for admin control.
+ */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Checks if the request is authenticated.
-     */
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    /**
-     * @description Checks if the authenticated user's UID matches the provided userId.
-     */
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
-
-    /**
-     * @description Checks if the authenticated user is the owner of the existing document.
-     */
-    function isExistingOwner(authorId) {
-      return isSignedIn() && request.auth.uid == authorId;
-    }
-
-    /**
-     * @description Allows anyone to read if published is true
-     */
-    function isPublished() {
-        return resource.data.published == true;
-    }
-
-    /**
-     * @description Defines the security rules for the /projects/{projectId} collection.
+     * @description Controls access to project documents. Published projects are publicly readable,
+     *              but only users with the specific email can create, update, or delete projects.
      * @path /projects/{projectId}
-     * @allow (create) Allow user 'P2GcGewB82MHZtxIfR4PFr8eI323' to create a project with authorId 'P2GcGewB82MHZtxIfR4PFr8eI323'.
-     * @deny (create) Deny user 'differentUserId' from creating a project with authorId 'P2GcGewB82MHZtxIfR4PFr8eI323'.
-     * @allow (get, list) Allow anyone to read published projects.
-     * @deny (update, delete) Deny unauthenticated users to delete projects.
-     * @principle Allows public read access for published projects and restricts write access to the owner.
+     * @allow get, list: if true
+     * @allow create: if request.auth.token.email == 'himanshuanand563@gmail.com';
+     * @allow update: if request.auth.token.email == 'himanshuanand563@gmail.com';
+     * @allow delete: if request.auth.token.email == 'himanshuanand563@gmail.com';
+     * @deny create: if request.auth == null; //Deny unauthenticated users from creating projects
+     * @deny update: if request.auth == null; //Deny unauthenticated users from updating projects
+     * @deny delete: if request.auth == null; //Deny unauthenticated users from deleting projects
+     * @principle Allows public read access for published projects and email-based authorization for writes.
      */
     match /projects/{projectId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isSignedIn() && request.resource.data.authorId == request.auth.uid;
-      allow update: if isSignedIn() && request.resource.data.authorId == request.auth.uid;
-      allow delete: if isSignedIn() && resource.data.authorId == request.auth.uid;
+      allow get, list: if true;
+      allow create: if request.auth.token.email == 'himanshuanand563@gmail.com';
+      allow update: if request.auth.token.email == 'himanshuanand563@gmail.com';
+      allow delete: if request.auth.token.email == 'himanshuanand563@gmail.com';
     }
 
     /**
-     * @description Defines the security rules for the /contacts/{contactId} collection.
+     * @description Controls access to contact form submissions. Allows anyone to create a contact submission, but
+     *              does not allow reading, listing, updating, or deleting submissions via the rules.
      * @path /contacts/{contactId}
-     * @deny (create) Deny any user (authenticated or not) from creating a contact message.
-     * @deny (get, list, update, delete) Deny any user (authenticated or not) from reading, listing, updating, or deleting contact messages.
-     * @principle Restricts all access to contact messages.
+     * @allow create: if true;
+     * @deny get, list, update, delete: if true;
+     * @principle Allows open submissions while restricting all other operations
      */
     match /contacts/{contactId} {
-      allow get: if false;
-      allow list: if false;
-      allow create: if false; // Disable contact submissions to prevent spam.  Remove this if you want to allow submissions, but consider adding validation.
+      allow get, list: if false;
+      allow create: if true;
       allow update: if false;
       allow delete: if false;
     }
 
     /**
-     * @description Defines the security rules for the /users/{userId} collection.
+     * @description Controls access to user profile documents. Only the authenticated user can read, create, update, or delete their own profile.
      * @path /users/{userId}
-     * @allow (create) Allow a user to create their own profile if the UID matches.
-     * @allow (get) Allow a user to get their own profile.
-     * @deny (update, delete) Deny others to update or delete a user profile.
-     * @principle Enforces user-ownership for profile data.
+     * @allow get, list: if isOwner(userId);
+     * @allow create: if isOwner(userId);
+     * @allow update: if isOwner(userId);
+     * @allow delete: if isExistingOwner(userId);
+     * @deny get: if request.auth == null;
+     * @deny create: if request.auth == null;
+     * @deny update: if request.auth == null;
+     * @deny delete: if request.auth == null;
+     * @deny create: if request.resource.data.uid != userId;
+     * @principle Enforces document ownership for user profiles.
      */
     match /users/{userId} {
-      allow get: if isOwner(userId);
-      allow list: if false; // disable listing all users
-      allow create: if isOwner(userId) && request.auth.uid == userId;
-      allow update: if isOwner(userId) && request.auth.uid == userId;
-      allow delete: if false; // Prevent users from deleting their profiles via rules.
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) && (request.resource.data.uid == resource.data.uid);
+      allow delete: if isExistingOwner(userId);
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
     }
   }
 }

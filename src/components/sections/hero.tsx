@@ -5,9 +5,21 @@ import { Button } from '@/components/ui/button';
 import { Download, Github, Linkedin, Twitter } from 'lucide-react';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useDoc } from '@/firebase/firestore/use-doc';
+import { doc } from 'firebase/firestore';
+import { useFirestore, useUser, useMemoFirebase } from '@/firebase';
 
 const HeroSection = () => {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
+  const { user } = useUser();
+  const firestore = useFirestore();
+
+  const userProfileRef = useMemoFirebase(() => {
+    if (!firestore || !user) return null;
+    return doc(firestore, 'users', user.uid);
+  }, [firestore, user]);
+
+  const { data: userProfile } = useDoc<{resumeUrl: string}>(userProfileRef);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -30,6 +42,9 @@ const HeroSection = () => {
     },
   };
 
+  const resumeUrl = userProfile?.resumeUrl || 'https://drive.google.com/uc?export=download&id=1MbT8wtl8vq_2B0XrGYpDgHmEQ8BHPj8V';
+
+
   return (
     <section className="pt-16 md:pt-24">
       <motion.div
@@ -50,7 +65,7 @@ const HeroSection = () => {
               <Link href="#contact">Contact Me</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <a href="https://drive.google.com/uc?export=download&id=1MbT8wtl8vq_2B0XrGYpDgHmEQ8BHPj8V" target="_blank" rel="noopener noreferrer">
+              <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
                 <Download className="mr-2 h-4 w-4" />
                 Resume
               </a>

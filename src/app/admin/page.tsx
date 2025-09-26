@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useUser } from '@/firebase';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, doc } from 'firebase/firestore';
 import {
@@ -25,16 +25,35 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useMemoFirebase } from '@/firebase/provider';
 import { projects as localProjects } from '@/lib/projects';
-import { deleteDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import { deleteDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useDoc } from '@/firebase/firestore/use-doc';
 
 export default function AdminDashboard() {
   const firestore = useFirestore();
+  const { user } = useUser();
   const { toast } = useToast();
   const [projectToDelete, setProjectToDelete] = useState<any>(null);
+  const [resumeUrl, setResumeUrl] = useState('');
+  const [isSavingResume, setIsSavingResume] = useState(false);
+
+  const userProfileRef = useMemoFirebase(() => {
+    if (!firestore || !user) return null;
+    return doc(firestore, 'users', user.uid);
+  }, [firestore, user]);
+  const { data: userProfile } = useDoc(userProfileRef);
+
+  useEffect(() => {
+    if (userProfile?.resumeUrl) {
+      setResumeUrl(userProfile.resumeUrl);
+    }
+  }, [userProfile]);
+
 
   const projectsQuery = useMemoFirebase(() => {
     if (!firestore) return null;
@@ -59,7 +78,6 @@ export default function AdminDashboard() {
   const handleDeleteProject = () => {
     if (!firestore || !projectToDelete) return;
 
-    // Only attempt to delete from Firestore if it's not a local project
     if (!projectToDelete.isLocal) {
         const projectRef = doc(firestore, 'projects', projectToDelete.id);
         deleteDocumentNonBlocking(projectRef);
@@ -69,16 +87,33 @@ export default function AdminDashboard() {
       title: 'Project Action',
       description: `"${projectToDelete.title}" has been removed from the view.`,
     });
-
-    // Note: This will only visually remove local projects for the current session.
-    // A page refresh would bring them back as they are hardcoded.
-    // To permanently remove them, you would need to edit the source code.
+    
     const projectIndex = allProjects.findIndex(p => p.id === projectToDelete.id);
     if (projectIndex > -1) {
         allProjects.splice(projectIndex, 1);
     }
 
     setProjectToDelete(null);
+  };
+  
+  const handleSaveResume = async () => {
+    if (!userProfileRef) return;
+    setIsSavingResume(true);
+    try {
+      await setDocumentNonBlocking(userProfileRef, { resumeUrl }, { merge: true });
+      toast({
+        title: 'Success!',
+        description: 'Your resume URL has been updated.',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to update resume URL.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSavingResume(false);
+    }
   };
 
 
@@ -87,12 +122,41 @@ export default function AdminDashboard() {
       <AlertDialog>
         <header className="mb-8 flex items-center justify-between">
           <h1 className="text-4xl font-bold">Admin Dashboard</h1>
-          <Button asChild>
-            <Link href="/admin/projects/new">Add New Project</Link>
-          </Button>
         </header>
+
+        <div className="mb-12">
+           <Card>
+            <CardHeader>
+                <CardTitle>Resume Management</CardTitle>
+                <CardDescription>Update the public URL for your resume. This link will be used on the "Download Resume" buttons across your site.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                 <div className="space-y-2">
+                    <Label htmlFor="resumeUrl">Resume URL</Label>
+                    <Input 
+                        id="resumeUrl" 
+                        value={resumeUrl}
+                        onChange={(e) => setResumeUrl(e.target.value)}
+                        placeholder="https://example.com/your-resume.pdf"
+                    />
+                </div>
+            </CardContent>
+            <CardFooter>
+                <Button onClick={handleSaveResume} disabled={isSavingResume}>
+                    {isSavingResume ? 'Saving...' : 'Save Resume URL'}
+                </Button>
+            </CardFooter>
+           </Card>
+        </div>
+
+
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Your Projects</h2>
+          <header className="flex items-center justify-between">
+            <h2 className="text-2xl font-semibold">Your Projects</h2>
+            <Button asChild>
+                <Link href="/admin/projects/new">Add New Project</Link>
+            </Button>
+          </header>
           {isLoading && <p>Loading projects...</p>}
           {allProjects && allProjects.length === 0 && !isLoading && (
             <p>You haven't added any projects yet.</p>
