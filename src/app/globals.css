@@ -90,7 +90,7 @@
     transform: translateX(0);
   }
   .animated-button .bgContainer {
-    @apply relative flex justify-start items-center overflow-hidden text-base font-semibold pr-3;
+    @apply relative flex justify-start items-center overflow-hidden text-base font-semibold pr-6;
     max-width: fit-content;
     color: hsl(var(--primary-foreground));
   }
