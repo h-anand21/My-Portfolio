@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -51,12 +52,12 @@ const HeroSection = () => {
   return (
     <section className="pt-16 md:pt-24 pb-16 md:pb-24">
       <motion.div
-        className="container flex flex-col items-center text-center"
+        className="container grid md:grid-cols-2 gap-12 items-center"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <motion.div variants={itemVariants} className="relative mb-8">
+        <motion.div variants={itemVariants} className="relative justify-self-center">
             <div className="absolute -inset-2 rounded-full border-4 border-dashed border-primary/50 animate-spin-slow"></div>
             {heroImage && (
                 <Image
@@ -71,7 +72,7 @@ const HeroSection = () => {
             )}
         </motion.div>
 
-        <motion.div variants={itemVariants} className="flex flex-col items-center">
+        <motion.div variants={itemVariants} className="flex flex-col items-center md:items-start text-center md:text-left">
           <h1 className="font-headline text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl mb-4">
             Himanshu Anand
           </h1>
@@ -97,7 +98,7 @@ const HeroSection = () => {
             </Button>
           </div>
 
-          <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4">
+          <motion.div variants={itemVariants} className="flex flex-wrap justify-center md:justify-start gap-4">
             <Button asChild size="lg">
               <Link href="#contact">Contact Me</Link>
             </Button>
@@ -115,3 +116,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
