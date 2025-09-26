@@ -7,7 +7,7 @@ import { useUser } from '@/firebase';
 import { Button } from './ui/button';
 import { getAuth, signOut } from 'firebase/auth';
 import { FloatingDock } from './ui/floating-dock';
-import { Home, FolderKanban, User, MessageSquare, KeySquare } from 'lucide-react';
+import { Home, FolderKanban, User, MessageSquare, KeySquare, Star } from 'lucide-react';
 
 const Header = () => {
   const { user } = useUser();
@@ -21,6 +21,7 @@ const Header = () => {
     { title: 'Home', href: '#', icon: <Home className="h-full w-full" /> },
     { title: 'Projects', href: '#projects', icon: <FolderKanban className="h-full w-full" /> },
     { title: 'About', href: '#about', icon: <User className="h-full w-full" /> },
+    { title: 'Testimonials', href: '#testimonials', icon: <Star className="h-full w-full" /> },
     { title: 'Contact', href: '#contact', icon: <MessageSquare className="h-full w-full" /> },
   ];
 
