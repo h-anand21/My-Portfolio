@@ -71,7 +71,7 @@
 
 @layer components {
   .animated-button {
-    @apply flex justify-around items-center py-2 pl-4 pr-0 cursor-pointer shadow-[3px_4px_0px_hsl(var(--foreground))] border-2 border-foreground rounded-[12px] relative overflow-hidden z-50 transition-all duration-300;
+    @apply flex justify-around items-center py-2 pl-4 pr-2 cursor-pointer shadow-[3px_4px_0px_hsl(var(--foreground))] border-2 border-foreground rounded-[12px] relative overflow-hidden z-50 transition-all duration-300;
     background-color: hsl(var(--primary));
   }
   .animated-button:hover {
@@ -90,7 +90,7 @@
     transform: translateX(0);
   }
   .animated-button .bgContainer {
-    @apply relative flex justify-start items-center overflow-hidden text-base font-semibold pr-10;
+    @apply relative flex justify-start items-center overflow-hidden text-base font-semibold pr-4;
     max-width: fit-content;
     color: hsl(var(--primary-foreground));
   }
@@ -103,7 +103,7 @@
   .animated-button .arrowContainer {
     @apply p-2 border-2 border-foreground rounded-full relative overflow-hidden transition-all duration-300 z-50;
     background-color: hsl(var(--accent));
-    margin-left: -15px;
+    margin-left: -5px;
   }
   .animated-button .arrowContainer::after {
     content: "";
