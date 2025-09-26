@@ -10,6 +10,7 @@ import { useDoc } from '@/firebase/firestore/use-doc';
 import { doc } from 'firebase/firestore';
 import { useFirestore, useUser, useMemoFirebase } from '@/firebase';
 import AnimatedButton from '../ui/animated-button';
+import { LayoutTextFlip } from '../ui/layout-text-flip';
 
 const HeroSection = () => {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
@@ -93,9 +94,10 @@ const HeroSection = () => {
               )
             })}
           </motion.h1>
-          <p className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-8">
-            A passionate developer creating modern, responsive, and accessible web experiences.
-          </p>
+          <LayoutTextFlip
+            text="A passionate developer creating"
+            words={["modern", "responsive", "accessible", "performant"]}
+          />
 
           <div className="mb-8">
             <svg width={0} height={0} style={{position: 'absolute'}}>
