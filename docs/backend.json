@@ -164,6 +164,36 @@
         "uid",
         "email"
       ]
+    },
+    "Testimonial": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Testimonial",
+      "type": "object",
+      "description": "Represents a testimonial from a client or collaborator.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the testimonial."
+        },
+        "quote": {
+          "type": "string",
+          "description": "The content of the testimonial."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the person giving the testimonial."
+        },
+        "designation": {
+          "type": "string",
+          "description": "Title and company of the person."
+        },
+        "src": {
+          "type": "string",
+          "description": "URL for the person's image.",
+          "format": "uri"
+        }
+      },
+      "required": [ "id", "quote", "name", "designation", "src" ]
     }
   },
   "auth": {
@@ -238,10 +268,30 @@
             }
           ]
         }
+      },
+      {
+        "path": "/testimonials/{testimonialId}",
+        "definition": {
+          "entityName": "Testimonial",
+          "schema": {
+            "$ref": "#/backend/entities/Testimonial"
+          },
+          "description": "Stores testimonial data for the homepage.",
+          "rules": {
+            "read": true,
+            "create": "request.auth.token.email == 'himanshuanand563@gmail.com'",
+            "update": "request.auth.token.email == 'himanshuanand563@gmail.com'",
+            "delete": "request.auth.token.email == 'himanshuanand563@gmail.com'"
+          },
+          "params": [
+            {
+              "name": "testimonialId",
+              "description": "Unique identifier for the testimonial."
+            }
+          ]
+        }
       }
     ],
     "reasoning": "The Firestore data structure is designed to support a public portfolio site with an admin interface for managing projects. The structure prioritizes authorization independence and supports secure list operations (QAPs). Authorization Independence is achieved by storing admin roles in a dedicated collection and securing project visibility via the `published` field, eliminating the need for `get()` calls in security rules. This design supports atomic operations and simplifies debugging.\n\nStructural Segregation is applied by storing projects in a single collection, with `published` determining visibility.  The admin role is checked via a dedicated `/roles_admin/{uid}` collection. This approach enforces a homogeneous security posture for projects, simplifying rules.\n\nAccess Modeling utilizes Path-Based ownership for admin roles (`/roles_admin/{uid}`).  The project's published state is stored directly within the project document, and Firestore security rules leverage this field to control read access for public users.\n\nData Clarity is ensured by using the explicit `published` boolean field to represent the project's visibility state. Standardized naming conventions are used (e.g., `publishedAt`)."
   }
 }
-
-    

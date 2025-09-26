@@ -126,7 +126,7 @@ export default function AdminDashboard() {
           <h1 className="text-4xl font-bold">Admin Dashboard</h1>
         </header>
 
-        <div className="mb-12">
+        <div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-8">
            <Card>
             <CardHeader>
                 <CardTitle>Resume Management</CardTitle>
@@ -149,6 +149,20 @@ export default function AdminDashboard() {
                 </Button>
             </CardFooter>
            </Card>
+           <Card>
+                <CardHeader>
+                    <CardTitle>Testimonials</CardTitle>
+                    <CardDescription>Manage the testimonials that appear on your homepage in the "What People Are Saying" section.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-muted-foreground">Add, edit, or delete testimonials to keep your social proof fresh and relevant.</p>
+                </CardContent>
+                <CardFooter>
+                    <Button asChild>
+                        <Link href="/admin/testimonials">Manage Testimonials</Link>
+                    </Button>
+                </CardFooter>
+            </Card>
         </div>
 
 

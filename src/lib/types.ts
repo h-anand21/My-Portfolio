@@ -17,3 +17,11 @@ export type Project = {
   };
   published?: boolean;
 };
+
+export type Testimonial = {
+  id: string;
+  quote: string;
+  name: string;
+  designation: string;
+  src: string; // URL for the image
+};
