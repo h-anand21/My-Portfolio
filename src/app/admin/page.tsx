@@ -63,24 +63,20 @@ export default function AdminDashboard() {
   const { data: firestoreProjects, isLoading } = useCollection(projectsQuery);
 
   const allProjects = useMemo(() => {
-    // Start with Firestore projects
-    const combined = firestoreProjects ? [...firestoreProjects] : [];
-    const firestoreSlugs = new Set(combined.map(p => p.slug));
+    const combinedProjects: any[] = firestoreProjects ? [...firestoreProjects] : [];
+    const firestoreProjectSlugs = new Set(combinedProjects.map(p => p.slug));
 
-    // Add local projects only if a project with the same slug doesn't already exist from Firestore
     localProjects.forEach(localProject => {
-      if (!firestoreSlugs.has(localProject.slug)) {
-        combined.push({
-          ...localProject,
-          id: localProject.slug, // Use slug for key consistency as local project id is different
-          shortSummary: localProject.shortDescription,
-          published: true, // Assume local projects are always 'published' for display
-          isLocal: true,
-        });
-      }
+        if (!firestoreProjectSlugs.has(localProject.slug)) {
+            combinedProjects.push({
+                ...localProject,
+                shortSummary: localProject.shortDescription, // Align property name
+                isLocal: true,
+            });
+        }
     });
 
-    return combined.sort((a, b) => (a.title > b.title ? 1 : -1));
+    return combinedProjects.sort((a, b) => a.title.localeCompare(b.title));
   }, [firestoreProjects]);
 
   const handleDeleteProject = () => {
@@ -96,10 +92,8 @@ export default function AdminDashboard() {
       description: `"${projectToDelete.title}" has been removed from the view.`,
     });
     
-    const projectIndex = allProjects.findIndex(p => p.id === projectToDelete.id);
-    if (projectIndex > -1) {
-        allProjects.splice(projectIndex, 1);
-    }
+    // The view will update automatically due to state changes from useCollection
+    // and the re-computation of `allProjects`. No manual splice needed.
 
     setProjectToDelete(null);
   };
