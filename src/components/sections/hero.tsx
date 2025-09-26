@@ -10,7 +10,7 @@ import { useDoc } from '@/firebase/firestore/use-doc';
 import { doc } from 'firebase/firestore';
 import { useFirestore, useUser, useMemoFirebase } from '@/firebase';
 import AnimatedButton from '../ui/animated-button';
-import { LayoutTextFlip } from '../ui/layout-text-flip';
+import { TextHoverEffect } from '../ui/text-hover-effect';
 
 const HeroSection = () => {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
@@ -94,12 +94,14 @@ const HeroSection = () => {
               )
             })}
           </motion.h1>
-          <motion.p
+          <motion.div
             variants={itemVariants}
             className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-8"
           >
-            Passionate about crafting responsive, accessible interfaces that delight users and solve real problems. Let’s build something meaningful.
-          </motion.p>
+            <TextHoverEffect>
+              Passionate about crafting responsive, accessible interfaces that delight users and solve real problems. Let’s build something meaningful.
+            </TextHoverEffect>
+          </motion.div>
 
           <div className="mb-8">
             <svg width={0} height={0} style={{position: 'absolute'}}>
@@ -175,5 +177,7 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
+    
 
     
