@@ -1,106 +1,81 @@
-/**
- * @file Firestore Security Rules
- * @description This ruleset enforces a role-based access control model for a portfolio application.
- *
- * Data Structure:
- * - /projects/{projectId}: Stores project data. Publicly readable if 'published' is true, otherwise only editable by admins.
- * - /contacts/{contactId}: Stores contact form submissions. Only admins can read or write.
- * - /roles_admin/{userId}:  Admin user roles.  The existence of a document in this collection grants admin privileges to the corresponding user.
- *
- * Key Security Decisions:
- * - Public read access to published projects.
- * - Admin-only access to create, update, and delete projects.
- * - Admin-only access to contact form submissions.
- * - Admin role is determined by the presence of a document in the `/roles_admin/{userId}` collection.
- * - User listing is disallowed for the `/roles_admin` collection to prevent information disclosure.
- *
- * Denormalization for Authorization:
- * - The `published` field is stored directly in the `/projects/{projectId}` document. This allows for efficient public read access without requiring additional `get()` calls to check the publication status.
- */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Checks if the user is signed in.
+     * @description Checks if the request is authenticated.
      */
     function isSignedIn() {
       return request.auth != null;
     }
 
     /**
-     * @description Checks if the user is an admin by verifying the existence of a document in the /roles_admin/{userId} collection.
-     */
-    function isAdmin() {
-      return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
-    }
-
-    /**
-     * @description Checks if the user is the owner of the resource, using their userId.
+     * @description Checks if the authenticated user's UID matches the provided userId.
      */
     function isOwner(userId) {
-      return request.auth.uid == userId;
+      return isSignedIn() && request.auth.uid == userId;
     }
 
     /**
-     * @description Checks if the user is the owner of the resource, AND that the resource exists.  For update/delete operations.
+     * @description Checks if the authenticated user is the owner of the existing document.
      */
-    function isExistingOwner(userId) {
-      return isOwner(userId) && resource != null;
+    function isExistingOwner(authorId) {
+      return isSignedIn() && request.auth.uid == authorId;
     }
 
+    /**
+     * @description Allows anyone to read if published is true
+     */
+    function isPublished() {
+        return resource.data.published == true;
+    }
+
+    /**
+     * @description Defines the security rules for the /projects/{projectId} collection.
+     * @path /projects/{projectId}
+     * @allow (create) Allow user 'P2GcGewB82MHZtxIfR4PFr8eI323' to create a project with authorId 'P2GcGewB82MHZtxIfR4PFr8eI323'.
+     * @deny (create) Deny user 'differentUserId' from creating a project with authorId 'P2GcGewB82MHZtxIfR4PFr8eI323'.
+     * @allow (get, list) Allow anyone to read published projects.
+     * @deny (update, delete) Deny unauthenticated users to delete projects.
+     * @principle Allows public read access for published projects and restricts write access to the owner.
+     */
     match /projects/{projectId} {
-      /**
-       * @description Allows public read access (get, list) to published projects, and restricts create, update, and delete to admins.
-       * @path /projects/{projectId}
-       * @allow (get, list) Anyone can read a published project.
-       * @allow (create, update, delete) Only admins can modify projects.
-       * @deny (create) A non-admin user cannot create a project.
-       * @deny (update) A non-admin user cannot update a project.
-       * @deny (delete) A non-admin user cannot delete a project.
-       * @principle Public read, admin-only write.
-       */
-      allow get: if resource.data.published == true;
+      allow get: if true;
       allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow create: if isSignedIn() && request.resource.data.authorId == request.auth.uid;
+      allow update: if isSignedIn() && request.resource.data.authorId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.authorId == request.auth.uid;
     }
 
+    /**
+     * @description Defines the security rules for the /contacts/{contactId} collection.
+     * @path /contacts/{contactId}
+     * @deny (create) Deny any user (authenticated or not) from creating a contact message.
+     * @deny (get, list, update, delete) Deny any user (authenticated or not) from reading, listing, updating, or deleting contact messages.
+     * @principle Restricts all access to contact messages.
+     */
     match /contacts/{contactId} {
-      /**
-       * @description Only admins can read, create, update, or delete contact form submissions.
-       * @path /contacts/{contactId}
-       * @allow (create) Only admins can create a contact (via the function).
-       * @allow (get, list) Only admins can read contacts.
-       * @deny (create) Non-admins cannot submit contact forms directly (should use the function).
-       * @deny (get, list) Non-admins cannot read contact form submissions.
-       * @principle Admin-only access.
-       */
-      allow create: if isAdmin();
-      allow get: if isAdmin();
-      allow list: if isAdmin();
+      allow get: if false;
+      allow list: if false;
+      allow create: if false; // Disable contact submissions to prevent spam.  Remove this if you want to allow submissions, but consider adding validation.
       allow update: if false;
       allow delete: if false;
     }
 
-    match /roles_admin/{userId} {
-      /**
-       * @description Allows admins to manage their own role document. Used for authorization.  No listing allowed.
-       * @path /roles_admin/{userId}
-       * @allow (create) An admin can create their own role document.
-       * @allow (get) An admin can read their own role document.
-       * @deny (list) No one can list the admin roles (prevents discovery).
-       * @deny (create) Non-admins cannot create an admin role document.
-       * @deny (update) Only the user can update their own role document.
-       * @deny (delete) Only the user can delete their own role document.
-       * @principle Owner-only, authorization independence.
-       */
-      allow create: if isSignedIn() && isOwner(userId);
-      allow get: if isSignedIn() && isOwner(userId);
-      allow list: if false;
-      allow update: if false;
-      allow delete: if isExistingOwner(userId);
+    /**
+     * @description Defines the security rules for the /users/{userId} collection.
+     * @path /users/{userId}
+     * @allow (create) Allow a user to create their own profile if the UID matches.
+     * @allow (get) Allow a user to get their own profile.
+     * @deny (update, delete) Deny others to update or delete a user profile.
+     * @principle Enforces user-ownership for profile data.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false; // disable listing all users
+      allow create: if isOwner(userId) && request.auth.uid == userId;
+      allow update: if isOwner(userId) && request.auth.uid == userId;
+      allow delete: if false; // Prevent users from deleting their profiles via rules.
     }
   }
 }

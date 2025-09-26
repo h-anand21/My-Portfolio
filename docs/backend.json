@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "Project": {
@@ -70,6 +71,10 @@
           "type": "string",
           "description": "The date and time when the project was published.",
           "format": "date-time"
+        },
+        "authorId": {
+            "type": "string",
+            "description": "The UID of the user who created the project."
         }
       },
       "required": [
@@ -80,7 +85,8 @@
         "description",
         "tech",
         "thumbnailUrl",
-        "published"
+        "published",
+        "authorId"
       ]
     },
     "Contact": {
@@ -170,6 +176,13 @@
             "$ref": "#/backend/entities/Project"
           },
           "description": "Stores project data. The 'published' field controls public visibility.",
+          "rules": {
+            "read": "resource.data.published == true",
+            "get": "isOwner(resource) || resource.data.published == true",
+            "create": "isOwner(resource)",
+            "update": "isOwner(resource)",
+            "delete": "isOwner(resource)"
+          },
           "params": [
             {
               "name": "projectId",
@@ -186,6 +199,11 @@
             "$ref": "#/backend/entities/Contact"
           },
           "description": "Stores contact form submissions.",
+          "rules": {
+            "read": false,
+            "write": false,
+            "create": true
+          },
           "params": [
             {
               "name": "contactId",
@@ -202,6 +220,12 @@
             "$ref": "#/backend/entities/UserProfile"
           },
           "description": "Stores public-facing user profile information. The `isAdmin` flag is stored here to be checked by security rules.",
+          "rules": {
+            "read": true,
+            "create": "request.auth.uid == userId",
+            "update": "request.auth.uid == userId",
+            "write": "request.auth.uid == userId"
+          },
           "params": [
             {
               "name": "userId",
