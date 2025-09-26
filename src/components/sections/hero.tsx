@@ -57,21 +57,6 @@ const HeroSection = () => {
         initial="hidden"
         animate="visible"
       >
-        <motion.div variants={itemVariants} className="relative justify-self-center">
-            <div className="absolute -inset-2 rounded-full border-4 border-dashed border-primary/50 animate-spin-slow"></div>
-            {heroImage && (
-                <Image
-                src={heroImage.imageUrl}
-                alt={heroImage.description}
-                data-ai-hint={heroImage.imageHint}
-                width={200}
-                height={200}
-                className="rounded-full object-cover aspect-square shadow-2xl z-10"
-                priority
-                />
-            )}
-        </motion.div>
-
         <motion.div variants={itemVariants} className="flex flex-col items-center md:items-start text-center md:text-left">
           <h1 className="font-headline text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl mb-4">
             Himanshu Anand
@@ -110,10 +95,25 @@ const HeroSection = () => {
             </Button>
           </motion.div>
         </motion.div>
+        <motion.div variants={itemVariants} className="relative justify-self-center">
+            <div className="absolute -inset-2 rounded-full border-4 border-dashed border-primary/50 animate-spin-slow"></div>
+            {heroImage && (
+                <Image
+                src={heroImage.imageUrl}
+                alt={heroImage.description}
+                data-ai-hint={heroImage.imageHint}
+                width={200}
+                height={200}
+                className="rounded-full object-cover aspect-square shadow-2xl z-10"
+                priority
+                />
+            )}
+        </motion.div>
       </motion.div>
     </section>
   );
 };
 
 export default HeroSection;
+
 
