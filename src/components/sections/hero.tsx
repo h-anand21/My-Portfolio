@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -57,7 +57,7 @@ const HeroSection = () => {
           <h1 className="font-headline text-7xl font-bold tracking-tighter sm:text-8xl md:text-9xl mb-8">
             Your Name
           </h1>
-          <p className="max-w-2xl text-3xl text-muted-foreground md:text-4xl mb-12">
+          <p className="max-w-2xl text-5xl text-muted-foreground md:text-6xl mb-12">
             A passionate developer creating modern, responsive, and accessible web experiences.
           </p>
           <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4 md:justify-start">
@@ -95,8 +95,8 @@ const HeroSection = () => {
               src={heroImage.imageUrl}
               alt={heroImage.description}
               data-ai-hint={heroImage.imageHint}
-              width={250}
-              height={250}
+              width={400}
+              height={400}
               className="rounded-full object-cover aspect-square shadow-2xl"
               priority
             />
