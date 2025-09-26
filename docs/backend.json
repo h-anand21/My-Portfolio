@@ -8,49 +8,79 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the Project entity."
+          "description": "Unique identifier for the project."
         },
         "title": {
           "type": "string",
-          "description": "Title of the project."
+          "description": "The title of the project."
+        },
+        "slug": {
+          "type": "string",
+          "description": "URL-friendly slug for the project (used in routes)."
+        },
+        "shortSummary": {
+          "type": "string",
+          "description": "A short summary of the project."
         },
         "description": {
           "type": "string",
-          "description": "Short description of the project."
+          "description": "A detailed description of the project, potentially in Markdown format."
         },
         "tech": {
           "type": "array",
-          "description": "Array of technologies used in the project.",
+          "description": "An array of technologies used in the project.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "An array of tags associated with the project.",
           "items": {
             "type": "string"
           }
         },
         "thumbnailUrl": {
           "type": "string",
-          "description": "URL of the project thumbnail image."
+          "description": "URL of the project thumbnail image.",
+          "format": "uri"
         },
-        "demoUrl": {
-          "type": "string",
-          "description": "URL of the live demo of the project."
+        "screenshots": {
+          "type": "array",
+          "description": "An array of URLs to project screenshots.",
+          "items": {
+            "type": "string"
+          }
         },
         "githubUrl": {
           "type": "string",
-          "description": "URL of the project's GitHub repository."
+          "description": "URL of the project's GitHub repository.",
+          "format": "uri"
         },
-        "caseStudy": {
+        "demoUrl": {
           "type": "string",
-          "description": "Detailed case study of the project."
+          "description": "URL of the live demo of the project.",
+          "format": "uri"
+        },
+        "published": {
+          "type": "boolean",
+          "description": "Indicates whether the project is published and visible on the public portfolio."
+        },
+        "publishedAt": {
+          "type": "string",
+          "description": "The date and time when the project was published.",
+          "format": "date-time"
         }
       },
       "required": [
         "id",
         "title",
+        "slug",
+        "shortSummary",
         "description",
         "tech",
         "thumbnailUrl",
-        "demoUrl",
-        "githubUrl",
-        "caseStudy"
+        "published"
       ]
     },
     "Contact": {
@@ -61,24 +91,24 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the Contact entity."
+          "description": "Unique identifier for the contact message."
         },
         "name": {
           "type": "string",
-          "description": "Name of the person submitting the contact form."
+          "description": "The name of the person submitting the form."
         },
         "email": {
           "type": "string",
-          "description": "Email address of the person submitting the contact form.",
+          "description": "The email address of the person submitting the form.",
           "format": "email"
         },
         "message": {
           "type": "string",
-          "description": "Message submitted through the contact form."
+          "description": "The message content."
         },
         "createdAt": {
           "type": "string",
-          "description": "Timestamp of when the contact form was submitted.",
+          "description": "The date and time when the contact message was created.",
           "format": "date-time"
         }
       },
@@ -90,29 +120,30 @@
         "createdAt"
       ]
     },
-    "AnalyticsMeta": {
+    "Admin": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "AnalyticsMeta",
+      "title": "Admin",
       "type": "object",
-      "description": "Represents custom analytics metrics (optional).",
+      "description": "Represents an administrator user for the portfolio application.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the AnalyticsMeta entity."
+          "description": "Unique identifier for the admin user."
         },
-        "metricName": {
+        "email": {
           "type": "string",
-          "description": "Name of the metric being tracked."
+          "description": "The email address of the admin user.",
+          "format": "email"
         },
-        "metricValue": {
-          "type": "number",
-          "description": "Value of the metric."
+        "role": {
+          "type": "string",
+          "description": "The role of the admin user (e.g., 'administrator')."
         }
       },
       "required": [
         "id",
-        "metricName",
-        "metricValue"
+        "email",
+        "role"
       ]
     }
   },
@@ -131,11 +162,11 @@
           "schema": {
             "$ref": "#/backend/entities/Project"
           },
-          "description": "Stores project metadata with public read access.",
+          "description": "Stores project data. The 'published' field controls public visibility.",
           "params": [
             {
               "name": "projectId",
-              "description": "The unique identifier for the project."
+              "description": "Unique identifier for the project."
             }
           ]
         }
@@ -147,32 +178,32 @@
           "schema": {
             "$ref": "#/backend/entities/Contact"
           },
-          "description": "Stores contact form submissions.  Writes are handled via a secured function to prevent unauthorized access.",
+          "description": "Stores contact form submissions.",
           "params": [
             {
               "name": "contactId",
-              "description": "The unique identifier for the contact message."
+              "description": "Unique identifier for the contact message."
             }
           ]
         }
       },
       {
-        "path": "/analytics_meta/{analyticsMetaId}",
+        "path": "/roles_admin/{userId}",
         "definition": {
-          "entityName": "AnalyticsMeta",
+          "entityName": "Admin",
           "schema": {
-            "$ref": "#/backend/entities/AnalyticsMeta"
+            "$ref": "#/backend/entities/Admin"
           },
-          "description": "Stores custom analytics metrics.  Writes should be restricted to authenticated admin users or secured functions.",
+          "description": "Stores admin user roles. Existence of a document grants admin privileges.  This existence check supports authorization independence.",
           "params": [
             {
-              "name": "analyticsMetaId",
-              "description": "The unique identifier for the analytics metric."
+              "name": "userId",
+              "description": "Unique identifier for the admin user."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore data structure is designed to support the portfolio application's features, emphasizing security, scalability, and ease of maintenance. It incorporates key principles like Authorization Independence and Structural Segregation.\n\n*   `/projects`: Stores project metadata. This collection has public read access, enabling efficient retrieval for the project grid. No write access is granted directly; updates occur via a secured function.\n*   `/contacts`: Stores contact form submissions. Writes are handled via a secured function to prevent spam/unauthorized access. This function can implement reCAPTCHA or other validation methods.\n*   `/analytics_meta`: Stores custom analytics metrics. This is an optional collection that allows for tracking application usage and performance. Writes should be restricted to authenticated admin users or secured functions.\n\n**Authorization Independence:** Authorization for project access is inherently public, simplifying rules. Contacts are managed via a secured function, avoiding direct client writes and complex rule logic. No `get()` calls are needed in rules, enabling atomic operations.\n\n**QAPs (Rules are not Filters):** The structure supports the required QAPs.\n\n*   `List Projects`: The segregation of public project data into a dedicated `/projects` collection allows for efficient and secure `list` operations without filtering.\n\n**Invariants:** Timestamps are enforced via server timestamps in the secured function for contact creation, ensuring integrity. Project ownership is not explicitly modeled, as projects are considered public data, managed by authorized personnel."
+    "reasoning": "The Firestore data structure is designed to support a public portfolio site with an admin interface for managing projects. The structure prioritizes authorization independence and supports secure list operations (QAPs). Authorization Independence is achieved by storing admin roles in a dedicated collection and securing project visibility via the `published` field, eliminating the need for `get()` calls in security rules. This design supports atomic operations and simplifies debugging.\n\nStructural Segregation is applied by storing projects in a single collection, with `published` determining visibility.  The admin role is checked via a dedicated `/roles_admin/{uid}` collection. This approach enforces a homogeneous security posture for projects, simplifying rules.\n\nAccess Modeling utilizes Path-Based ownership for admin roles (`/roles_admin/{uid}`).  The project's published state is stored directly within the project document, and Firestore security rules leverage this field to control read access for public users.\n\nData Clarity is ensured by using the explicit `published` boolean field to represent the project's visibility state. Standardized naming conventions are used (e.g., `publishedAt`)."
   }
 }
