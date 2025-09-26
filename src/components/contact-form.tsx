@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useRef, FormEvent } from "react";
-import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { HoverBorderGradient } from "./ui/hover-border-gradient";
 
 export default function ContactForm() {
   const { toast } = useToast();
@@ -61,9 +61,16 @@ export default function ContactForm() {
         <Label htmlFor="message">Message</Label>
         <Textarea id="message" name="message" placeholder="Your message..." rows={5} required value={message} onChange={(e) => setMessage(e.target.value)} />
       </div>
-       <Button type="submit" className="w-full" size="lg">
-        Send Message
-      </Button>
+       <div className="flex justify-center">
+        <HoverBorderGradient
+          containerClassName="rounded-full"
+          as="button"
+          type="submit"
+          className="bg-card text-foreground flex items-center space-x-2"
+        >
+          <span>Send Message</span>
+        </HoverBorderGradient>
+      </div>
     </form>
   );
 }
