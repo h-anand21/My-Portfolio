@@ -24,7 +24,7 @@ const AboutSection = () => {
     const aboutImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
 
     return (
-        <section id="about" className="py-24 md:py-32">
+        <section id="about" className="pt-16 md:pt-20 pb-24 md:pb-32">
             <div className="container">
                 <div className="bg-card text-card-foreground rounded-3xl p-8 md:p-12 shadow-2xl border border-border">
                     <div className="text-center mb-12">
