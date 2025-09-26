@@ -32,8 +32,8 @@ const projectSchema = z.object({
     .min(10, 'Summary must be at least 10 characters.')
     .max(160, 'Summary must be less than 160 characters.'),
   description: z.string().min(20, 'Description must be at least 20 characters.'),
-  tech: z.string().min(1, 'Please add at least one technology.'),
   thumbnailUrl: z.string().url({ message: 'Please enter a valid URL.' }),
+  tech: z.string().min(1, 'Please add at least one technology.'),
   tags: z.string().optional(),
   githubUrl: z.string().url().optional().or(z.literal('')),
   demoUrl: z.string().url().optional().or(z.literal('')),
