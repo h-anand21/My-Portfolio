@@ -102,9 +102,8 @@ const HeroSection = () => {
           </motion.h2>
           <motion.div
             variants={itemVariants}
-            className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-8"
           >
-            <TextHoverEffect>
+            <TextHoverEffect className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-8">
               Passionate about crafting responsive, accessible interfaces that delight users and solve real problems. Let’s build something meaningful.
             </TextHoverEffect>
           </motion.div>
