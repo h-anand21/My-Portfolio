@@ -105,7 +105,7 @@
   .animated-button .arrowContainer {
     @apply p-2 border-2 border-foreground rounded-full relative overflow-hidden transition-all duration-300 z-50;
     background-color: hsl(var(--accent));
-    margin-left: 0.5em;
+    margin-left: -5em;
   }
   .animated-button .arrowContainer::after {
     content: "";
