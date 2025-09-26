@@ -9,6 +9,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useDoc } from '@/firebase/firestore/use-doc';
 import { doc } from 'firebase/firestore';
 import { useFirestore, useUser, useMemoFirebase } from '@/firebase';
+import AnimatedButton from '../ui/animated-button';
 
 const HeroSection = () => {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
@@ -108,9 +109,9 @@ const HeroSection = () => {
           </div>
 
           <motion.div variants={itemVariants} className="flex flex-wrap justify-center md:justify-start gap-4">
-            <Button asChild size="lg">
-              <Link href="#contact">Contact Me</Link>
-            </Button>
+            <Link href="#contact" passHref>
+              <AnimatedButton />
+            </Link>
             <Button asChild variant="outline" size="lg">
               <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
                 <Download className="mr-2 h-4 w-4" />
@@ -126,8 +127,8 @@ const HeroSection = () => {
                 src={heroImage.imageUrl}
                 alt={heroImage.description}
                 data-ai-hint={heroImage.imageHint}
-                width={400}
-                height={400}
+                width={450}
+                height={450}
                 className="rounded-full object-cover aspect-square shadow-2xl z-10"
                 priority
                 />
@@ -139,3 +140,5 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
+    
