@@ -4,54 +4,91 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FaAws, FaReact, FaWordpress } from "react-icons/fa";
-import { SiMongodb, SiLaravel, SiTailwindcss, SiFigma, SiNestjs, SiOpenai } from "react-icons/si";
+import { useFirestore, useMemoFirebase } from '@/firebase';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { collection } from 'firebase/firestore';
+import type { Skill } from '@/lib/types';
+import { Skeleton } from './skeleton';
 
 const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string }) => {
+  const firestore = useFirestore();
 
-  const icons = [
-    { icon: <SiMongodb size={36} className="text-[#4DB33D]" />, angle: 0 },
-    { icon: <FaAws size={36} className="text-[#FF9900]" />, angle: 45 },
-    { icon: <SiOpenai size={36} className="text-[#10A37F]" />, angle: 90 },
-    { icon: <SiNestjs size={36} className="text-[#E0234E]" />, angle: 135 },
-    { icon: <FaReact size={36} className="text-[#61DAFB]" />, angle: 180 },
-    { icon: <SiFigma size={36} className="text-[#F24E1E]" />, angle: 225 },
-    { icon: <SiTailwindcss size={36} className="text-[#38BDF8]" />, angle: 270 },
-    { icon: <SiLaravel size={36} className="text-[#FF2D20]" />, angle: 315 },
-    { icon: <FaWordpress size={36} className="text-[#21759B]" />, angle: 360 },
-  ];
+  const skillsQuery = useMemoFirebase(() => {
+    if (!firestore) return null;
+    return collection(firestore, 'skills');
+  }, [firestore]);
+
+  const { data: skills, isLoading } = useCollection<Skill>(skillsQuery);
+
+  if (isLoading) {
+    return (
+        <div className="relative flex items-center justify-center h-full w-full">
+            <Skeleton className="w-48 h-48 md:w-64 md:h-64 rounded-full" />
+        </div>
+    )
+  }
+
+  const icons = skills || [];
+  const iconCount = icons.length;
 
   return (
-    <div className="relative flex items-center justify-center h-full w-full">
-        {/* Rotating Icons */}
-        <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-            className="absolute w-[220px] h-[220px] md:w-[280px] md:h-[280px] rounded-full flex items-center justify-center"
-        >
-            {icons.map((item, index) => (
+    <div className="relative flex items-center justify-center w-full h-[280px] sm:h-[340px] md:h-[480px]">
+      {/* Rotating orbit icons */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+        className="absolute flex items-center justify-center"
+        style={{
+          width: 'clamp(200px, 50vw, 400px)',
+          height: 'clamp(200px, 50vw, 400px)',
+        }}
+      >
+        {icons.map((item, index) => {
+          const angle = (360 / iconCount) * index;
+          return (
             <motion.div
-                key={index}
-                className="absolute"
-                style={{
-                    transform: `rotate(${item.angle}deg) translate(110px) rotate(-${item.angle}deg)`,
-                }}
-                whileHover={{ scale: 1.3 }}
+              key={item.id}
+              className="absolute w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-card shadow-lg border border-border/50"
+              style={{
+                transform: `rotate(${angle}deg) translate(clamp(100px, 25vw, 200px)) rotate(-${angle}deg)`,
+              }}
+              whileHover={{ scale: 1.2, zIndex: 50 }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
-                {item.icon}
+                <div 
+                    className="w-6 h-6 md:w-8 md:h-8 text-foreground"
+                    dangerouslySetInnerHTML={{ __html: item.icon }} 
+                />
             </motion.div>
-            ))}
-        </motion.div>
-        {/* --- Profile Image --- */}
-        <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-gray-700 overflow-hidden z-10">
-          <Image
-            src={imageUrl}
-            alt={altText}
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
+          );
+        })}
+      </motion.div>
+
+      {/* Glowing Ring */}
+       <div 
+        className="absolute rounded-full z-0 animate-spin-slow"
+        style={{
+          width: 'clamp(200px, 50vw, 400px)',
+          height: 'clamp(200px, 50vw, 400px)',
+          boxShadow: '0 0 20px 0px hsl(var(--primary)), 0 0 30px 5px hsl(var(--accent))',
+        }}
+       />
+
+      {/* Profile Image */}
+      <div className="relative rounded-full border-[3px] border-gray-700 overflow-hidden z-10 shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+        style={{
+          width: 'clamp(120px, 30vw, 240px)',
+          height: 'clamp(120px, 30vw, 240px)',
+        }}
+      >
+        <Image
+          src={imageUrl}
+          alt={altText}
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
     </div>
   );
 };
