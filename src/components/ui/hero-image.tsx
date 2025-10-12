@@ -51,8 +51,7 @@ const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string })
               style={{
                 transform: `rotate(${angle}deg) translate(clamp(100px, 25vw, 200px)) rotate(-${angle}deg)`,
               }}
-              whileHover={{ scale: 1.1, zIndex: 10 }}
-              transition={{ type: "spring", stiffness: 300, damping: 10 }}
+               whileHover={{ scale: 1.1, zIndex: 10, transition: { type: "spring", stiffness: 300, damping: 10 } }}
             >
                 <div 
                     className="w-6 h-6 md:w-8 md:h-8 text-foreground"
