@@ -4,6 +4,7 @@
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from 'next/image';
+import { ShinyCard } from '@/components/ui/shiny-card';
 
 import { useEffect, useState } from "react";
 
@@ -54,7 +55,7 @@ export const AnimatedTestimonials = ({
   return (
     <div className="mx-auto max-w-sm px-4 py-20 font-sans antialiased md:max-w-4xl md:px-8 lg:px-12">
       <div className="relative grid grid-cols-1 gap-20 md:grid-cols-2">
-        <div>
+        <div className="flex items-center justify-center">
           <div className="relative h-80 w-full">
             <AnimatePresence>
               {testimonials.map((testimonial, index) => (
@@ -72,7 +73,7 @@ export const AnimatedTestimonials = ({
                     zIndex: isActive(index)
                       ? 40
                       : testimonials.length + 2 - index,
-                    y: isActive(index) ? [0, -80, 0] : 0,
+                    y: isActive(index) ? [0, -40, 0] : 0,
                   }}
                   exit={{
                     opacity: 0,
@@ -99,59 +100,24 @@ export const AnimatedTestimonials = ({
             </AnimatePresence>
           </div>
         </div>
-        <div className="flex flex-col justify-between py-4">
-          <motion.div
-            key={active}
-            initial={{
-              y: 20,
-              opacity: 0,
-            }}
-            animate={{
-              y: 0,
-              opacity: 1,
-            }}
-            exit={{
-              y: -20,
-              opacity: 0,
-            }}
-            transition={{
-              duration: 0.2,
-              ease: "easeInOut",
-            }}
-          >
-            <h3 className="text-2xl font-bold text-card-foreground">
-              {testimonials[active].name}
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              {testimonials[active].designation}
-            </p>
-            <motion.p className="mt-8 text-lg text-muted-foreground">
-              {testimonials[active].quote.split(" ").map((word, index) => (
-                <motion.span
-                  key={index}
-                  initial={{
-                    filter: "blur(10px)",
-                    opacity: 0,
-                    y: 5,
-                  }}
-                  animate={{
-                    filter: "blur(0px)",
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  transition={{
-                    duration: 0.2,
-                    ease: "easeInOut",
-                    delay: 0.02 * index,
-                  }}
-                  className="inline-block"
+        <div className="relative flex flex-col justify-center">
+             <AnimatePresence mode="wait">
+                <motion.div
+                    key={active}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -20, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="h-[350px] w-full"
                 >
-                  {word}&nbsp;
-                </motion.span>
-              ))}
-            </motion.p>
-          </motion.div>
-          <div className="flex gap-4 pt-12 md:pt-0">
+                  <ShinyCard
+                      name={testimonials[active].name}
+                      designation={testimonials[active].designation}
+                      quote={testimonials[active].quote}
+                  />
+                </motion.div>
+            </AnimatePresence>
+          <div className="flex gap-4 pt-12 md:pt-8 z-10">
             <button
               onClick={handlePrev}
               className="group/button flex h-7 w-7 items-center justify-center rounded-full bg-secondary text-secondary-foreground"
