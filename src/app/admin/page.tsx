@@ -34,7 +34,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useDoc } from '@/firebase/firestore/use-doc';
-import { Card as AnimatedCard, CardSkeletonContainer, CardTitle as AnimatedCardTitle, CardDescription as AnimatedCardDescription, AnimatedCardSkeleton } from '@/components/ui/animated-card';
+import { GlassCard } from '@/components/ui/glass-card';
 
 export default function AdminDashboard() {
   const firestore = useFirestore();
@@ -164,15 +164,7 @@ export default function AdminDashboard() {
                     </Button>
                 </CardFooter>
             </Card>
-            <AnimatedCard>
-                <CardSkeletonContainer>
-                    <AnimatedCardSkeleton />
-                </CardSkeletonContainer>
-                <AnimatedCardTitle>AI Integrations</AnimatedCardTitle>
-                <AnimatedCardDescription>
-                    This card showcases the AI tools and services integrated into this application.
-                </AnimatedCardDescription>
-            </AnimatedCard>
+            <GlassCard />
         </div>
 
 
