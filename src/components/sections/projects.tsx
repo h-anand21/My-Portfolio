@@ -8,6 +8,7 @@ import { collection, query, where } from 'firebase/firestore';
 import { useMemoFirebase } from '@/firebase/provider';
 import type { Project } from '@/lib/types';
 import { Skeleton } from '../ui/skeleton';
+import { TextHoverEffect } from '../ui/text-hover-effect';
 
 const ProjectsSection = () => {
     const firestore = useFirestore();
@@ -28,13 +29,15 @@ const ProjectsSection = () => {
     };
 
     return (
-        <section id="projects" className="py-12 md:py-16">
+        <section id="projects" className="py-8 md:py-12">
             <div className="container">
                 <div className="max-w-2xl mx-auto text-center mb-16">
                     <h2 className="font-headline text-4xl md:text-5xl font-bold breathe-text">
                         My Work
                     </h2>
-                    <p className="mt-4 text-lg text-muted-foreground">Here are some of the projects I'm proud to have worked on. Each one was a unique challenge and a great learning experience.</p>
+                     <TextHoverEffect className="mt-4 max-w-2xl mx-auto">
+                        Here are some of the projects I'm proud to have worked on. Each one was a unique challenge and a great learning experience.
+                    </TextHoverEffect>
                 </div>
                  {isLoading && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

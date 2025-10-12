@@ -34,7 +34,7 @@ const AboutSection = () => {
     const defaultP2 = "My journey in tech has been driven by a curiosity for how things work and a desire to create impactful digital experiences. From architecting scalable backends to crafting pixel-perfect UIs, I enjoy every aspect of the development process.";
 
     return (
-        <section id="about" className="py-12 md:py-16">
+        <section id="about" className="py-8 md:py-12">
             <div className="container">
                 <div className="bg-card text-card-foreground rounded-3xl shadow-2xl border border-border overflow-hidden">
                    <div className="title p-8 md:p-12 relative">
@@ -58,10 +58,10 @@ const AboutSection = () => {
                                 </div>
                             ) : (
                                 <>
-                                    <TextHoverEffect className="text-lg md:text-xl text-muted-foreground">
+                                    <TextHoverEffect>
                                         {userProfile?.aboutMeP1 || defaultP1}
                                     </TextHoverEffect>
-                                    <TextHoverEffect className="text-lg md:text-xl text-muted-foreground">
+                                    <TextHoverEffect>
                                         {userProfile?.aboutMeP2 || defaultP2}
                                     </TextHoverEffect>
                                 </>

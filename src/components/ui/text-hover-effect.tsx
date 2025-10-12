@@ -1,8 +1,8 @@
 
 'use client';
 
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export const TextHoverEffect = ({
@@ -12,31 +12,46 @@ export const TextHoverEffect = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const [hovered, setHovered] = useState(false);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
   const text = typeof children === 'string' ? children : '';
 
+  const sentence = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.1,
+        staggerChildren: 0.03,
+      },
+    },
+  };
+
+  const letter = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
   return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={cn("flex flex-wrap", className)}
+    <motion.p
+      ref={ref}
+      className={cn("flex flex-wrap text-muted-foreground", className)}
+      variants={sentence}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
     >
       {text.split(' ').map((word, idx) => (
         <motion.span
           key={idx}
-          className="mr-[7px] mt-[2px] transition-colors duration-300"
-          style={{
-            color: hovered ? 'hsl(var(--foreground))' : 'hsl(var(--muted-foreground))',
-          }}
-          transition={{
-            duration: 0.15,
-            delay: idx * 0.02,
-            ease: "linear"
-          }}
+          variants={letter}
+          className="mr-[6px] mt-[2px] transition-colors duration-300 text-lg md:text-xl"
         >
           {word}
         </motion.span>
       ))}
-    </div>
+    </motion.p>
   );
 };

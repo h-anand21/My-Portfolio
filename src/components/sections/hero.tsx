@@ -76,7 +76,7 @@ const HeroSection = () => {
 
 
   return (
-    <section className="py-12 md:py-16">
+    <section className="py-8 md:py-12">
       <motion.div
         className="container grid md:grid-cols-2 gap-12 items-center"
         variants={containerVariants}
@@ -106,8 +106,9 @@ const HeroSection = () => {
           </motion.h2>
           <motion.div
             variants={itemVariants}
+            className="max-w-2xl mb-8"
           >
-            <TextHoverEffect className="max-w-2xl text-lg text-muted-foreground md:text-xl mb-8">
+            <TextHoverEffect>
               Passionate about crafting responsive, accessible interfaces that delight users and solve real problems. Let’s build something meaningful.
             </TextHoverEffect>
           </motion.div>

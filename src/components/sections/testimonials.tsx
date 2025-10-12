@@ -8,6 +8,7 @@ import { collection, query } from 'firebase/firestore';
 import { useMemoFirebase } from '@/firebase/provider';
 import { Skeleton } from '../ui/skeleton';
 import type { Testimonial } from '@/lib/types';
+import { TextHoverEffect } from "../ui/text-hover-effect";
 
 
 const TestimonialsSection = () => {
@@ -21,15 +22,15 @@ const TestimonialsSection = () => {
     const { data: testimonials, isLoading } = useCollection<Testimonial>(testimonialsQuery);
 
     return (
-        <section id="testimonials" className="bg-background py-12 md:py-16">
+        <section id="testimonials" className="bg-background py-8 md:py-12">
             <div className="container">
                 <div className="text-center mb-12">
                     <h2 className="font-headline text-4xl md:text-5xl font-bold">
                         What People Are Saying
                     </h2>
-                    <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+                     <TextHoverEffect className="mt-4 max-w-2xl mx-auto">
                         I take pride in delivering results. Here's what collaborators and clients have to say about my work.
-                    </p>
+                    </TextHoverEffect>
                 </div>
                  {isLoading && (
                     <div className="flex flex-col items-center justify-center">
