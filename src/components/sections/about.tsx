@@ -29,8 +29,8 @@ const AboutSection = () => {
     const aboutImage = userProfile?.aboutMeImageUrl || defaultAboutImage?.imageUrl;
     const aboutImageAlt = defaultAboutImage?.description || 'About me image';
 
-    const defaultP1 = "I'm a passionate and results-oriented software developer with a knack for building beautiful, functional, and user-centric web applications. With a strong foundation in modern JavaScript frameworks like React and Next.js, I thrive on turning complex problems into elegant solutions.";
-    const defaultP2 = "My journey in tech has been driven by a curiosity for how things work and a desire to create impactful digital experiences. From architecting scalable backends to crafting pixel-perfect UIs, I enjoy every aspect of the development process.";
+    const defaultP1 = "Check out my new trending post on LinkedIn for my latest thoughts on AI and web development!";
+    const defaultP2 = "";
     
     const aboutMeText = userProfile ? `${userProfile.aboutMeP1} ${userProfile.aboutMeP2}` : `${defaultP1} ${defaultP2}`;
 
