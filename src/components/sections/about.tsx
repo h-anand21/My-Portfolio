@@ -9,6 +9,7 @@ import { useFirestore, useMemoFirebase } from '@/firebase';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { TextHoverEffect } from '../ui/text-hover-effect';
+import { GlassCard } from '../ui/glass-card';
 
 const AboutSection = () => {
     const firestore = useFirestore();
@@ -36,20 +37,9 @@ const AboutSection = () => {
                         <div className="aurora__item"></div>
                     </div>
                     <div className="text-center mb-12 relative z-10">
-                        <h2 className="font-headline text-5xl md:text-6xl font-bold text-card-foreground">About</h2>
+                        <h2 className="font-headline text-5xl md:text-6xl font-bold text-card-foreground">About Me & Skills</h2>
                     </div>
                     <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
-                        <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
-                             {aboutImage && (
-                                <Image
-                                src={aboutImage.imageUrl}
-                                alt={aboutImage.description}
-                                data-ai-hint={aboutImage.imageHint}
-                                fill
-                                className="object-contain"
-                                />
-                            )}
-                        </div>
                         <div className="space-y-6">
                             <TextHoverEffect className="text-lg md:text-xl text-muted-foreground">
                                 I'm a passionate and results-oriented software developer with a knack for building beautiful,
@@ -70,6 +60,9 @@ const AboutSection = () => {
                                 </Button>
                             </div>
                         </div>
+                        <div className="flex justify-center items-center">
+                            <GlassCard />
+                        </div>
                     </div>
                    </div>
                 </div>
@@ -79,5 +72,3 @@ const AboutSection = () => {
 };
 
 export default AboutSection;
-
-    
