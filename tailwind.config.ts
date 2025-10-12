@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -107,10 +108,12 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'spin-slow': 'spin-slow 10s linear infinite',
+        'spin-slow': 'spin-slow 20s linear infinite',
         'move': 'move 2s linear infinite alternate'
       },
     },
   },
   plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 } satisfies Config;
+
+    
