@@ -4,20 +4,32 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FaReact, FaJava } from "react-icons/fa";
-import { SiTailwindcss, SiFigma, SiJavascript, SiMongodb, SiSpring, SiNodedotjs } from "react-icons/si";
+import {
+  FaReact,
+  FaWordpress,
+} from "react-icons/fa";
+import {
+  SiTailwindcss,
+  SiFigma,
+  SiMongodb,
+  SiLaravel,
+  SiNestjs,
+  SiAwslambda,
+} from "react-icons/si";
+import { RiOpenaiFill } from "react-icons/ri";
 
 const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string; }) => {
     
    const icons = [
-    { icon: <SiFigma size="1.5em" className="text-pink-500" />, angle: 230 },
-    { icon: <FaJava size="1.5em" className="text-red-500" />, angle: 250 },
-    { icon: <FaReact size="1.5em" className="text-cyan-400" />, angle: 300 },
-    { icon: <SiTailwindcss size="1.5em" className="text-blue-400" />, angle: 330 },
-    { icon: <SiSpring size="1.5em" className="text-green-500" />, angle: 30 },
-    { icon: <SiMongodb size="1.5em" className="text-green-600" />, angle: 60 },
-    { icon: <SiJavascript size="1.5em" className="text-yellow-400" />, angle: 100 },
-    { icon: <SiNodedotjs size="1.5em" className="text-green-400" />, angle: 130 },
+    { icon: <SiMongodb className="text-green-500" />, angle: 270 },
+    { icon: <SiAwslambda className="text-yellow-400" />, angle: 310 },
+    { icon: <RiOpenaiFill className="text-white" />, angle: 350 },
+    { icon: <SiNestjs className="text-pink-500" />, angle: 30 },
+    { icon: <FaReact className="text-cyan-400" />, angle: 70 },
+    { icon: <SiTailwindcss className="text-sky-400" />, angle: 110 },
+    { icon: <FaWordpress className="text-blue-400" />, angle: 150 },
+    { icon: <SiLaravel className="text-red-500" />, angle: 200 },
+    { icon: <SiFigma className="text-pink-400" />, angle: 230 },
   ];
 
   return (
@@ -42,9 +54,9 @@ const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string; }
           {icons.map((item, index) => (
             <div
               key={index}
-              className="absolute w-12 h-12 rounded-full bg-card flex items-center justify-center shadow-lg border border-border"
+              className="absolute w-12 h-12 rounded-full bg-card flex items-center justify-center shadow-lg border border-border text-2xl"
               style={{
-                transform: `rotate(${item.angle}deg) translate(110px) rotate(-${item.angle}deg) scale(0.9)`,
+                transform: `rotate(${item.angle}deg) translate(110px) rotate(-${item.angle}deg)`,
               }}
             >
               {item.icon}
