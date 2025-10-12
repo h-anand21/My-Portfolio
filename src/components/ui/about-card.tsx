@@ -172,6 +172,7 @@ const StyledWrapper = styled.div`
     top: 20%;
     border-radius: 80px 29px 29px 29px;
     transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s;
+    background: #f55d56;
   }
   .card:hover .profile-pic {
     width: 100px;
@@ -181,7 +182,7 @@ const StyledWrapper = styled.div`
     left: 10px;
     border-radius: 50%;
     z-index: 3;
-    border: 7px solid #fbb9b6;
+    border: 7px solid #f55d56;
     box-shadow: rgba(96, 75, 74, 0.1882352941) 0px 5px 5px 0px;
     transition: all 0.5s ease-in-out, z-index 0.5s ease-in-out 0.1s;
   }
