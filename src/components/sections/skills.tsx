@@ -12,7 +12,7 @@ const SkillsSection = () => {
                     <h2 className="font-headline text-4xl md:text-5xl font-bold">
                         My Skills
                     </h2>
-                    <TextHoverEffect className="mt-4 max-w-2xl mx-auto">
+                    <TextHoverEffect className="mt-4 max-w-2xl mx-auto justify-center">
                         I specialize in modern web technologies, bringing ideas to life with clean, efficient code and a focus on user experience.
                     </TextHoverEffect>
                 </div>
