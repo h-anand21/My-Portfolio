@@ -2,65 +2,58 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
+import { useFirestore, useMemoFirebase } from '@/firebase';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { collection } from 'firebase/firestore';
+import type { Skill } from '@/lib/types';
+import { Skeleton } from './skeleton';
+import styled from 'styled-components';
+
+const StyledWrapper = styled.div`
+  .profileCard_container {
+    animation: spin-slow 20s linear infinite;
+  }
+`;
+
 
 const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string; }) => {
-  const icons = [
-    { 
-      icon: (
-        <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12,2.61,3.63,6.23,2.5,18.14,12,21.39,21.5,18.14,20.37,6.23ZM12,3.77l7.63,3.16L18.91,17.2,12,19.64,5.09,17.2,4.37,6.93Z" />
-          <path d="M12,5.18,7.91,6.8,6.86,16.43,12,18.39,17.14,16.43,16.09,6.8Z" />
-        </svg>
-      ), 
-      style: { transform: 'rotate(0deg) translate(140px) rotate(0deg)' } 
-    },
-    { 
-      icon: (
-        <svg viewBox="0 0 128 128" fill="currentColor">
-            <g><circle r="11.4" cy="64" cx="64"></circle><path d="M107.3 45.2c-2.2-.8-4.5-1.6-6.9-2.3.6-2.4 1.1-4.8 1.5-7.1 2.1-13.2-.2-22.5-6.6-26.1-1.9-1.1-4-1.6-6.4-1.6-7 0-15.9 5.2-24.9 13.9-9-8.7-17.9-13.9-24.9-13.9-2.4 0-4.5.5-6.4 1.6-6.4 3.7-8.7 13-6.6 26.1.4 2.3.9 4.7 1.5 7.1-2.4.7-4.7 1.4-6.9 2.3C8.2 50 1.4 56.6 1.4 64s6.9 14 19.3 18.8c2.2.8 4.5 1.6 6.9 2.3-.6 2.4-1.1 4.8-1.5 7.1-2.1 13.2.2 22.5 6.6 26.1 1.9 1.1 4 1.6 6.4 1.6 7.1 0 16-5.2 24.9-13.9 9 8.7 17.9 13.9 24.9 13.9 2.4 0 4.5-.5 6.4-1.6 6.4-3.7 8.7-13 6.6-26.1-.4-2.3-.9-4.7-1.5-7.1 2.4-.7 4.7-1.4 6.9-2.3 12.5-4.8 19.3-11.4 19.3-18.8s-6.8-14-19.3-18.8zM92.5 14.7c4.1 2.4 5.5 9.8 3.8 20.3-.3 2.1-.8 4.3-1.4 6.6-5.2-1.2-10.7-2-16.5-2.5-3.4-4.8-6.9-9.1-10.4-13 7.4-7.3 14.9-12.3 21-12.3 1.3 0 2.5.3 3.5.9zM81.3 74c-1.8 3.2-3.9 6.4-6.1 9.6-3.7.3-7.4.4-11.2.4-3.9 0-7.6-.1-11.2-.4-2.2-3.2-4.2-6.4-6-9.6-1.9-3.3-3.7-6.7-5.3-10 1.6-3.3 3.4-6.7 5.3-10 1.8-3.2 3.9-6.4 6.1-9.6 3.7-.3 7.4-.4 11.2-.4 3.9 0 7.6.1 11.2.4 2.2 3.2 4.2 6.4 6 9.6 1.9 3.3 3.7 6.7 5.3 10-1.7 3.3-3.4 6.6-5.3 10zm8.3-3.3c1.5 3.5 2.7 6.9 3.8 10.3-3.4.8-7 1.4-10.8 1.9 1.2-1.9 2.5-3.9 3.6-6 1.2-2.1 2.3-4.2 3.4-6.2zM64 97.8c-2.4-2.6-4.7-5.4-6.9-8.3 2.3.1 4.6.2 6.9.2 2.3 0 4.6-.1 6.9-.2-2.2 2.9-4.5 5.7-6.9 8.3zm-18.6-15c-3.8-.5-7.4-1.1-10.8-1.9 1.1-3.3 2.3-6.8 3.8-10.3 1.1 2 2.2 4.1 3.4 6.1 1.2 2.2 2.4 4.1 3.6 6.1zm-7-25.5c-1.5-3.5-2.7-6.9-3.8-10.3 3.4-.8 7-1.4 10.8-1.9-1.2 1.9-2.5 3.9-3.6 6-1.2 2.1-2.3 4.2-3.4 6.2zM64 30.2c2.4 2.6 4.7 5.4 6.9 8.3-2.3-.1-4.6-.2-6.9-.2-2.3 0-4.6.1-6.9.2 2.2-2.9 4.5-5.7 6.9-8.3zm22.2 21l-3.6-6c3.8.5 7.4 1.1 10.8 1.9-1.1 3.3-2.3 6.8-3.8 10.3-1.1-2.1-2.2-4.2-3.4-6.2zM31.7 35c-1.7-10.5-.3-17.9 3.8-20.3 1-.6 2.2-.9 3.5-.9 6 0 13.5 4.9 21 12.3-3.5 3.8-7 8.2-10.4 13-5.8.5-11.3 1.4-16.5 2.5-.6-2.3-1-4.5-1.4-6.6zM7 64c0-4.7 5.7-9.7 15.7-13.4 2-.8 4.2-1.5 6.4-2.1 1.6 5 3.6 10.3 6 15.6-2.4 5.3-4.5 10.5-6 15.5C15.3 75.6 7 69.6 7 64zm28.5 49.3c-4.1-2.4-5.5-9.8-3.8-20.3.3-2.1.8-4.3 1.4-6.6 5.2 1.2 10.7 2 16.5 2.5 3.4 4.8 6.9 9.1 10.4 13-7.4 7.3-14.9 12.3-21 12.3-1.3 0-2.5-.3-3.5-.9zM96.3 93c1.7 10.5.3 17.9-3.8 20.3-1 .6-2.2.9-3.5.9-6 0-13.5-4.9-21-12.3 3.5-3.8 7-8.2 10.4-13 5.8-.5 11.3-1.4 16.5-2.5.6 2.3 1 4.5 1.4 6.6zm9-15.6c-2 .8-4.2 1.5-6.4 2.1-1.6-5-3.6-10.3-6-15.6 2.4-5.3 4.5-10.5 6-15.5 13.8 4 22.1 10 22.1 15.6 0 4.7-5.8 9.7-15.7 13.4z"></path></g>
-        </svg>
-      ), 
-      style: { transform: 'rotate(60deg) translate(140px) rotate(-60deg)' } 
-    },
-    { 
-      icon: (
-        <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M45.5 129c11.9 0 21.5-9.6 21.5-21.5V86H45.5C33.6 86 24 95.6 24 107.5S33.6 129 45.5 129zm0 0" fill="#0acf83"></path><path d="M24 64.5C24 52.6 33.6 43 45.5 43H67v43H45.5C33.6 86 24 76.4 24 64.5zm0 0" fill="#a259ff"></path><path d="M24 21.5C24 9.6 33.6 0 45.5 0H67v43H45.5C33.6 43 24 33.4 24 21.5zm0 0" fill="#f24e1e"></path><path d="M67 0h21.5C100.4 0 110 9.6 110 21.5S100.4 43 88.5 43H67zm0 0" fill="#ff7262"></path><path d="M110 64.5c0 11.9-9.6 21.5-21.5 21.5S67 76.4 67 64.5 76.6 43 88.5 43 110 52.6 110 64.5zm0 0" fill="#1abcfe"></path></svg>
-      ),
-       style: { transform: 'rotate(120deg) translate(140px) rotate(-120deg)' } 
-    },
-    { 
-      icon: (
-       <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.49-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.22-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.01-.06C2.64 19.41 5.48 20 8.42 20c7.7 0 11.91-6.38 11.91-11.91 0-.18 0-.36-.01-.54.82-.59 1.53-1.33 2.1-2.18z" /></svg>
-      ), 
-      style: { transform: 'rotate(180deg) translate(140px) rotate(-180deg)' } 
-    },
-    { 
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth="1.5" stroke="none"><path d="M21.721 8.538a2.016 2.016 0 0 0-1.63-1.63C18.412 6.5 12 6.5 12 6.5s-6.412 0-8.091.408a2.016 2.016 0 0 0-1.63 1.63c-.408 1.679-.408 5.162-.408 5.162s0 3.483.408 5.162a2.016 2.016 0 0 0 1.63 1.63c1.679.408 8.091.408 8.091.408s6.412 0 8.091-.408a2.016 2.016 0 0 0 1.63-1.63c.408-1.679.408-5.162.408-5.162s0-3.483-.408-5.162zM9.75 15.5V9l6 3.25-6 3.25z" /></svg>
-      ), 
-      style: { transform: 'rotate(240deg) translate(140px) rotate(-240deg)' } 
-    },
-    { 
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C8.74 0 8.33 0 7.05 0 5.77 0 4.89 0 4.12 0 2.02 0 0 2.02 0 4.12c0 .77 0 1.65 0 2.93C0 8.33 0 8.74 0 12s0 3.67 0 4.95c0 1.28 0 2.16 0 2.93 0 2.1 2.02 4.12 4.12 4.12c.77 0 1.65 0 2.93 0 1.28 0 1.69 0 2.95 0s1.67 0 2.95 0c1.28 0 2.16 0 2.93 0 2.1 0 4.12-2.02 4.12-4.12 0-.77 0-1.65 0-2.93 0-1.28 0-1.69 0-2.95s0-1.67 0-2.95c0-1.28 0-2.16 0-2.93C24 2.02 21.98 0 19.88 0c-.77 0-1.65 0-2.93 0-1.28 0-1.69 0-2.95 0zm0 2.16c3.2 0 3.58 0 4.84.07 1.17.05 1.8.22 2.22.38.48.18.84.42 1.22.8.38.38.62.74.8 1.22.16.42.33.95.38 2.22.07 1.26.07 1.64.07 4.84s0 3.58-.07 4.84c-.05 1.17-.22 1.8-.38 2.22-.18.48-.42.84-.8 1.22-.38.38-.74.62-1.22.8-.42.16-1.05.33-2.22.38-1.26.07-1.64.07-4.84.07s-3.58 0-4.84-.07c-1.17-.05-1.8-.22-2.22-.38-.48-.18-.84-.42-1.22-.8-.38-.38-.62-.74-.8-1.22-.16-.42-.33-1.05-.38-2.22-.07-1.26-.07-1.64-.07-4.84s0-3.58.07-4.84c.05-1.17.22-1.8.38-2.22.18-.48.42-.84.8-1.22.38-.38.74-.62-1.22-.8.42-.16 1.05-.33 2.22-.38 1.26-.07 1.64-.07 4.84-.07zM12 5.88c-3.39 0-6.12 2.73-6.12 6.12s2.73 6.12 6.12 6.12 6.12-2.73 6.12-6.12-2.73-6.12-6.12-6.12zm0 10.16c-2.23 0-4.04-1.81-4.04-4.04s1.81-4.04 4.04-4.04 4.04 1.81 4.04 4.04-1.81 4.04-4.04 4.04zM18.41 4.15c-.78 0-1.42.64-1.42 1.42s.64 1.42 1.42 1.42 1.42-.64 1.42-1.42-.64-1.42-1.42-1.42z" /></svg>
-      ), 
-      style: { transform: 'rotate(300deg) translate(140px) rotate(-300deg)' } 
-    },
-  ];
+    const firestore = useFirestore();
+    const skillsQuery = useMemoFirebase(() => {
+        if (!firestore) return null;
+        return collection(firestore, 'skills');
+    }, [firestore]);
+
+    const { data: skills, isLoading } = useCollection<Skill>(skillsQuery);
+    const iconCount = skills?.length || 6;
+    const angleStep = 360 / iconCount;
 
   return (
     <div className="relative h-full w-full flex items-center justify-center">
-      <div className="profileCard_container relative p-14 border-2 border-dashed rounded-full border-gray-400/50 animate-spin-slow">
-        {icons.map((item, index) => (
-          <button
-            key={index}
-            className="profile_item absolute rounded-full bg-cover cursor-pointer border border-gray-400/50 p-2 active:scale-95 hover:scale-95 transition-all duration-500 w-[50px] h-[50px] bg-card text-muted-foreground z-[2]"
-            style={item.style as React.CSSProperties}
-          >
-            {item.icon}
-          </button>
-        ))}
-      </div>
+       <StyledWrapper>
+        <div className="profileCard_container relative p-14 border-2 border-dashed rounded-full border-gray-400/50">
+            {isLoading ? (
+                Array.from({ length: 6 }).map((_, index) => (
+                    <div
+                        key={index}
+                        className="absolute rounded-full bg-cover cursor-pointer border border-gray-400/50 p-2 w-[50px] h-[50px] bg-card"
+                        style={{ transform: `rotate(${index * 60}deg) translate(140px) rotate(-${index * 60}deg)` }}
+                    >
+                        <Skeleton className="w-full h-full rounded-full" />
+                    </div>
+                ))
+            ) : (
+                skills?.map((skill, index) => (
+                <div
+                    key={skill.id}
+                    className="profile_item absolute rounded-full bg-cover cursor-pointer border border-gray-400/50 p-2 active:scale-95 hover:scale-95 transition-all duration-500 w-[50px] h-[50px] bg-card text-muted-foreground z-[2]"
+                    style={{ transform: `rotate(${index * angleStep}deg) translate(140px) rotate(-${index * angleStep}deg)` }}
+                >
+                    <div dangerouslySetInnerHTML={{ __html: skill.icon }} className="w-full h-full flex items-center justify-center" />
+                </div>
+                ))
+            )}
+        </div>
+      </StyledWrapper>
       <div className="absolute">
         <button className="profile_item w-[250px] h-[250px] p-1 border-2 rounded-full hover:border-gray-400/50 cursor-pointer transition-all duration-500 z-0">
           <div className="w-full bg-white h-full flex items-center justify-center p-2 rounded-full active:scale-95 hover:scale-95 object-cover transition-all duration-500">
