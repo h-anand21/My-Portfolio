@@ -28,7 +28,7 @@ const TestimonialsSection = () => {
                     <h2 className="font-headline text-4xl md:text-5xl font-bold">
                         What People Are Saying
                     </h2>
-                     <TextHoverEffect className="mt-4 max-w-2xl mx-auto">
+                     <TextHoverEffect className="mt-4 max-w-2xl mx-auto justify-center">
                         I take pride in delivering results. Here's what collaborators and clients have to say about my work.
                     </TextHoverEffect>
                 </div>
