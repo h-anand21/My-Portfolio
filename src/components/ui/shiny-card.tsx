@@ -16,7 +16,6 @@ export const ShinyCard = ({ name, designation, quote }: ShinyCardProps) => {
         <div className="w-full h-full rounded-xl rounded-tr-[80px] rounded-br-[30px] bg-card" />
       </div>
       <div className="w-full h-full flex items-center justify-center relative backdrop-blur-lg rounded-2xl">
-        <div className="w-32 h-32 rounded-full bg-gradient-to-tr from-primary to-accent animate-spin-slow" />
       </div>
       <div className="w-full h-full p-4 flex flex-col justify-between absolute inset-0">
         <div className="w-full p-4 pt-3 pb-1.5 flex flex-col rounded-xl backdrop-blur-lg bg-black/10 dark:bg-white/5 text-foreground">
