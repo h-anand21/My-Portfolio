@@ -9,7 +9,6 @@ import { useFirestore, useMemoFirebase } from '@/firebase';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { TextHoverEffect } from '../ui/text-hover-effect';
-import { GlassCard } from '../ui/glass-card';
 
 const AboutSection = () => {
     const firestore = useFirestore();
@@ -37,7 +36,7 @@ const AboutSection = () => {
                         <div className="aurora__item"></div>
                     </div>
                     <div className="text-center mb-12 relative z-10">
-                        <h2 className="font-headline text-5xl md:text-6xl font-bold text-card-foreground">About Me & Skills</h2>
+                        <h2 className="font-headline text-5xl md:text-6xl font-bold text-card-foreground">About Me</h2>
                     </div>
                     <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
                         <div className="space-y-6">
@@ -61,7 +60,16 @@ const AboutSection = () => {
                             </div>
                         </div>
                         <div className="flex justify-center items-center">
-                            <GlassCard />
+                           {aboutImage && (
+                                <Image
+                                    src={aboutImage.imageUrl}
+                                    alt={aboutImage.description}
+                                    data-ai-hint={aboutImage.imageHint}
+                                    width={300}
+                                    height={300}
+                                    className="rounded-full object-contain aspect-square shadow-2xl z-10"
+                                />
+                            )}
                         </div>
                     </div>
                    </div>
