@@ -73,7 +73,7 @@ const HeroSection = () => {
 
 
   return (
-    <section className="pt-16 md:pt-24 pb-16 md:pb-24">
+    <section className="pt-16 md:pt-20 pb-24 md:pb-32">
       <motion.div
         className="container grid md:grid-cols-2 gap-12 items-center"
         variants={containerVariants}
@@ -169,7 +169,7 @@ const HeroSection = () => {
                 data-ai-hint={heroImage.imageHint}
                 width={450}
                 height={450}
-                className="rounded-full object-contain aspect-square shadow-2xl z-10"
+                className="rounded-full object-cover aspect-square shadow-2xl z-10"
                 priority
                 />
             )}
