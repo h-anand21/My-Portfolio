@@ -35,7 +35,7 @@ const ProjectsSection = () => {
                     <h2 className="font-headline text-4xl md:text-5xl font-bold breathe-text">
                         My Work
                     </h2>
-                     <TextHoverEffect className="mt-4 max-w-2xl mx-auto">
+                     <TextHoverEffect className="mt-4 max-w-2xl mx-auto justify-center">
                         Here are some of the projects I'm proud to have worked on. Each one was a unique challenge and a great learning experience.
                     </TextHoverEffect>
                 </div>
@@ -71,5 +71,6 @@ const ProjectsSection = () => {
 };
 
 export default ProjectsSection;
+
 
 
