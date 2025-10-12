@@ -3,7 +3,7 @@ import ContactForm from "../contact-form";
 
 const ContactSection = () => {
     return (
-        <section id="contact" className="pb-24 md:pb-32">
+        <section id="contact" className="py-12 md:py-16">
             <div className="container text-center">
                  <div className="relative overflow-hidden rounded-3xl group">
                     <div

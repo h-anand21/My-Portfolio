@@ -21,7 +21,7 @@ const TestimonialsSection = () => {
     const { data: testimonials, isLoading } = useCollection<Testimonial>(testimonialsQuery);
 
     return (
-        <section id="testimonials" className="bg-background py-12 md:py-20">
+        <section id="testimonials" className="bg-background py-12 md:py-16">
             <div className="container">
                 <div className="text-center mb-12">
                     <h2 className="font-headline text-4xl md:text-5xl font-bold">

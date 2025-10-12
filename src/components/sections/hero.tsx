@@ -73,7 +73,7 @@ const HeroSection = () => {
 
 
   return (
-    <section className="pt-16 md:pt-20 pb-24 md:pb-32">
+    <section className="pt-12 pb-16">
       <motion.div
         className="container grid md:grid-cols-2 gap-12 items-center"
         variants={containerVariants}

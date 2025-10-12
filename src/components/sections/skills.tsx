@@ -5,7 +5,7 @@ import { GlassCard } from '../ui/glass-card';
 
 const SkillsSection = () => {
     return (
-        <section id="skills" className="py-16 md:py-24 bg-background">
+        <section id="skills" className="py-12 md:py-16 bg-background">
             <div className="container">
                 <div className="text-center mb-16">
                     <h2 className="font-headline text-4xl md:text-5xl font-bold">
