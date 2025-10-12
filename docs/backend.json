@@ -150,6 +150,11 @@
           "format": "uri",
           "description": "URL of the user's profile picture."
         },
+        "heroImageUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL for the hero section image."
+        },
         "isAdmin": {
           "type": "boolean",
           "description": "Flag to indicate if the user has administrative privileges."
@@ -170,6 +175,11 @@
         "aboutMeP2": {
             "type": "string",
             "description": "The second paragraph of the 'About Me' section."
+        },
+        "aboutMeImageUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL for the 'About Me' section image."
         }
       },
       "required": [

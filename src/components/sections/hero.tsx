@@ -14,7 +14,7 @@ import { TextHoverEffect } from '../ui/text-hover-effect';
 import { HoverBorderGradient } from '../ui/hover-border-gradient';
 
 const HeroSection = () => {
-  const heroImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
+  const defaultHeroImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
   const { user } = useUser();
   const firestore = useFirestore();
 
@@ -26,7 +26,7 @@ const HeroSection = () => {
     return doc(firestore, 'users', adminUid);
   }, [firestore]);
 
-  const { data: userProfile } = useDoc<{resumeUrl: string}>(adminUserRef);
+  const { data: userProfile } = useDoc<{resumeUrl: string, heroImageUrl: string}>(adminUserRef);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -70,10 +70,13 @@ const HeroSection = () => {
   };
 
   const resumeUrl = userProfile?.resumeUrl || 'https://drive.google.com/uc?export=download&id=1MbT8wtl8vq_2B0XrGYpDgHmEQ8BHPj8V';
+  const heroImage = userProfile?.heroImageUrl || defaultHeroImage?.imageUrl;
+  const heroImageAlt = defaultHeroImage?.description || 'Hero image';
+  const heroImageHint = defaultHeroImage?.imageHint || 'professional headshot';
 
 
   return (
-    <section className="pt-12 pb-16">
+    <section className="py-12 md:py-16">
       <motion.div
         className="container grid md:grid-cols-2 gap-12 items-center"
         variants={containerVariants}
@@ -164,9 +167,9 @@ const HeroSection = () => {
             <div className="absolute -inset-2 rounded-full border-4 border-dashed border-primary/50 animate-spin-slow"></div>
             {heroImage && (
                 <Image
-                src={heroImage.imageUrl}
-                alt={heroImage.description}
-                data-ai-hint={heroImage.imageHint}
+                src={heroImage}
+                alt={heroImageAlt}
+                data-ai-hint={heroImageHint}
                 width={450}
                 height={450}
                 className="rounded-full object-cover aspect-square shadow-2xl z-10"
@@ -180,9 +183,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
-    
-
-    
-
-    

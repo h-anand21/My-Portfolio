@@ -47,6 +47,9 @@ export default function AdminDashboard() {
   const [aboutMeP1, setAboutMeP1] = useState('');
   const [aboutMeP2, setAboutMeP2] = useState('');
   const [isSavingAbout, setIsSavingAbout] = useState(false);
+  const [heroImageUrl, setHeroImageUrl] = useState('');
+  const [aboutMeImageUrl, setAboutMeImageUrl] = useState('');
+  const [isSavingImages, setIsSavingImages] = useState(false);
 
   const userProfileRef = useMemoFirebase(() => {
     if (!firestore || !user) return null;
@@ -60,6 +63,8 @@ export default function AdminDashboard() {
       setAboutMeTitle(userProfile.aboutMeTitle || '');
       setAboutMeP1(userProfile.aboutMeP1 || '');
       setAboutMeP2(userProfile.aboutMeP2 || '');
+      setHeroImageUrl(userProfile.heroImageUrl || '');
+      setAboutMeImageUrl(userProfile.aboutMeImageUrl || '');
     }
   }, [userProfile]);
 
@@ -147,6 +152,29 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSaveImages = async () => {
+    if (!userProfileRef) return;
+    setIsSavingImages(true);
+    try {
+        await setDocumentNonBlocking(userProfileRef, { 
+            heroImageUrl,
+            aboutMeImageUrl,
+        }, { merge: true });
+        toast({
+            title: 'Success!',
+            description: 'Your images have been updated.',
+        });
+    } catch (error) {
+        toast({
+            title: 'Error',
+            description: 'Failed to update images.',
+            variant: 'destructive',
+        });
+    } finally {
+        setIsSavingImages(false);
+    }
+  };
+
 
   return (
     <div className="container py-12">
@@ -219,6 +247,37 @@ export default function AdminDashboard() {
                         {isSavingAbout ? 'Saving...' : 'Save About Me'}
                     </Button>
                 </CardFooter>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Image Management</CardTitle>
+                <CardDescription>Update the images on your site.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="heroImageUrl">Hero Image URL</Label>
+                  <Input
+                    id="heroImageUrl"
+                    value={heroImageUrl}
+                    onChange={(e) => setHeroImageUrl(e.target.value)}
+                    placeholder="URL for hero image"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="aboutMeImageUrl">About Me Image URL</Label>
+                  <Input
+                    id="aboutMeImageUrl"
+                    value={aboutMeImageUrl}
+                    onChange={(e) => setAboutMeImageUrl(e.target.value)}
+                    placeholder="URL for about me image"
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button onClick={handleSaveImages} disabled={isSavingImages}>
+                  {isSavingImages ? 'Saving...' : 'Save Images'}
+                </Button>
+              </CardFooter>
             </Card>
            <Card>
                 <CardHeader>

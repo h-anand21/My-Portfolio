@@ -24,7 +24,11 @@ const AboutSection = () => {
     const { data: userProfile, isLoading } = useDoc<any>(adminUserRef);
     
     const resumeUrl = userProfile?.resumeUrl || 'https://drive.google.com/uc?export=download&id=1MbT8wtl8vq_2B0XrGYpDgHmEQ8BHPj8V';
-    const aboutImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
+    const defaultAboutImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
+
+    const aboutImage = userProfile?.aboutMeImageUrl || defaultAboutImage?.imageUrl;
+    const aboutImageAlt = defaultAboutImage?.description || 'About me image';
+    const aboutImageHint = defaultAboutImage?.imageHint || 'professional photo';
 
     const defaultP1 = "I'm a passionate and results-oriented software developer with a knack for building beautiful, functional, and user-centric web applications. With a strong foundation in modern JavaScript frameworks like React and Next.js, I thrive on turning complex problems into elegant solutions.";
     const defaultP2 = "My journey in tech has been driven by a curiosity for how things work and a desire to create impactful digital experiences. From architecting scalable backends to crafting pixel-perfect UIs, I enjoy every aspect of the development process.";
@@ -74,9 +78,9 @@ const AboutSection = () => {
                         <div className="flex justify-center items-center">
                            {aboutImage && (
                                 <Image
-                                    src={aboutImage.imageUrl}
-                                    alt={aboutImage.description}
-                                    data-ai-hint={aboutImage.imageHint}
+                                    src={aboutImage}
+                                    alt={aboutImageAlt}
+                                    data-ai-hint={aboutImageHint}
                                     width={300}
                                     height={400}
                                     className="object-contain shadow-2xl z-10 rounded-lg"
