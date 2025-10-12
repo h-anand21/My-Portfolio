@@ -7,18 +7,18 @@ import { motion } from 'framer-motion';
 import { FaAws, FaReact, FaWordpress } from "react-icons/fa";
 import { SiMongodb, SiLaravel, SiTailwindcss, SiFigma, SiNestjs, SiOpenai } from "react-icons/si";
 
-const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string; }) => {
-    
-   const icons = [
-    { icon: <SiMongodb size={36} color="#4DB33D" />, angle: 0 },
-    { icon: <FaAws size={36} color="#FF9900" />, angle: 45 },
-    { icon: <SiOpenai size={36} color="#10A37F" />, angle: 90 },
-    { icon: <SiNestjs size={36} color="#E0234E" />, angle: 135 },
-    { icon: <FaReact size={36} color="#61DAFB" />, angle: 180 },
-    { icon: <SiFigma size={36} color="#F24E1E" />, angle: 225 },
-    { icon: <SiTailwindcss size={36} color="#38BDF8" />, angle: 270 },
-    { icon: <SiLaravel size={36} color="#FF2D20" />, angle: 315 },
-    { icon: <FaWordpress size={36} color="#21759B" />, angle: 360 },
+const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string }) => {
+
+  const icons = [
+    { icon: <SiMongodb size={36} className="text-[#4DB33D]" />, angle: 0 },
+    { icon: <FaAws size={36} className="text-[#FF9900]" />, angle: 45 },
+    { icon: <SiOpenai size={36} className="text-[#10A37F]" />, angle: 90 },
+    { icon: <SiNestjs size={36} className="text-[#E0234E]" />, angle: 135 },
+    { icon: <FaReact size={36} className="text-[#61DAFB]" />, angle: 180 },
+    { icon: <SiFigma size={36} className="text-[#F24E1E]" />, angle: 225 },
+    { icon: <SiTailwindcss size={36} className="text-[#38BDF8]" />, angle: 270 },
+    { icon: <SiLaravel size={36} className="text-[#FF2D20]" />, angle: 315 },
+    { icon: <FaWordpress size={36} className="text-[#21759B]" />, angle: 360 },
   ];
 
   return (
