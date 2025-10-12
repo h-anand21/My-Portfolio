@@ -32,7 +32,7 @@ const AboutSection = () => {
     const defaultP1 = "Check out my new trending post on LinkedIn for my latest thoughts on AI and web development!";
     const defaultP2 = "";
     
-    const aboutMeText = userProfile ? `${userProfile.aboutMeP1} ${userProfile.aboutMeP2}` : `${defaultP1} ${defaultP2}`;
+    const aboutMeText = userProfile ? `${userProfile.aboutMeP1 || ''} ${userProfile.aboutMeP2 || ''}`.trim() : `${defaultP1} ${defaultP2}`.trim();
 
 
     return (
@@ -80,7 +80,7 @@ const AboutSection = () => {
                         <div className="flex justify-center items-center">
                            <AboutCard
                                 name="Himanshu Anand"
-                                aboutMe={aboutMeText}
+                                aboutMe=""
                                 imageUrl={aboutImage || ''}
                                 altText={aboutImageAlt}
                            />
