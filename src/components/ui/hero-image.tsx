@@ -35,7 +35,7 @@ const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string; }
 
         {/* --- Rotating Circle --- */}
         <motion.div
-          className="absolute top-1/2 left-1/2 w-[300px] h-[300px] md:w-[420px] md:h-[420px] -translate-x-1/2 -translate-y-1/2"
+          className="absolute top-1/2 left-1/2 w-[220px] h-[220px] md:w-[280px] md:h-[280px] -translate-x-1/2 -translate-y-1/2"
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
         >
@@ -44,7 +44,7 @@ const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string; }
               key={index}
               className="absolute w-12 h-12 rounded-full bg-card flex items-center justify-center shadow-lg border border-border"
               style={{
-                transform: `rotate(${item.angle}deg) translate(150px) rotate(-${item.angle}deg)`,
+                transform: `rotate(${item.angle}deg) translate(110px) rotate(-${item.angle}deg) scale(0.9)`,
               }}
             >
               {item.icon}
