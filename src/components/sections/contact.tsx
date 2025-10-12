@@ -4,16 +4,10 @@ import ContactForm from "../contact-form";
 
 const ContactSection = () => {
     return (
-        <section id="contact" className="py-4 md:py-6">
-            <div className="text-center">
-                 <div className="relative overflow-hidden group">
-                    <div
-                        className="absolute -inset-12 z-[-2] animate-spin-slow"
-                        style={{
-                            background: 'conic-gradient(from 45deg, transparent 75%, hsl(var(--primary)), transparent 100%)'
-                        }}
-                    />
-                    <div className="bg-card/95 backdrop-blur-md text-card-foreground px-10 py-8 md:py-12 shadow-2xl z-10">
+        <section id="contact" className="py-8 md:py-12">
+            <div className="container">
+                <div className="bg-card text-card-foreground rounded-3xl shadow-2xl border border-border overflow-hidden">
+                    <div className="text-center p-8 md:p-12">
                         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-6">
                             Get In Touch
                         </h2>
