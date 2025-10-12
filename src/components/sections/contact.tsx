@@ -4,7 +4,7 @@ import ContactForm from "../contact-form";
 const ContactSection = () => {
     return (
         <section id="contact" className="pb-24 md:pb-32">
-            <div className="text-center">
+            <div className="container text-center">
                  <div className="relative overflow-hidden rounded-3xl group">
                     <div
                         className="absolute -inset-12 z-[-2] animate-spin-slow"
@@ -12,7 +12,7 @@ const ContactSection = () => {
                             background: 'conic-gradient(from 45deg, transparent 75%, hsl(var(--primary)), transparent 100%)'
                         }}
                     />
-                    <div className="bg-card/95 backdrop-blur-md text-card-foreground p-10 shadow-2xl z-10">
+                    <div className="bg-card/95 backdrop-blur-md text-card-foreground p-8 md:p-12 shadow-2xl z-10">
                         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-6">
                             Get In Touch
                         </h2>
