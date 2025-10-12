@@ -1,73 +1,56 @@
 
 'use client';
+
 import React from 'react';
 import Image from 'next/image';
-import { useFirestore, useMemoFirebase } from '@/firebase';
-import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection } from 'firebase/firestore';
-import type { Skill } from '@/lib/types';
-import { Skeleton } from './skeleton';
-import styled from 'styled-components';
-
-const StyledWrapper = styled.div`
-  .profileCard_container {
-    animation: spin-slow 20s linear infinite;
-  }
-`;
-
+import { motion } from 'framer-motion';
+import { FaReact, FaJava } from "react-icons/fa";
+import { SiTailwindcss, SiFigma, SiJavascript, SiMongodb, SiSpring, SiNodedotjs } from "react-icons/si";
 
 const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string; }) => {
-    const firestore = useFirestore();
-    const skillsQuery = useMemoFirebase(() => {
-        if (!firestore) return null;
-        return collection(firestore, 'skills');
-    }, [firestore]);
-
-    const { data: skills, isLoading } = useCollection<Skill>(skillsQuery);
-    const iconCount = skills?.length || 6;
-    const angleStep = 360 / iconCount;
+    
+   const icons = [
+    { icon: <SiFigma size="1.5em" className="text-pink-500" />, angle: 230 },
+    { icon: <FaJava size="1.5em" className="text-red-500" />, angle: 250 },
+    { icon: <FaReact size="1.5em" className="text-cyan-400" />, angle: 300 },
+    { icon: <SiTailwindcss size="1.5em" className="text-blue-400" />, angle: 330 },
+    { icon: <SiSpring size="1.5em" className="text-green-500" />, angle: 30 },
+    { icon: <SiMongodb size="1.5em" className="text-green-600" />, angle: 60 },
+    { icon: <SiJavascript size="1.5em" className="text-yellow-400" />, angle: 100 },
+    { icon: <SiNodedotjs size="1.5em" className="text-green-400" />, angle: 130 },
+  ];
 
   return (
     <div className="relative h-full w-full flex items-center justify-center">
-       <StyledWrapper>
-        <div className="profileCard_container relative p-14 border-2 border-dashed rounded-full border-gray-400/50">
-            {isLoading ? (
-                Array.from({ length: 6 }).map((_, index) => (
-                    <div
-                        key={index}
-                        className="absolute rounded-full bg-cover cursor-pointer border border-gray-400/50 p-2 w-[50px] h-[50px] bg-card"
-                        style={{ transform: `rotate(${index * 60}deg) translate(140px) rotate(-${index * 60}deg)` }}
-                    >
-                        <Skeleton className="w-full h-full rounded-full" />
-                    </div>
-                ))
-            ) : (
-                skills?.map((skill, index) => (
-                <div
-                    key={skill.id}
-                    className="profile_item absolute rounded-full bg-cover cursor-pointer border border-gray-400/50 p-2 active:scale-95 hover:scale-95 transition-all duration-500 w-[50px] h-[50px] bg-card text-muted-foreground z-[2]"
-                    style={{ transform: `rotate(${index * angleStep}deg) translate(140px) rotate(-${index * angleStep}deg)` }}
-                >
-                    <div dangerouslySetInnerHTML={{ __html: skill.icon }} className="w-full h-full flex items-center justify-center" />
-                </div>
-                ))
-            )}
+        {/* --- Profile Image --- */}
+        <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-gray-700 overflow-hidden z-10">
+          <Image
+            src={imageUrl}
+            alt={altText}
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
-      </StyledWrapper>
-      <div className="absolute">
-        <button className="profile_item w-[250px] h-[250px] p-1 border-2 rounded-full hover:border-gray-400/50 cursor-pointer transition-all duration-500 z-0">
-          <div className="w-full bg-white h-full flex items-center justify-center p-2 rounded-full active:scale-95 hover:scale-95 object-cover transition-all duration-500">
-            <Image
-              src={imageUrl}
-              alt={altText}
-              width={250}
-              height={250}
-              className="rounded-full object-cover aspect-square"
-              priority
-            />
-          </div>
-        </button>
-      </div>
+
+        {/* --- Rotating Circle --- */}
+        <motion.div
+          className="absolute top-1/2 left-1/2 w-[300px] h-[300px] md:w-[420px] md:h-[420px] -translate-x-1/2 -translate-y-1/2"
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+        >
+          {icons.map((item, index) => (
+            <div
+              key={index}
+              className="absolute w-12 h-12 rounded-full bg-card flex items-center justify-center shadow-lg border border-border"
+              style={{
+                transform: `rotate(${item.angle}deg) translate(150px) rotate(-${item.angle}deg)`,
+              }}
+            >
+              {item.icon}
+            </div>
+          ))}
+        </motion.div>
     </div>
   );
 };
