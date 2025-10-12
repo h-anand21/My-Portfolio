@@ -66,8 +66,8 @@ const AboutSection = () => {
                                     alt={aboutImage.description}
                                     data-ai-hint={aboutImage.imageHint}
                                     width={300}
-                                    height={300}
-                                    className="rounded-full object-contain aspect-square shadow-2xl z-10"
+                                    height={400}
+                                    className="object-contain shadow-2xl z-10 rounded-lg"
                                 />
                             )}
                         </div>
