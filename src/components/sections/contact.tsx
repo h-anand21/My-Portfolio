@@ -4,7 +4,7 @@ import ContactForm from "../contact-form";
 
 const ContactSection = () => {
     return (
-        <section id="contact" className="py-8 md:py-12">
+        <section id="contact" className="py-4 md:py-6">
             <div className="text-center">
                  <div className="relative overflow-hidden group">
                     <div
@@ -13,7 +13,7 @@ const ContactSection = () => {
                             background: 'conic-gradient(from 45deg, transparent 75%, hsl(var(--primary)), transparent 100%)'
                         }}
                     />
-                    <div className="bg-card/95 backdrop-blur-md text-card-foreground px-5 py-8 md:py-12 shadow-2xl z-10">
+                    <div className="bg-card/95 backdrop-blur-md text-card-foreground px-10 py-8 md:py-12 shadow-2xl z-10">
                         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-6">
                             Get In Touch
                         </h2>
