@@ -293,6 +293,20 @@ export default function AdminDashboard() {
                     </Button>
                 </CardFooter>
             </Card>
+             <Card>
+                <CardHeader>
+                    <CardTitle>Skills</CardTitle>
+                    <CardDescription>Manage the skills that appear on your homepage.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-muted-foreground">Add, edit, or delete skills.</p>
+                </CardContent>
+                <CardFooter>
+                    <Button asChild>
+                        <Link href="/admin/skills">Manage Skills</Link>
+                    </Button>
+                </CardFooter>
+            </Card>
         </div>
 
 

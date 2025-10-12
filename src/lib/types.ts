@@ -1,3 +1,4 @@
+
 export type Project = {
   id: string;
   slug: string;
@@ -24,4 +25,10 @@ export type Testimonial = {
   name: string;
   designation: string;
   src: string; // URL for the image
+};
+
+export type Skill = {
+  id: string;
+  name: string;
+  icon: string; // SVG content
 };

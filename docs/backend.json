@@ -216,6 +216,27 @@
         }
       },
       "required": [ "id", "quote", "name", "designation", "src" ]
+    },
+    "Skill": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Skill",
+      "type": "object",
+      "description": "Represents a single skill or technology.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the skill."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the skill (e.g., 'React')."
+        },
+        "icon": {
+          "type": "string",
+          "description": "The full SVG content for the skill's icon."
+        }
+      },
+      "required": [ "id", "name", "icon" ]
     }
   },
   "auth": {
@@ -311,8 +332,29 @@
             }
           ]
         }
+      },
+      {
+        "path": "/skills/{skillId}",
+        "definition": {
+          "entityName": "Skill",
+          "schema": {
+            "$ref": "#/backend/entities/Skill"
+          },
+          "description": "Stores skills data for the homepage skills section.",
+          "rules": {
+            "read": true,
+            "create": "request.auth.token.email == 'himanshuanand563@gmail.com'",
+            "write": "request.auth.token.email == 'himanshuanand563@gmail.com'"
+          },
+          "params": [
+            {
+              "name": "skillId",
+              "description": "Unique identifier for the skill."
+            }
+          ]
+        }
       }
     ],
-    "reasoning": "The Firestore data structure is designed to support a public portfolio site with an admin interface for managing projects. The structure prioritizes authorization independence and supports secure list operations (QAPs). Authorization Independence is achieved by storing admin roles in a dedicated collection and securing project visibility via the `published` field, eliminating the need for `get()` calls in security rules. This design supports atomic operations and simplifies debugging.\n\nStructural Segregation is applied by storing projects in a single collection, with `published` determining visibility.  The admin role is checked via a dedicated `/roles_admin/{uid}` collection. This approach enforces a homogeneous security posture for projects, simplifying rules.\n\nAccess Modeling utilizes Path-Based ownership for admin roles (`/roles_admin/{uid}`).  The project's published state is stored directly within the project document, and Firestore security rules leverage this field to control read access for public users.\n\nData Clarity is ensured by using the explicit `published` boolean field to represent the project's visibility state. Standardized naming conventions are used (e.g., `publishedAt`)."
+    "reasoning": "The Firestore data structure is designed to support a public portfolio site with an admin interface for managing projects, testimonials, and skills. The structure prioritizes authorization independence and supports secure list operations (QAPs). Authorization Independence is achieved by storing admin roles and checking against a specific admin email, securing project visibility via the `published` field. This design supports atomic operations and simplifies debugging.\n\nStructural Segregation is applied by storing projects, testimonials, and skills in their own top-level collections. The admin role is checked via a specific email string in the security rules. This approach enforces a homogeneous security posture for content, simplifying rules.\n\nAccess Modeling utilizes Path-Based ownership for admin roles via email checks. The project's published state is stored directly within the project document, and Firestore security rules leverage this field to control read access for public users. Public read is available for skills and testimonials.\n\nData Clarity is ensured by using explicit fields like `published` and standardized naming conventions."
   }
 }
