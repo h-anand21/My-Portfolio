@@ -34,6 +34,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useDoc } from '@/firebase/firestore/use-doc';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function AdminDashboard() {
   const firestore = useFirestore();
@@ -42,16 +43,23 @@ export default function AdminDashboard() {
   const [projectToDelete, setProjectToDelete] = useState<any>(null);
   const [resumeUrl, setResumeUrl] = useState('');
   const [isSavingResume, setIsSavingResume] = useState(false);
+  const [aboutMeTitle, setAboutMeTitle] = useState('');
+  const [aboutMeP1, setAboutMeP1] = useState('');
+  const [aboutMeP2, setAboutMeP2] = useState('');
+  const [isSavingAbout, setIsSavingAbout] = useState(false);
 
   const userProfileRef = useMemoFirebase(() => {
     if (!firestore || !user) return null;
     return doc(firestore, 'users', user.uid);
   }, [firestore, user]);
-  const { data: userProfile } = useDoc(userProfileRef);
+  const { data: userProfile } = useDoc<any>(userProfileRef);
 
   useEffect(() => {
-    if (userProfile?.resumeUrl) {
-      setResumeUrl(userProfile.resumeUrl);
+    if (userProfile) {
+      setResumeUrl(userProfile.resumeUrl || '');
+      setAboutMeTitle(userProfile.aboutMeTitle || '');
+      setAboutMeP1(userProfile.aboutMeP1 || '');
+      setAboutMeP2(userProfile.aboutMeP2 || '');
     }
   }, [userProfile]);
 
@@ -92,9 +100,6 @@ export default function AdminDashboard() {
       description: `"${projectToDelete.title}" has been removed from the view.`,
     });
     
-    // The view will update automatically due to state changes from useCollection
-    // and the re-computation of `allProjects`. No manual splice needed.
-
     setProjectToDelete(null);
   };
   
@@ -118,6 +123,30 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSaveAboutMe = async () => {
+    if (!userProfileRef) return;
+    setIsSavingAbout(true);
+    try {
+        await setDocumentNonBlocking(userProfileRef, { 
+            aboutMeTitle,
+            aboutMeP1,
+            aboutMeP2
+        }, { merge: true });
+        toast({
+            title: 'Success!',
+            description: 'Your "About Me" section has been updated.',
+        });
+    } catch (error) {
+        toast({
+            title: 'Error',
+            description: 'Failed to update "About Me" section.',
+            variant: 'destructive',
+        });
+    } finally {
+        setIsSavingAbout(false);
+    }
+  };
+
 
   return (
     <div className="container py-12">
@@ -126,11 +155,11 @@ export default function AdminDashboard() {
           <h1 className="text-4xl font-bold">Admin Dashboard</h1>
         </header>
 
-        <div className="mb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <div className="mb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
            <Card>
             <CardHeader>
                 <CardTitle>Resume Management</CardTitle>
-                <CardDescription>Update the public URL for your resume. This link will be used on the "Download Resume" buttons across your site.</CardDescription>
+                <CardDescription>Update the public URL for your resume.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                  <div className="space-y-2">
@@ -151,11 +180,53 @@ export default function AdminDashboard() {
            </Card>
            <Card>
                 <CardHeader>
+                    <CardTitle>About Me</CardTitle>
+                    <CardDescription>Edit the content of your "About Me" section.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="aboutMeTitle">Title</Label>
+                        <Input 
+                            id="aboutMeTitle" 
+                            value={aboutMeTitle}
+                            onChange={(e) => setAboutMeTitle(e.target.value)}
+                            placeholder="Your Title (e.g., Software Developer)"
+                        />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="aboutMeP1">Paragraph 1</Label>
+                        <Textarea 
+                            id="aboutMeP1" 
+                            value={aboutMeP1}
+                            onChange={(e) => setAboutMeP1(e.target.value)}
+                            placeholder="First paragraph of your bio."
+                            rows={4}
+                        />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="aboutMeP2">Paragraph 2</Label>
+                        <Textarea 
+                            id="aboutMeP2" 
+                            value={aboutMeP2}
+                            onChange={(e) => setAboutMeP2(e.target.value)}
+                            placeholder="Second paragraph of your bio."
+                            rows={4}
+                        />
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <Button onClick={handleSaveAboutMe} disabled={isSavingAbout}>
+                        {isSavingAbout ? 'Saving...' : 'Save About Me'}
+                    </Button>
+                </CardFooter>
+            </Card>
+           <Card>
+                <CardHeader>
                     <CardTitle>Testimonials</CardTitle>
-                    <CardDescription>Manage the testimonials that appear on your homepage in the "What People Are Saying" section.</CardDescription>
+                    <CardDescription>Manage the testimonials that appear on your homepage.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-sm text-muted-foreground">Add, edit, or delete testimonials to keep your social proof fresh and relevant.</p>
+                    <p className="text-sm text-muted-foreground">Add, edit, or delete testimonials.</p>
                 </CardContent>
                 <CardFooter>
                     <Button asChild>

@@ -158,6 +158,18 @@
             "type": "string",
             "format": "uri",
             "description": "URL of the user's resume file."
+        },
+        "aboutMeTitle": {
+          "type": "string",
+          "description": "The title to display in the About Me section."
+        },
+        "aboutMeP1": {
+            "type": "string",
+            "description": "The first paragraph of the 'About Me' section."
+        },
+        "aboutMeP2": {
+            "type": "string",
+            "description": "The second paragraph of the 'About Me' section."
         }
       },
       "required": [
