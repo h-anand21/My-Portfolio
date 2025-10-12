@@ -38,8 +38,8 @@ const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string })
         transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
         className="absolute flex items-center justify-center"
         style={{
-          width: 'clamp(200px, 50vw, 400px)',
-          height: 'clamp(200px, 50vw, 400px)',
+          width: 'clamp(240px, 60vw, 480px)',
+          height: 'clamp(240px, 60vw, 480px)',
         }}
       >
         {icons.map((item, index) => {
@@ -49,7 +49,7 @@ const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string })
               key={item.id}
               className="absolute w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-card shadow-lg border border-border/50"
               style={{
-                transform: `rotate(${angle}deg) translate(clamp(100px, 25vw, 200px)) rotate(-${angle}deg)`,
+                transform: `rotate(${angle}deg) translate(clamp(120px, 30vw, 240px)) rotate(-${angle}deg)`,
               }}
                whileHover={{ scale: 1.1, zIndex: 10, transition: { type: "spring", stiffness: 300, damping: 10 } }}
             >
@@ -66,8 +66,8 @@ const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string })
        <div 
         className="absolute rounded-full z-0 animate-spin-slow"
         style={{
-          width: 'clamp(200px, 50vw, 400px)',
-          height: 'clamp(200px, 50vw, 400px)',
+          width: 'clamp(240px, 60vw, 480px)',
+          height: 'clamp(240px, 60vw, 480px)',
           boxShadow: '0 0 20px 0px hsl(var(--primary))',
         }}
        />
@@ -75,8 +75,8 @@ const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string })
       {/* Profile Image */}
       <div className="relative rounded-full border-[3px] border-gray-700 overflow-hidden z-10 shadow-[0_0_30px_rgba(255,255,255,0.1)]"
         style={{
-          width: 'clamp(120px, 30vw, 240px)',
-          height: 'clamp(120px, 30vw, 240px)',
+          width: 'clamp(200px, 50vw, 400px)',
+          height: 'clamp(200px, 50vw, 400px)',
         }}
       >
         <Image
