@@ -185,7 +185,7 @@ const StyledWrapper = styled.div`
     transition: all 0.5s ease-in-out, z-index 0.5s ease-in-out 0.1s;
   }
   .card:hover .profile-pic:hover {
-    transform: scale(1.3);
+    transform: scale(0.95);
     border-radius: 0px;
   }
   .card:hover .profile-pic img, .card:hover .profile-pic svg {
