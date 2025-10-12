@@ -145,7 +145,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                     src={project.thumbnailUrl} 
                     alt={`${project.title} screenshot`} 
                     fill 
-                    className="object-cover"
+                    className="object-contain"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
             </div>
@@ -181,3 +181,5 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
     </div>
   );
 }
+
+    

@@ -46,7 +46,7 @@ const AboutSection = () => {
                                 alt={aboutImage.description}
                                 data-ai-hint={aboutImage.imageHint}
                                 fill
-                                className="object-cover"
+                                className="object-contain"
                                 />
                             )}
                         </div>
@@ -79,3 +79,5 @@ const AboutSection = () => {
 };
 
 export default AboutSection;
+
+    

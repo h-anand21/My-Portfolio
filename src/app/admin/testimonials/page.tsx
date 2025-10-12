@@ -186,7 +186,7 @@ export default function TestimonialsAdminPage() {
                             testimonialsData.map((testimonial) => (
                                 <div key={testimonial.id} className="flex items-start justify-between rounded-lg border p-4">
                                     <div className="flex items-start gap-4">
-                                        <img src={testimonial.src} alt={testimonial.name} className="h-16 w-16 rounded-full object-cover"/>
+                                        <img src={testimonial.src} alt={testimonial.name} className="h-16 w-16 rounded-full object-contain"/>
                                         <div>
                                             <p className="font-semibold">{testimonial.name}</p>
                                             <p className="text-sm text-muted-foreground">{testimonial.designation}</p>
