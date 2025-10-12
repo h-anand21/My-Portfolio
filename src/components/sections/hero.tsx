@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Download, Github, Linkedin, Twitter } from 'lucide-react';
+import { Download } from 'lucide-react';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useDoc } from '@/firebase/firestore/use-doc';
@@ -12,6 +12,7 @@ import { useFirestore, useUser, useMemoFirebase } from '@/firebase';
 import AnimatedButton from '../ui/animated-button';
 import { TextHoverEffect } from '../ui/text-hover-effect';
 import { HoverBorderGradient } from '../ui/hover-border-gradient';
+import HeroImage from '../ui/hero-image';
 
 const HeroSection = () => {
   const defaultHeroImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
@@ -165,18 +166,7 @@ const HeroSection = () => {
           </motion.div>
         </motion.div>
         <motion.div variants={itemVariants} className="relative justify-self-center order-first md:order-last">
-            <div className="absolute -inset-2 rounded-full border-4 border-dashed border-primary/50 animate-spin-slow"></div>
-            {heroImage && (
-                <Image
-                src={heroImage}
-                alt={heroImageAlt}
-                data-ai-hint={heroImageHint}
-                width={450}
-                height={450}
-                className="rounded-full object-cover aspect-square shadow-2xl z-10"
-                priority
-                />
-            )}
+            <HeroImage imageUrl={heroImage || ''} altText={heroImageAlt} />
         </motion.div>
       </motion.div>
     </section>
