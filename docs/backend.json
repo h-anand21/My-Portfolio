@@ -342,7 +342,7 @@
           },
           "description": "Stores skills data for the homepage skills section.",
           "rules": {
-            "read": true,
+            "read": "if true;",
             "create": "request.auth.token.email == 'himanshuanand563@gmail.com'",
             "write": "request.auth.token.email == 'himanshuanand563@gmail.com'"
           },
