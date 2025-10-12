@@ -1,9 +1,10 @@
+
 import ContactForm from "../contact-form";
 
 const ContactSection = () => {
     return (
         <section id="contact" className="pb-24 md:pb-32">
-            <div className="container max-w-2xl text-center">
+            <div className="text-center">
                  <div className="relative overflow-hidden rounded-3xl group">
                     <div
                         className="absolute -inset-12 z-[-2] animate-spin-slow"
