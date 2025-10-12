@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -52,8 +51,8 @@ const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string })
               style={{
                 transform: `rotate(${angle}deg) translate(clamp(100px, 25vw, 200px)) rotate(-${angle}deg)`,
               }}
-              whileHover={{ scale: 1.2, zIndex: 50 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              whileHover={{ scale: 1.1, zIndex: 10 }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
             >
                 <div 
                     className="w-6 h-6 md:w-8 md:h-8 text-foreground"
@@ -70,7 +69,7 @@ const HeroImage = ({ imageUrl, altText }: { imageUrl: string; altText: string })
         style={{
           width: 'clamp(200px, 50vw, 400px)',
           height: 'clamp(200px, 50vw, 400px)',
-          boxShadow: '0 0 20px 0px hsl(var(--primary)), 0 0 30px 5px hsl(var(--accent))',
+          boxShadow: '0 0 20px 0px hsl(var(--primary))',
         }}
        />
 
