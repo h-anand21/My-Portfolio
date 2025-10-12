@@ -12,7 +12,7 @@ const ContactSection = () => {
                             Get In Touch
                         </h2>
                         <div className="max-w-3xl mx-auto mb-12">
-                            <TextHoverEffect>
+                            <TextHoverEffect className="justify-center">
                                 Have a project in mind, a question, or just want to say hi? I'd love to hear from you.
                                 Fill out the form below and I'll get back to you as soon as possible.
                             </TextHoverEffect>
