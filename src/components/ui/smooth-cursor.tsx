@@ -79,10 +79,11 @@ export function SmoothCursor() {
     <div
       ref={cursorRef}
       className={cn(
-        "pointer-events-none fixed z-[9999] h-6 w-6 bg-primary transition-transform duration-300 ease-in-out",
+        "pointer-events-none fixed z-[9999] h-8 w-8 bg-primary transition-transform duration-300 ease-in-out",
+        "shadow-[0_5px_15px_rgba(var(--primary-rgb),0.4)]"
       )}
       style={{
-        clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'
+        clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)'
       }}
     />
   );
