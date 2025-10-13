@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 export function SmoothCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const clickEffectRef = useRef<HTMLDivElement>(null);
   const isgrabbing = useRef(false);
 
   useEffect(() => {
@@ -28,14 +29,20 @@ export function SmoothCursor() {
     const mouseDown = () => {
       isgrabbing.current = true;
       if (cursor) {
-        cursor.style.transform = "translate(-50%, -50%) scale(0.8) rotate(0deg)";
+        cursor.classList.add('opacity-0');
+      }
+      if(clickEffectRef.current) {
+        clickEffectRef.current.classList.remove('hidden');
       }
     };
 
     const mouseUp = () => {
       isgrabbing.current = false;
       if (cursor) {
-        cursor.style.transform = "translate(-50%, -50%) scale(1) rotate(0deg)";
+        cursor.classList.remove('opacity-0');
+      }
+      if(clickEffectRef.current) {
+        clickEffectRef.current.classList.add('hidden');
       }
     };
 
@@ -48,17 +55,16 @@ export function SmoothCursor() {
       
       const angle = Math.atan2(distY, distX) * (180 / Math.PI) + 90;
 
-
       if (cursor) {
           cursor.style.left = cursorX + "px";
           cursor.style.top = cursorY + "px";
-          if (isgrabbing.current) {
-            cursor.style.transform = `translate(-50%, -50%) scale(0.8) rotate(${angle}deg)`;
-          } else {
-            cursor.style.transform = `translate(-50%, -50%) scale(1) rotate(${angle}deg)`;
-          }
+          cursor.style.transform = `translate(-50%, -50%) scale(1) rotate(${angle}deg)`;
       }
 
+      if (clickEffectRef.current) {
+        clickEffectRef.current.style.left = cursorX + "px";
+        clickEffectRef.current.style.top = cursorY + "px";
+      }
 
       requestAnimationFrame(animate);
     };
@@ -76,15 +82,26 @@ export function SmoothCursor() {
   }, []);
 
   return (
-    <div
-      ref={cursorRef}
-      className={cn(
-        "pointer-events-none fixed z-[9999] h-8 w-8 bg-primary transition-transform duration-300 ease-in-out",
-        "shadow-[0_5px_15px_rgba(var(--primary-rgb),0.4)]"
-      )}
-      style={{
-        clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)'
-      }}
-    />
+    <>
+      <div
+        ref={cursorRef}
+        className={cn(
+          "pointer-events-none fixed z-[9999] h-8 w-8 transition-opacity duration-300 ease-in-out"
+        )}
+        style={{
+          backgroundColor: 'hsl(var(--cursor-color))',
+          clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)'
+        }}
+      />
+      <div
+        ref={clickEffectRef}
+        className="pointer-events-none fixed z-[9998] hidden"
+      >
+        <div 
+          className="h-16 w-16 rounded-full border-2" 
+          style={{ borderColor: 'hsl(var(--cursor-color))', animation: 'click-pulse 0.5s ease-out' }} 
+        />
+      </div>
+    </>
   );
 }

@@ -31,6 +31,8 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
 
+    --cursor-color: 210 100% 50%;
+
     --clr-1: #00c2ff;
     --clr-2: #33ff8c;
     --clr-3: #ffc640;
@@ -63,6 +65,8 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    --cursor-color: 336 82% 52%;
   }
 }
 
@@ -312,6 +316,18 @@
        transform: rotate(360deg);
      }
    }
+
+  @keyframes click-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+  }
+
 }
 
 @layer components {
