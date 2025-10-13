@@ -11,7 +11,6 @@ import Footer from '@/components/footer';
 import { FirebaseClientProvider } from '@/firebase';
 import Loader from '@/components/ui/loader';
 import { AnimatePresence, motion } from 'framer-motion';
-import WelcomeScreen from '@/components/welcome-screen';
 
 export default function RootLayout({
   children,
@@ -19,27 +18,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [isLoading, setIsLoading] = useState(true);
-  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     // Simulate a loading time for the initial loader
     const loadingTimer = setTimeout(() => {
       setIsLoading(false);
-      setShowWelcome(true);
     }, 3000); 
-
-    // After loading, show welcome screen for a few seconds
-    const welcomeTimer = setTimeout(() => {
-      if (!isLoading) {
-        setShowWelcome(false);
-      }
-    }, 6000); // 3s loader + 3s welcome
 
     return () => {
       clearTimeout(loadingTimer);
-      clearTimeout(welcomeTimer);
     };
-  }, [isLoading]);
+  }, []);
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -81,21 +70,9 @@ export default function RootLayout({
                   <Loader />
                 </motion.div>
               )}
-              {!isLoading && showWelcome && (
-                 <motion.div
-                  key="welcome"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="fixed inset-0 z-[100] flex items-center justify-center bg-background"
-                >
-                  <WelcomeScreen />
-                </motion.div>
-              )}
             </AnimatePresence>
              <AnimatePresence>
-             {!isLoading && !showWelcome && (
+             {!isLoading && (
                 <motion.div
                   key="content"
                   initial={{ opacity: 0 }}
