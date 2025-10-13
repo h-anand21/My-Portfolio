@@ -2,10 +2,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Project } from '@/lib/types';
-import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { ExternalLink, Github } from 'lucide-react';
 import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
+import { NeumorphicBadge } from './ui/neumorphic-badge';
 
 interface ProjectCardProps {
     project: Project;
@@ -49,8 +49,8 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                             translateZ={20}
                             className="flex flex-wrap gap-2"
                          >
-                            {techArray.map((tag) => (
-                                <Badge key={tag} variant="secondary">{tag}</Badge>
+                            {techArray.map((tag, index) => (
+                                <NeumorphicBadge key={tag} text={tag} hue={180 + index * 40} />
                             ))}
                         </CardItem>
 
