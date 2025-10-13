@@ -55,7 +55,7 @@ const Loader = () => {
             <rect x={470} y={265} width={8} height={10} fill="url(#pinGradient)" rx={2} />
           </g>
           <text x={400} y={245} fontFamily="Arial, sans-serif" fontSize={22} fill="url(#textGradient)" textAnchor="middle" alignmentBaseline="middle">
-            Loading
+            Welcome!
           </text>
           <circle cx={100} cy={100} r={5} fill="black" />
           <circle cx={80} cy={180} r={5} fill="black" />
