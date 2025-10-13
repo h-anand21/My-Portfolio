@@ -28,14 +28,14 @@ export function SmoothCursor() {
     const mouseDown = () => {
       isgrabbing.current = true;
       if (cursor) {
-        cursor.style.transform = "translate(-50%, -50%) scale(0.8)";
+        cursor.style.transform = "translate(-50%, -50%) scale(0.8) rotate(0deg)";
       }
     };
 
     const mouseUp = () => {
       isgrabbing.current = false;
       if (cursor) {
-        cursor.style.transform = "translate(-50%, -50%) scale(1)";
+        cursor.style.transform = "translate(-50%, -50%) scale(1) rotate(0deg)";
       }
     };
 
@@ -45,9 +45,20 @@ export function SmoothCursor() {
 
       cursorX = cursorX + distX * speed;
       cursorY = cursorY + distY * speed;
+      
+      const angle = Math.atan2(distY, distX) * (180 / Math.PI) + 90;
 
-      cursor.style.left = cursorX + "px";
-      cursor.style.top = cursorY + "px";
+
+      if (cursor) {
+          cursor.style.left = cursorX + "px";
+          cursor.style.top = cursorY + "px";
+          if (isgrabbing.current) {
+            cursor.style.transform = `translate(-50%, -50%) scale(0.8) rotate(${angle}deg)`;
+          } else {
+            cursor.style.transform = `translate(-50%, -50%) scale(1) rotate(${angle}deg)`;
+          }
+      }
+
 
       requestAnimationFrame(animate);
     };
@@ -68,8 +79,11 @@ export function SmoothCursor() {
     <div
       ref={cursorRef}
       className={cn(
-        "pointer-events-none fixed z-[9999] h-8 w-8 rounded-full border-2 border-primary transition-transform duration-300 ease-in-out",
+        "pointer-events-none fixed z-[9999] h-6 w-6 bg-primary transition-transform duration-300 ease-in-out",
       )}
+      style={{
+        clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'
+      }}
     />
   );
 }
