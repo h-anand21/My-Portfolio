@@ -2,10 +2,19 @@
 import { TextHoverEffect } from "../ui/text-hover-effect";
 import ContactForm from "../contact-form";
 import { Meteors } from "../ui/meteors";
+import DotPattern from "../ui/dot-pattern";
 
 const ContactSection = () => {
     return (
-        <section id="contact" className="py-8 md:py-12">
+        <section id="contact" className="py-8 md:py-12 relative overflow-hidden">
+             <DotPattern
+                width={20}
+                height={20}
+                cx={1}
+                cy={1}
+                cr={1}
+                className="[mask-image:linear-gradient(to_bottom,white,transparent,white)]"
+            />
             <div className="container">
                 <div className="bg-card text-card-foreground rounded-3xl shadow-2xl border border-border overflow-hidden relative">
                     <div className="absolute inset-0 w-full h-full">
