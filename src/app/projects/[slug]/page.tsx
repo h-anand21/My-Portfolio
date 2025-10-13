@@ -1,3 +1,4 @@
+
 'use server';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -129,11 +130,9 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                         </Button>
                     )}
                     {project.githubUrl && (
-                        <Button variant="outline" size="icon" asChild>
-                            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
-                                <Github className="h-5 w-5" />
-                            </a>
-                        </Button>
+                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository" className="neumorphic-icon-button h-10 w-10 !p-2 inline-flex items-center justify-center">
+                            <Github className="h-5 w-5" />
+                        </a>
                     )}
                 </div>
             </div>

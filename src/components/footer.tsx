@@ -1,3 +1,4 @@
+
 import { Github, Linkedin, Twitter } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
@@ -9,22 +10,16 @@ const Footer = () => {
         <p className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} Portfolio Pro. All rights reserved.
         </p>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="https://github.com/h-anand21" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-              <Github className="h-5 w-5 text-muted-foreground hover:text-foreground" />
-            </Link>
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="https://x.com/hanand_21" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-              <Twitter className="h-5 w-5 text-muted-foreground hover:text-foreground" />
-            </Link>
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="https://www.linkedin.com/in/himanshu-anand21/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <Linkedin className="h-5 w-5 text-muted-foreground hover:text-foreground" />
-            </Link>
-          </Button>
+        <div className="flex items-center gap-4">
+          <a href="https://github.com/h-anand21" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="neumorphic-icon-button h-12 w-12 !p-3">
+              <Github className="h-5 w-5" />
+          </a>
+          <a href="https://x.com/hanand_21" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="neumorphic-icon-button h-12 w-12 !p-3">
+              <Twitter className="h-5 w-5" />
+          </a>
+          <a href="https://www.linkedin.com/in/himanshu-anand21/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="neumorphic-icon-button h-12 w-12 !p-3">
+              <Linkedin className="h-5 w-5" />
+          </a>
         </div>
       </div>
     </footer>

@@ -1,3 +1,4 @@
+
 "use client";
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,7 +16,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
     const techArray = Array.isArray(project.tech) ? project.tech : [];
 
-    const handleExternalLinkClick = (e: React.MouseEvent<HTMLButtonElement>, url: string) => {
+    const handleExternalLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
         e.preventDefault();
         e.stopPropagation();
         window.open(url, '_blank', 'noopener,noreferrer');
@@ -59,14 +60,14 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                             className="flex gap-2"
                         >
                             {project.githubUrl && (
-                                <Button variant="ghost" size="icon" onClick={(e) => handleExternalLinkClick(e, project.githubUrl!)} aria-label="GitHub repository">
-                                    <Github className="h-5 w-5 text-muted-foreground hover:text-primary" />
-                                </Button>
+                                <a href={project.githubUrl} onClick={(e) => handleExternalLinkClick(e, project.githubUrl!)} aria-label="GitHub repository" className="neumorphic-icon-button h-10 w-10 !p-2">
+                                    <Github className="h-5 w-5" />
+                                </a>
                             )}
                             {project.demoUrl && (
-                                <Button variant="ghost" size="icon" onClick={(e) => handleExternalLinkClick(e, project.demoUrl!)} aria-label="Live Demo">
-                                    <ExternalLink className="h-5 w-5 text-muted-foreground hover:text-primary" />
-                                </Button>
+                                <a href={project.demoUrl} onClick={(e) => handleExternalLinkClick(e, project.demoUrl!)} aria-label="Live Demo" className="neumorphic-icon-button h-10 w-10 !p-2">
+                                    <ExternalLink className="h-5 w-5" />
+                                </a>
                             )}
                         </CardItem>
                     </div>

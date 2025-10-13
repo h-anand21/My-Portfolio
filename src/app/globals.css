@@ -31,7 +31,7 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
 
-    --cursor-color: 336 82% 52%;
+    --cursor-color: 231 48% 48%;
 
     --clr-1: #00c2ff;
     --clr-2: #33ff8c;
@@ -66,7 +66,7 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    --cursor-color: 231 48% 48%;
+    --cursor-color: 336 82% 52%;
   }
 }
 
@@ -495,6 +495,45 @@
 
   .neumorphic-badge:active .neumorphic-badge-text {
     transform: scale(0.95);
+  }
+
+  .neumorphic-icon-button {
+    @apply grid place-items-center bg-background p-4 rounded-lg border border-transparent cursor-pointer transition-transform duration-500;
+    box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
+                -6px -6px 10px -1px rgba(255,255,255,0.7);
+  }
+  .dark .neumorphic-icon-button {
+     box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.5),
+                -6px -6px 10px -1px rgba(255,255,255,0.1);
+  }
+
+  .neumorphic-icon-button:hover {
+    box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
+                inset -4px -4px 6px -1px rgba(255,255,255,0.7),
+                -0.5px -0.5px 0px rgba(255,255,255,1),
+                0.5px 0.5px 0px rgba(0,0,0,0.15),
+                0px 12px 10px -10px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.1);
+    transform: translateY(0.5em);
+  }
+  .dark .neumorphic-icon-button:hover {
+     box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.6),
+                inset -4px -4px 6px -1px rgba(255,255,255,0.1),
+                -0.5px -0.5px 0px rgba(255,255,255,0.5),
+                0.5px 0.5px 0px rgba(0,0,0,0.15),
+                0px 12px 10px -10px rgba(0,0,0,0.05);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .neumorphic-icon-button:hover svg {
+    transform: scale(0.9);
+  }
+
+  .neumorphic-icon-button svg {
+     @apply transition-transform duration-500 text-muted-foreground;
+  }
+   .neumorphic-icon-button:hover svg {
+    @apply text-primary;
   }
 }
 
