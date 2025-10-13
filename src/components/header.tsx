@@ -39,7 +39,7 @@ const Header = () => {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="font-bold font-headline text-lg">Portfolio Pro</span>
+            <span className="font-bold font-headline text-lg">hanand.dev</span>
           </Link>
         </div>
 
