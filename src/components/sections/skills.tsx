@@ -3,10 +3,19 @@
 
 import { GlassCard } from '../ui/glass-card';
 import { TextHoverEffect } from '../ui/text-hover-effect';
+import DotPattern from '../ui/dot-pattern';
 
 const SkillsSection = () => {
     return (
-        <section id="skills" className="py-8 md:py-12 bg-background">
+        <section id="skills" className="py-8 md:py-12 bg-background relative overflow-hidden">
+             <DotPattern
+                width={20}
+                height={20}
+                cx={1}
+                cy={1}
+                cr={1}
+                className="[mask-image:linear-gradient(to_bottom,white,transparent,white)]"
+            />
             <div className="container">
                 <div className="text-center mb-16">
                     <h2 className="font-headline text-4xl md:text-5xl font-bold">
