@@ -16,7 +16,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
     const techArray = Array.isArray(project.tech) ? project.tech : [];
 
-    const handleExternalLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
+    const handleExternalLinkClick = (e: React.MouseEvent<HTMLElement>, url: string) => {
         e.preventDefault();
         e.stopPropagation();
         window.open(url, '_blank', 'noopener,noreferrer');
@@ -60,14 +60,14 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                             className="flex gap-2"
                         >
                             {project.githubUrl && (
-                                <a href={project.githubUrl} onClick={(e) => handleExternalLinkClick(e, project.githubUrl!)} aria-label="GitHub repository" className="neumorphic-icon-button h-10 w-10 !p-2">
+                                <div onClick={(e) => handleExternalLinkClick(e, project.githubUrl!)} aria-label="GitHub repository" className="neumorphic-icon-button h-10 w-10 !p-2 cursor-pointer">
                                     <Github className="h-5 w-5" />
-                                </a>
+                                </div>
                             )}
                             {project.demoUrl && (
-                                <a href={project.demoUrl} onClick={(e) => handleExternalLinkClick(e, project.demoUrl!)} aria-label="Live Demo" className="neumorphic-icon-button h-10 w-10 !p-2">
+                                <div onClick={(e) => handleExternalLinkClick(e, project.demoUrl!)} aria-label="Live Demo" className="neumorphic-icon-button h-10 w-10 !p-2 cursor-pointer">
                                     <ExternalLink className="h-5 w-5" />
-                                </a>
+                                </div>
                             )}
                         </CardItem>
                     </div>
