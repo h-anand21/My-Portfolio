@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -11,7 +12,8 @@ const WelcomeScreen = () => {
         <div className="transition-all flex flex-col items-center py-5 justify-start duration-300 group-hover:duration-1000 bg-card text-card-foreground w-full h-full absolute group-hover:-translate-y-16">
           <div className="text-center p-4">
               <p className="text-lg md:text-xl">👋 Welcome friends!</p>
-              <p className="text-sm md:text-base mt-2">Coding karte rahe, haste rahe, muskuraate rahe! 💻✨</p>
+              <p className="text-sm md:text-base mt-2">Coding karte rahe,</p>
+              <p>haste rahe, muskuraate rahe! 💻✨</p>
           </div>
         </div>
         <button className="seal bg-primary text-primary-foreground w-10 aspect-square rounded-full z-40 text-[10px] flex items-center justify-center font-semibold [clip-path:polygon(50%_0%,_80%_10%,_100%_35%,_100%_70%,_80%_90%,_50%_100%,_20%_90%,_0%_70%,_0%_35%,_20%_10%)] group-hover:opacity-0 transition-all duration-1000 group-hover:scale-0 group-hover:rotate-180 border-4 border-primary-foreground/50">
