@@ -11,6 +11,7 @@ import Footer from '@/components/footer';
 import { FirebaseClientProvider } from '@/firebase';
 import Loader from '@/components/ui/loader';
 import { AnimatePresence, motion } from 'framer-motion';
+import { SmoothCursor } from '@/components/ui/smooth-cursor';
 
 export default function RootLayout({
   children,
@@ -51,6 +52,7 @@ export default function RootLayout({
         </style>
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
+        <SmoothCursor />
         <FirebaseClientProvider>
           <ThemeProvider
             attribute="class"
