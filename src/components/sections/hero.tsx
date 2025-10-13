@@ -13,6 +13,7 @@ import AnimatedButton from '../ui/animated-button';
 import { TextHoverEffect } from '../ui/text-hover-effect';
 import { HoverBorderGradient } from '../ui/hover-border-gradient';
 import HeroImage from '../ui/hero-image';
+import { DotPattern } from '../ui/dot-pattern';
 
 const HeroSection = () => {
   const defaultHeroImage = PlaceHolderImages.find(img => img.id === 'hero-photo');
@@ -77,7 +78,15 @@ const HeroSection = () => {
 
 
   return (
-    <section className="py-8 md:py-12">
+    <section className="relative py-8 md:py-12 overflow-hidden">
+      <DotPattern
+        width={20}
+        height={20}
+        cx={1}
+        cy={1}
+        cr={1}
+        className="[mask-image:linear-gradient(to_bottom_right,white,transparent,white)]"
+      />
       <motion.div
         className="container grid md:grid-cols-2 gap-12 items-center"
         variants={containerVariants}
