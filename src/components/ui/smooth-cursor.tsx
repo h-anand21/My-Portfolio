@@ -68,7 +68,7 @@ export function SmoothCursor() {
     <div
       ref={cursorRef}
       className={cn(
-        "pointer-events-none fixed z-[9999] h-6 w-6 rounded-full bg-primary/50 backdrop-blur-sm transition-transform duration-300 ease-in-out",
+        "pointer-events-none fixed z-[9999] h-8 w-8 rounded-full border-2 border-primary transition-transform duration-300 ease-in-out",
       )}
     />
   );
