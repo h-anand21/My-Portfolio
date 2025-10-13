@@ -390,4 +390,49 @@
   .animated-button .arrowContainer svg path {
     fill: hsl(var(--accent-foreground));
   }
+
+  .animated-modern-button {
+    @apply relative flex items-center gap-1 py-4 px-9 border-4 border-transparent text-base bg-inherit rounded-full font-semibold cursor-pointer overflow-hidden transition-all duration-500;
+    color: hsl(var(--primary));
+    box-shadow: 0 0 0 2px hsl(var(--primary));
+  }
+  .animated-modern-button svg {
+    @apply absolute w-6 z-10 transition-all duration-700;
+    fill: hsl(var(--primary));
+  }
+  .animated-modern-button .arr-1 {
+    @apply right-4;
+  }
+  .animated-modern-button .arr-2 {
+    @apply left-[-25%];
+  }
+  .animated-modern-button .circle {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full opacity-0 transition-all duration-700;
+    background-color: hsl(var(--primary));
+  }
+  .animated-modern-button .text {
+    @apply relative z-10 -translate-x-3 transition-all duration-700;
+  }
+  .animated-modern-button:hover {
+    @apply shadow-[0_0_0_12px_transparent] rounded-xl;
+    color: hsl(var(--primary-foreground));
+  }
+  .animated-modern-button:hover .arr-1 {
+    @apply right-[-25%];
+  }
+  .animated-modern-button:hover .arr-2 {
+    @apply left-4;
+  }
+  .animated-modern-button:hover .text {
+    @apply translate-x-3;
+  }
+  .animated-modern-button:hover svg {
+    fill: hsl(var(--primary-foreground));
+  }
+  .animated-modern-button:active {
+    @apply scale-95 shadow-[0_0_0_4px_hsl(var(--primary))];
+  }
+  .animated-modern-button:hover .circle {
+    @apply w-56 h-56 opacity-100;
+  }
 }

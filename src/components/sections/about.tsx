@@ -1,7 +1,6 @@
 
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { useDoc } from '@/firebase/firestore/use-doc';
 import { doc } from 'firebase/firestore';
@@ -11,6 +10,7 @@ import { TextHoverEffect } from '../ui/text-hover-effect';
 import { Skeleton } from '../ui/skeleton';
 import { AboutCard } from '../ui/about-card';
 import DotPattern from '../ui/dot-pattern';
+import ModernButton from '../ui/modern-button';
 
 const AboutSection = () => {
     const firestore = useFirestore();
@@ -77,13 +77,8 @@ const AboutSection = () => {
                                     </TextHoverEffect>
                                 </>
                             )}
-                             <div className="pt-6">
-                                <Button asChild size="lg" className="w-full md:w-auto" variant="outline">
-                                    <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
-                                        <Download className="mr-2 h-5 w-5" />
-                                        Download My Resume
-                                    </a>
-                                </Button>
+                             <div className="pt-6 flex justify-center md:justify-start">
+                                <ModernButton text="Download Resume" href={resumeUrl} />
                             </div>
                         </div>
                         <div className="flex justify-center items-center">
