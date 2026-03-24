@@ -43,9 +43,9 @@ const CodingStatsSection = () => {
             .catch(err => console.error("Failed to fetch GitHub stats:", err))
             .finally(() => setGhStatsLoading(false));
 
-        // Fetch GitHub Trophies
+        // Fetch GitHub Trophies via the local proxy
         setGhTrophiesLoading(true);
-        fetch(`https://github-profile-trophy.vercel.app/api/trophies?username=${githubUsername}`)
+        fetch(`/api/github-trophies?username=${githubUsername}`)
             .then(res => {
                  if (!res.ok) {
                     throw new Error('Network response was not ok for trophies');
