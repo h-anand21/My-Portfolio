@@ -2,11 +2,72 @@
 'use client';
 
 import { Github, CodeSquare } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+// Interfaces for our data
+interface GitHubStats {
+    public_repos: number;
+    followers: number;
+    created_at: string;
+}
+
+interface GitHubTrophy {
+    label: string;
+    rank: 'SECRET' | 'SSS' | 'SS' | 'S' | 'AAA' | 'AA' | 'A' | 'B' | 'C';
+}
+
 
 const CodingStatsSection = () => {
     const githubUsername = "h-anand21";
     const leetcodeUsername = "hanand21";
+
+    // State for GitHub data
+    const [githubStats, setGithubStats] = useState<GitHubStats | null>(null);
+    const [githubTrophies, setGithubTrophies] = useState<GitHubTrophy[] | null>(null);
+    const [ghStatsLoading, setGhStatsLoading] = useState(true);
+    const [ghTrophiesLoading, setGhTrophiesLoading] = useState(true);
+
+    useEffect(() => {
+        // Fetch GitHub User Stats
+        setGhStatsLoading(true);
+        fetch(`https://api.github.com/users/${githubUsername}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
+            .then((data: GitHubStats) => {
+                setGithubStats(data);
+            })
+            .catch(err => console.error("Failed to fetch GitHub stats:", err))
+            .finally(() => setGhStatsLoading(false));
+
+        // Fetch GitHub Trophies
+        setGhTrophiesLoading(true);
+        fetch(`https://github-profile-trophy.vercel.app/api/trophies?username=${githubUsername}`)
+            .then(res => {
+                 if (!res.ok) {
+                    throw new Error('Network response was not ok for trophies');
+                }
+                return res.json()
+            })
+            .then((data: GitHubTrophy[]) => {
+                // Filter out any potential errors/empty objects from the API
+                const validTrophies = Array.isArray(data) ? data.filter(trophy => trophy.rank && trophy.label) : [];
+                setGithubTrophies(validTrophies);
+            })
+            .catch(err => {
+                console.error("Failed to fetch GitHub trophies:", err);
+                setGithubTrophies([]); // Set to empty array on error to stop loading
+            })
+            .finally(() => setGhTrophiesLoading(false));
+            
+    }, [githubUsername]);
+    
+    // For the marquee effect to be smooth, we need to duplicate the items
+    const duplicatedTrophies = githubTrophies ? [...githubTrophies, ...githubTrophies] : [];
+
 
     return (
         <section id="coding-stats" className="py-12 bg-neo-black text-white border-y-4 border-black relative overflow-hidden">
@@ -67,7 +128,9 @@ const CodingStatsSection = () => {
                                 <div
                                     className="text-[9px] font-mono text-neo-green uppercase tracking-widest opacity-70 mb-3 flex items-center justify-between">
                                     <span>Trophy_Room</span>
-                                    <span id="gh-badges-status" className="animate-pulse text-neo-yellow">Fetching...</span>
+                                     <span id="gh-badges-status" className={ghTrophiesLoading ? "animate-pulse text-neo-yellow" : ""}>
+                                        {ghTrophiesLoading ? 'Fetching...' : 'Loaded'}
+                                    </span>
                                 </div>
 
                                 <div className="flex flex-col md:flex-row gap-4 flex-1">
@@ -75,12 +138,18 @@ const CodingStatsSection = () => {
                                     <div
                                         className="w-full md:w-1/3 flex flex-col items-center justify-center border-b-2 md:border-b-0 md:border-r-2 border-dashed border-white/10 pb-4 md:pb-0 md:pr-4">
                                         <div className="text-[8px] font-mono text-gray-400 uppercase mb-2">Highest Rank</div>
-                                        <div id="gh-active-badge"
+                                        <div
                                             className="flex flex-col items-center justify-center w-full h-full min-h-[60px]">
-                                            {/* Skeleton */}
-                                            <div
-                                                className="w-10 h-10 rounded-full border-2 border-white/20 border-t-neo-green animate-spin mb-2">
-                                            </div>
+                                             {ghTrophiesLoading ? (
+                                                <div className="w-10 h-10 rounded-full border-2 border-white/20 border-t-neo-green animate-spin mb-2"></div>
+                                            ) : githubTrophies && githubTrophies.length > 0 ? (
+                                                <>
+                                                    <img src={`https://github-profile-trophy.vercel.app/api/trophy?username=${githubUsername}&theme=darkhub&no-frame=true&no-bg=true&rank=${githubTrophies[0].rank}`} alt={githubTrophies[0].label} className="w-16 h-16"/>
+                                                    <p className="text-[10px] font-mono text-white mt-1 text-center">{githubTrophies[0].label}</p>
+                                                </>
+                                            ) : (
+                                                <p className="text-xs text-gray-500">No trophies</p>
+                                            )}
                                         </div>
                                     </div>
 
@@ -89,27 +158,27 @@ const CodingStatsSection = () => {
                                         <div className="text-[8px] font-mono text-gray-400 uppercase mb-2">Achievements</div>
                                         <div
                                             className="relative w-full flex-1 overflow-hidden marquee-container group/scroller border-l border-r border-white/5">
-                                            {/* Gradient Masks for Marquee */}
-                                            <div
-                                                className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-neo-black/90 to-transparent z-10 pointer-events-none">
-                                            </div>
-                                            <div
-                                                className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-neo-black/90 to-transparent z-10 pointer-events-none">
-                                            </div>
+                                            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-neo-black/90 to-transparent z-10 pointer-events-none"></div>
+                                            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-neo-black/90 to-transparent z-10 pointer-events-none"></div>
 
-                                            <div id="gh-history-badges"
-                                                className="flex gap-4 pb-2 items-center h-full absolute animate-marquee px-4">
-                                                {/* Skeletons */}
-                                                <div
-                                                    className="min-w-[70px] flex flex-col items-center animate-pulse opacity-50">
-                                                    <div className="w-10 h-10 bg-white/10 rounded-full mb-2"></div>
-                                                    <div className="w-8 h-2 bg-white/10 rounded"></div>
-                                                </div>
-                                                <div
-                                                    className="min-w-[70px] flex flex-col items-center animate-pulse opacity-50">
-                                                    <div className="w-10 h-10 bg-white/10 rounded-full mb-2"></div>
-                                                    <div className="w-8 h-2 bg-white/10 rounded"></div>
-                                                </div>
+                                            <div className="flex gap-4 pb-2 items-center h-full absolute animate-marquee group-hover/scroller:[animation-play-state:paused] px-4">
+                                                 {ghTrophiesLoading ? (
+                                                    [...Array(4)].map((_, i) => (
+                                                    <div key={i} className="min-w-[70px] flex flex-col items-center animate-pulse opacity-50">
+                                                        <div className="w-10 h-10 bg-white/10 rounded-full mb-2"></div>
+                                                        <div className="w-12 h-2 bg-white/10 rounded"></div>
+                                                    </div>
+                                                    ))
+                                                ) : duplicatedTrophies.length > 0 ? (
+                                                    duplicatedTrophies.map((trophy, index) => (
+                                                        <div key={index} className="min-w-[70px] flex flex-col items-center">
+                                                            <img src={`https://github-profile-trophy.vercel.app/api/trophy?username=${githubUsername}&theme=darkhub&no-frame=true&no-bg=true&rank=${trophy.rank}`} alt={trophy.label} className="w-10 h-10 opacity-70 group-hover/scroller:opacity-100 transition-opacity"/>
+                                                            <p className="text-[9px] text-center font-mono text-gray-400 mt-1 truncate w-full">{trophy.label}</p>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <p className="text-xs text-gray-500 pl-4">No achievements found</p>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -123,14 +192,17 @@ const CodingStatsSection = () => {
                                     <div
                                         className="text-[9px] font-mono text-neo-green mb-1 uppercase tracking-widest opacity-70">
                                         Repositories</div>
-                                    <div id="repos-count" className="text-white font-black text-3xl tracking-tighter">--</div>
+                                    <div id="repos-count" className="text-white font-black text-3xl tracking-tighter">
+                                        {ghStatsLoading ? '--' : githubStats?.public_repos ?? '0'}
+                                    </div>
                                 </div>
                                 <div
                                     className="border-2 border-neo-green/30 bg-neo-black/60 p-4 relative group overflow-hidden hover:border-neo-green transition-colors shadow-[4px_4px_0_rgba(51,255,87,0.1)]">
                                     <div
                                         className="text-[9px] font-mono text-neo-green mb-1 uppercase tracking-widest opacity-70">
                                         Followers</div>
-                                    <div id="followers-count" className="text-white font-black text-3xl tracking-tighter">--
+                                    <div id="followers-count" className="text-white font-black text-3xl tracking-tighter">
+                                        {ghStatsLoading ? '--' : githubStats?.followers ?? '0'}
                                     </div>
                                 </div>
                                 <div
@@ -147,7 +219,9 @@ const CodingStatsSection = () => {
                                         className="text-[9px] font-mono text-neo-green mb-1 uppercase tracking-widest opacity-70">
                                         Joined</div>
                                     <div id="created-at"
-                                        className="text-white font-black text-xl tracking-tighter mt-1 leading-none">--</div>
+                                        className="text-white font-black text-xl tracking-tighter mt-1 leading-none">
+                                        {ghStatsLoading ? '--' : githubStats ? new Date(githubStats.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : 'N/A'}
+                                    </div>
                                 </div>
                             </div>
 
@@ -216,56 +290,13 @@ const CodingStatsSection = () => {
                                 <div
                                     className="text-[9px] font-mono text-neo-orange uppercase tracking-widest opacity-70 mb-3 flex items-center justify-between">
                                     <span>Performance_Badges</span>
-                                    <span id="lc-badges-status" className="animate-pulse text-neo-yellow">Fetching...</span>
+                                    <span className="text-neo-yellow">N/A</span>
                                 </div>
 
                                 <div className="flex flex-col md:flex-row gap-4 flex-1">
-                                    {/* Active/Locked Badge */}
                                     <div
-                                        className="w-full md:w-1/3 flex flex-col items-center justify-center border-b-2 md:border-b-0 md:border-r-2 border-dashed border-white/10 pb-4 md:pb-0 md:pr-4">
-                                        <div className="text-[8px] font-mono text-gray-400 uppercase mb-2">Active Badge</div>
-                                        <div id="lc-active-badge"
-                                            className="flex flex-col items-center justify-center w-full h-full min-h-[60px]">
-                                            {/* Skeleton */}
-                                            <div
-                                                className="w-10 h-10 rounded-full border-2 border-white/20 border-t-neo-orange animate-spin mb-2">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* History Awards Scroll Area */}
-                                    <div className="w-full md:w-2/3 flex flex-col relative overflow-hidden">
-                                        <div className="text-[8px] font-mono text-gray-400 uppercase mb-2">History Awards</div>
-                                        <div
-                                            className="relative w-full flex-1 overflow-hidden marquee-container group/scroller border-l border-r border-white/5">
-                                            {/* Gradient Masks for Marquee */}
-                                            <div
-                                                className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-neo-black/90 to-transparent z-10 pointer-events-none">
-                                            </div>
-                                            <div
-                                                className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-neo-black/90 to-transparent z-10 pointer-events-none">
-                                            </div>
-
-                                            <div id="lc-history-badges"
-                                                className="flex gap-4 pb-2 items-center h-full absolute animate-marquee px-4">
-                                                {/* Skeletons */}
-                                                <div
-                                                    className="min-w-[70px] flex flex-col items-center animate-pulse opacity-50">
-                                                    <div className="w-10 h-10 bg-white/10 rounded-full mb-2"></div>
-                                                    <div className="w-8 h-2 bg-white/10 rounded"></div>
-                                                </div>
-                                                <div
-                                                    className="min-w-[70px] flex flex-col items-center animate-pulse opacity-50">
-                                                    <div className="w-10 h-10 bg-white/10 rounded-full mb-2"></div>
-                                                    <div className="w-8 h-2 bg-white/10 rounded"></div>
-                                                </div>
-                                                <div
-                                                    className="min-w-[70px] flex flex-col items-center animate-pulse opacity-50">
-                                                    <div className="w-10 h-10 bg-white/10 rounded-full mb-2"></div>
-                                                    <div className="w-8 h-2 bg-white/10 rounded"></div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        className="w-full flex flex-col items-center justify-center">
+                                        <p className="text-gray-500 text-xs text-center">Badge API not available for LeetCode.</p>
                                     </div>
                                 </div>
                             </div>
@@ -305,3 +336,5 @@ const CodingStatsSection = () => {
 }
 
 export default CodingStatsSection;
+
+    

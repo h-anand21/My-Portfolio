@@ -118,7 +118,7 @@ export default {
         },
         'marquee': {
           '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
       },
       animation: {
@@ -127,9 +127,11 @@ export default {
         'spin-slow': 'spin-slow 20s linear infinite',
         'move': 'move 2s linear infinite alternate',
         "meteor": "meteor 5s linear infinite",
-        'marquee': 'marquee 40s linear infinite',
+        'marquee': 'marquee 25s linear infinite',
       },
     },
   },
   plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 } satisfies Config;
+
+    
