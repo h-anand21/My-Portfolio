@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Github, CodeSquare } from 'lucide-react';
@@ -16,6 +15,16 @@ interface GitHubTrophy {
     rank: 'SECRET' | 'SSS' | 'SS' | 'S' | 'AAA' | 'AA' | 'A' | 'B' | 'C';
 }
 
+interface GitHubContribution {
+    date: string;
+    count: number;
+    level: 0 | 1 | 2 | 3 | 4;
+}
+
+interface GitHubContributionsResponse {
+    contributions: GitHubContribution[];
+}
+
 
 const CodingStatsSection = () => {
     const githubUsername = "h-anand21";
@@ -24,8 +33,10 @@ const CodingStatsSection = () => {
     // State for GitHub data
     const [githubStats, setGithubStats] = useState<GitHubStats | null>(null);
     const [githubTrophies, setGithubTrophies] = useState<GitHubTrophy[] | null>(null);
+    const [totalCommits, setTotalCommits] = useState<number | null>(null);
     const [ghStatsLoading, setGhStatsLoading] = useState(true);
     const [ghTrophiesLoading, setGhTrophiesLoading] = useState(true);
+    const [ghCommitsLoading, setGhCommitsLoading] = useState(true);
 
     useEffect(() => {
         // Fetch GitHub User Stats
@@ -63,6 +74,25 @@ const CodingStatsSection = () => {
             })
             .finally(() => setGhTrophiesLoading(false));
             
+        // Fetch GitHub Contributions (Commits) via proxy
+        setGhCommitsLoading(true);
+        fetch(`/api/github-contributions?username=${githubUsername}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok for contributions');
+                }
+                return res.json();
+            })
+            .then((data: GitHubContributionsResponse) => {
+                const total = data.contributions.reduce((acc, curr) => acc + curr.count, 0);
+                setTotalCommits(total);
+            })
+            .catch(err => {
+                console.error("Failed to fetch GitHub contributions:", err);
+                setTotalCommits(0); // Set to 0 on error
+            })
+            .finally(() => setGhCommitsLoading(false));
+
     }, [githubUsername]);
     
     // For the marquee effect to be smooth, we need to duplicate the items
@@ -117,7 +147,9 @@ const CodingStatsSection = () => {
                                 </div>
                                 <div className="text-right">
                                     <div id="total-contributions"
-                                        className="text-2xl font-black text-neo-green tracking-tighter">--</div>
+                                        className="text-2xl font-black text-neo-green tracking-tighter">
+                                        {ghCommitsLoading ? '--' : totalCommits}
+                                    </div>
                                     <p className="text-[8px] font-mono text-gray-500 uppercase">Commits</p>
                                 </div>
                             </div>
@@ -211,7 +243,9 @@ const CodingStatsSection = () => {
                                         className="text-[9px] font-mono text-neo-green mb-1 uppercase tracking-widest opacity-70">
                                         Commits</div>
                                     <div id="total-contributions-grid"
-                                        className="text-white font-black text-3xl tracking-tighter">--</div>
+                                        className="text-white font-black text-3xl tracking-tighter">
+                                        {ghCommitsLoading ? '--' : totalCommits}
+                                    </div>
                                 </div>
                                 <div
                                     className="border-2 border-neo-green/30 bg-neo-black/60 p-4 relative group overflow-hidden hover:border-neo-green transition-colors shadow-[4px_4px_0_rgba(51,255,87,0.1)]">
@@ -336,5 +370,3 @@ const CodingStatsSection = () => {
 }
 
 export default CodingStatsSection;
-
-    
