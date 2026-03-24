@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Github, CodeSquare } from 'lucide-react';
@@ -59,17 +60,24 @@ const CodingStatsSection = () => {
         fetch(`/api/github-trophies?username=${githubUsername}`)
             .then(res => {
                  if (!res.ok) {
-                    throw new Error('Network response was not ok for trophies');
+                    // If the response is not OK, we'll just treat it as if there's no data
+                    // instead of throwing an error that shows up in the console.
+                    return null;
                 }
                 return res.json()
             })
-            .then((data: GitHubTrophy[]) => {
-                // Filter out any potential errors/empty objects from the API
-                const validTrophies = Array.isArray(data) ? data.filter(trophy => trophy.rank && trophy.label) : [];
-                setGithubTrophies(validTrophies);
+            .then((data: GitHubTrophy[] | null) => {
+                if (data) {
+                    // Filter out any potential errors/empty objects from the API
+                    const validTrophies = Array.isArray(data) ? data.filter(trophy => trophy.rank && trophy.label) : [];
+                    setGithubTrophies(validTrophies);
+                } else {
+                    setGithubTrophies([]); // Set to empty array on failed fetch
+                }
             })
             .catch(err => {
-                console.error("Failed to fetch GitHub trophies:", err);
+                // This catch will now primarily handle JSON parsing errors or total network failure.
+                console.error("Error processing GitHub trophies response:", err);
                 setGithubTrophies([]); // Set to empty array on error to stop loading
             })
             .finally(() => setGhTrophiesLoading(false));
