@@ -23,6 +23,10 @@ export default {
         code: ['Source Code Pro', 'monospace'],
       },
       colors: {
+        'neo-green': '#33FF57',
+        'neo-orange': '#FF6B00',
+        'neo-yellow': '#FFD700',
+        'neo-black': '#1A1A1A',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -112,6 +116,10 @@ export default {
             opacity: "0",
           },
         },
+        'marquee': {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -119,6 +127,7 @@ export default {
         'spin-slow': 'spin-slow 20s linear infinite',
         'move': 'move 2s linear infinite alternate',
         "meteor": "meteor 5s linear infinite",
+        'marquee': 'marquee 40s linear infinite',
       },
     },
   },
