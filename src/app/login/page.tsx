@@ -46,8 +46,11 @@ export default function LoginPage() {
                   case 'auth/account-exists-with-different-credential':
                       setError('An account already exists with the same email. Please use the original sign-in method.');
                       break;
+                  case 'auth/operation-not-allowed':
+                    setError('Login with this provider is not enabled. Please check your Firebase project settings.');
+                    break;
                   default:
-                      setError('An authentication error occurred. Please try again.');
+                      setError(`An authentication error occurred: ${err.message}`);
                       break;
               }
           } else {
@@ -59,6 +62,10 @@ export default function LoginPage() {
   }, [user, isUserLoading, auth, router]);
 
   const handleGoogleSignIn = async () => {
+    if (!auth) {
+        setError("Firebase Auth is not initialized. Please try again later.");
+        return;
+    }
     setIsProcessingLogin(true);
     setError(null);
     try {
